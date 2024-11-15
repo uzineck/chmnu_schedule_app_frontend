@@ -1,0 +1,14 @@
+services:
+  frontend_main-app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: prod
+      args:
+        NODE_ENV: production
+    image: frontend_chmnu_schedule:latest
+    container_name: frontend_main-app
+    ports:
+      - '80:80'
+    environment:
+      - NODE_ENV=production

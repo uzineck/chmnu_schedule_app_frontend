@@ -1,0 +1,1 @@
+## CHMNU Schedule Frontend App

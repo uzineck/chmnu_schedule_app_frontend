@@ -1,0 +1,19 @@
+services:
+  frontend_main-app:
+    stdin_open: true
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: dev
+      args:
+        NODE_ENV: development
+    image: frontend_chmnu_schedule:latest
+    container_name: frontend_main-app
+    ports:
+      - '3000:3000'
+    volumes:
+      - ..:/app/
+      - node_modules:/app/node_modules
+
+volumes:
+  node_modules:
