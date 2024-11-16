@@ -48,4 +48,12 @@ const Http = {
         fetchWrapper(url, { ...options, method: 'DELETE' }),
 };
 
+// export const buildQueryParams = (params: Record<string, unknown>): string => {
+//     return new URLSearchParams(
+//         Object.entries(params)
+//             .filter(([, value]) => value != null)
+//             .map(([key, value]) => [key, String(value)])
+//     ).toString();
+// };
+
 export default Http;
