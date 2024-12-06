@@ -5,6 +5,7 @@ import GroupSearch from "../Group/GroupSearch.tsx";
 import TeacherSearch from "../Teacher/TeacherSearch.tsx";
 import GroupSchedule from "../Schedule/GroupSchedule.tsx";
 import {Subgroup} from "../../models/enums/Subgroup.ts";
+import TeacherSchedule from "../Schedule/TeacherSchedule.tsx";
 
 
 const MainScreen = () => {
@@ -23,18 +24,18 @@ const MainScreen = () => {
         <>
             <GroupSearch onGroupSelect={handleGroupSelect} />
             <TeacherSearch onTeacherSelect={handleTeacherSelect} />
-            {
-                selectedTeacher && (
-                    <p>
-                        Selected Teacher: {selectedTeacher.uuid}
-                    </p>
-                )
+            {selectedTeacher &&
+                <TeacherSchedule
+                    teacherUuid={selectedTeacher.uuid}
+                />
             }
-            {selectedGroup && <GroupSchedule
-                groupUuid={selectedGroup.uuid}
-                subgroup={Subgroup.A}
-                is_even={true}
-            />}
+            {selectedGroup &&
+                <GroupSchedule
+                    groupUuid={selectedGroup.uuid}
+                    subgroup={Subgroup.A}
+                    is_even={true}
+                />
+            }
         </>
     );
 };
