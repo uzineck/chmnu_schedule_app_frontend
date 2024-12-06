@@ -1,0 +1,7 @@
+/* Style for the container of the dropdown */
+.base-dropdown {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 10px;
+}

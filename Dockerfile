@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json .
 ARG NODE_ENV=production
 
-RUN yarn install --production=false
+RUN npm install --production=false
 
 # Copy the rest of the files to the container
 COPY . .
@@ -21,7 +21,7 @@ CMD ["npm", "run", "dev", "--", "--host"]
 # Production build stage: Builds optimized static files
 FROM base AS build
 ENV NODE_ENV=production
-RUN yarn build
+RUN npm build
 
 # Production runtime stage: Serves static files with Nginx
 FROM nginx:stable-alpine AS prod

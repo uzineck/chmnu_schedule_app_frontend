@@ -9,6 +9,8 @@ services:
         NODE_ENV: development
     image: frontend_chmnu_schedule:latest
     container_name: frontend_main-app
+    env_file:
+      - ../.env
     ports:
       - '3000:3000'
     volumes:

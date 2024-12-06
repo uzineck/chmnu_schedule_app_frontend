@@ -1,7 +1,19 @@
-const BASE_URL = 'http://localhost:80/api/v1';
+import {ApiCallError} from "./errors.ts";
+
+const DOMAIN = `${import.meta.env.VITE_API_DOMAIN}`;
+const API = `${DOMAIN}/api`;
+const BASE_URL = `${API}/v1`;
 
 const defaultHeaders = {
     "Content-Type": "application/json",
+};
+
+const getCsrfToken = (): string | null => {
+    const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrftoken='))
+        ?.split('=')[1];
+    return csrfToken || null;
 };
 
 interface FetchOptions extends RequestInit {
@@ -12,48 +24,72 @@ interface FetchOptions extends RequestInit {
 const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
     const { headers = {}, body, ...restOptions } = options;
 
+    const csrfToken = getCsrfToken();
+
+    const requestHeaders: Record<string, string> = {
+        ...defaultHeaders,
+        ...headers,
+    };
+
+    if (csrfToken) {
+        requestHeaders['X-CSRFToken'] = csrfToken;
+    }
+
     const requestOptions: RequestInit = {
         ...restOptions,
-        headers: {
-            ...defaultHeaders,
-            ...headers,
-        },
-        body: body ? JSON.stringify(body) : undefined,
+        headers: requestHeaders,
+        body,
+        credentials: 'include',
     };
 
     const url = BASE_URL + requestUrl;
     const response = await fetch(url, requestOptions);
 
     if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status} in request to ${url}`);
+        let errorDetail = 'An error occurred';
+        try {
+            const errorBody = await response.json();
+            if (errorBody?.detail) {
+                errorDetail = errorBody.detail;
+            }
+        } catch (e) {
+            console.error("Failed to parse error response:", e);
+        }
+
+        throw new ApiCallError(errorDetail);
     }
+
     return await response.json();
 };
-
 const Http = {
     // GET request
     get: (url: string, options: FetchOptions = {}) =>
         fetchWrapper(url, { ...options, method: 'GET' }),
 
     // POST request
-    post: (url: string, body: never, options: FetchOptions = {}) =>
-        fetchWrapper(url, { ...options, method: 'POST', body }),
+    post: <T>(url: string, body: T, options: FetchOptions = {}) =>
+        fetchWrapper(url, {
+            ...options,
+            method: 'POST',
+            body: body ? JSON.stringify(body) : undefined, // Serialize body to string
+        }),
 
     // PUT request
-    put: (url: string, body: never, options: FetchOptions = {}) =>
-        fetchWrapper(url, { ...options, method: 'PUT', body }),
+    put: <T>(url: string, body: T, options: FetchOptions = {}) =>
+        fetchWrapper(url, {
+            ...options,
+            method: 'PUT',
+            body: body ? JSON.stringify(body) : undefined, // Serialize body to string
+        }),
 
     // DELETE request
     delete: (url: string, options: FetchOptions = {}) =>
         fetchWrapper(url, { ...options, method: 'DELETE' }),
 };
 
-// export const buildQueryParams = (params: Record<string, unknown>): string => {
-//     return new URLSearchParams(
-//         Object.entries(params)
-//             .filter(([, value]) => value != null)
-//             .map(([key, value]) => [key, String(value)])
-//     ).toString();
-// };
 
 export default Http;
+
+export const ping = async () => {
+    return await Http.get(`/ping`);
+};
