@@ -1,4 +1,6 @@
 import { ApiCallError } from "./errors.ts";
+import {updateAccessToken} from "./client/auth.ts";
+import {TokenSchema} from "../models/client/request/TokenSchema.ts";
 
 const DOMAIN = `${import.meta.env.VITE_API_DOMAIN}`;
 const API = `${DOMAIN}/api`;
@@ -25,6 +27,7 @@ const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
 	const { headers = {}, body, ...restOptions } = options;
 
 	const csrfToken = getCsrfToken();
+	const accessToken = localStorage.getItem('accessToken');
 
 	const requestHeaders: Record<string, string> = {
 		...defaultHeaders,
@@ -33,6 +36,10 @@ const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
 
 	if (csrfToken) {
 		requestHeaders['X-CSRFToken'] = csrfToken;
+	}
+
+	if (accessToken) {
+		requestHeaders['Authorization'] = `Bearer ${accessToken}`;
 	}
 
 	const requestOptions: RequestInit = {
@@ -46,17 +53,48 @@ const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
 	const response = await fetch(url, requestOptions);
 
 	if (!response.ok) {
-		let errorDetail = 'An error occurred';
-		try {
-			const errorBody = await response.json();
-			if (errorBody?.detail) {
-				errorDetail = errorBody.detail;
-			}
-		} catch (e) {
-			console.error("Failed to parse error response:", e);
-		}
+		if (response.status === 401) {
+			console.warn('Access token expired. Attempting to refresh...');
+			const refreshToken = localStorage.getItem('refreshToken');
 
-		throw new ApiCallError(errorDetail);
+			if (refreshToken) {
+				try {
+					const data: TokenSchema = { token: refreshToken };
+					const newToken = await updateAccessToken(data);
+
+					localStorage.setItem('accessToken', newToken.data.access_token);
+
+					requestHeaders['Authorization'] = `Bearer ${newToken.data.access_token}`;
+					const retryResponse = await fetch(url, {
+						...requestOptions,
+						headers: requestHeaders,
+					});
+
+					if (!retryResponse.ok) {
+						throw new ApiCallError('Failed after token refresh');
+					}
+
+					return await retryResponse.json();
+				} catch (refreshError) {
+					console.error('Token refresh failed:', refreshError);
+					throw new ApiCallError('Session expired. Please log in again.');
+				}
+			} else {
+				throw new ApiCallError('Refresh token missing. Please log in again.');
+			}
+		} else {
+			let errorDetail = 'An error occurred';
+			try {
+				const errorBody = await response.json();
+				if (errorBody?.detail) {
+					errorDetail = errorBody.detail;
+				}
+			} catch (e) {
+				console.error('Failed to parse error response:', e);
+			}
+
+			throw new ApiCallError(errorDetail);
+		}
 	}
 
 	return await response.json();

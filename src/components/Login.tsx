@@ -28,15 +28,12 @@ const Login = ({ onClose }: LoginProps) => {
                     email: values.email,
                     password: values.password
                 });
-                console.log(response);
-                if (response.data?.access_token) {
-                    localStorage.setItem('accessToken', response.data.access_token);
-                    
-                    console.log('Успішний вхід:', response);
-                    onClose();
-                } else {
-                    setStatus('Помилка: токени не отримано');
-                }
+
+                localStorage.setItem('accessToken', response.data.access_token);
+                localStorage.setItem('refreshToken', response.data.refresh_token);
+
+                console.log('Успішний вхід:', response);
+                onClose();
             } catch (error) {
                 console.error('Помилка входу:', error);
                 setStatus('Невірний email або пароль');

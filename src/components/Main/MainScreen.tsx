@@ -6,11 +6,14 @@ import TeacherSearch from "../Teacher/TeacherSearch.tsx";
 import GroupSchedule from "../Schedule/GroupSchedule.tsx";
 import {Subgroup} from "../../models/enums/Subgroup.ts";
 import TeacherSchedule from "../Schedule/TeacherSchedule.tsx";
+import {Subject} from "../../models/subject/Subject.ts";
+import SubjectSearch from "../Subject/SubjectSearch.tsx";
 
 
 const MainScreen = () => {
     const [selectedGroup, setSelectedGroup] = useState<GroupWithFaculty | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+    const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
 
     const handleGroupSelect = (group: GroupWithFaculty | null) => {
         setSelectedGroup(group);
@@ -20,10 +23,16 @@ const MainScreen = () => {
         setSelectedTeacher(teacher);
     }
 
+    const handleSubjectSelect = (subject: Subject | null) => {
+        setSelectedSubject(subject);
+    }
+
     return (
         <>
             <GroupSearch onGroupSelect={handleGroupSelect} />
             <TeacherSearch onTeacherSelect={handleTeacherSelect} />
+            <SubjectSearch onSubjectSelect={handleSubjectSelect} />
+
             {selectedTeacher &&
                 <TeacherSchedule
                     teacherUuid={selectedTeacher.uuid}
@@ -36,6 +45,7 @@ const MainScreen = () => {
                     is_even={true}
                 />
             }
+            {selectedSubject && <p>Subject: {selectedSubject.title}</p>}
         </>
     );
 };
