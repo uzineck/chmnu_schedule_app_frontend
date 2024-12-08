@@ -28,9 +28,9 @@ const Login = ({ onClose }: LoginProps) => {
                     email: values.email,
                     password: values.password
                 });
-
-                if (response.data?.token?.access) {
-                    localStorage.setItem('accessToken', response.data.token.access);
+                console.log(response);
+                if (response.data?.access_token) {
+                    localStorage.setItem('accessToken', response.data.access_token);
                     
                     console.log('Успішний вхід:', response);
                     onClose();
