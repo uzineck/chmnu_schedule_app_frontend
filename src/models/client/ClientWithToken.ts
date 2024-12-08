@@ -1,4 +1,7 @@
-import {ClientPrivate} from "./ClientPrivate.ts";
-import {Token} from "./Token.ts";
+import { Token } from './Token';
+import { ClientPrivate } from './ClientPrivate';
 
-export interface ClientWithToken extends ClientPrivate, Token{}
+export interface ClientWithToken {
+    client: ClientPrivate;
+    token: Token;
+}
