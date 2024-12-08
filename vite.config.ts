@@ -12,4 +12,7 @@ export default defineConfig({
       usePolling: true,
     }
   },
+  resolve: {
+    preserveSymlinks: true
+  }
 })
