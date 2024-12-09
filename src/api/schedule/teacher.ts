@@ -5,6 +5,9 @@ import {Teacher} from "../../models/teacher/Teacher.ts";
 import {TeacherFilter} from "../../models/filters/TeacherFilter.ts";
 import {ListPaginatedResponse, PaginationIn} from "../../models/ListPaginatedResponse.ts";
 import {TeacherWithLessons} from "../../models/teacher/TeacherWithLessons.ts";
+import {CreateTeacherSchema} from "../../models/teacher/request/CreateTeacherSchema.ts";
+import {TeacherNameSchema} from "../../models/teacher/request/TeacherNameSchema.ts";
+import {TeacherRankSchema} from "../../models/teacher/request/TeacherRankSchema.ts";
 
 const BASE_URL = '/schedule/teacher';
 
@@ -28,3 +31,15 @@ export const getListOfTeachers = (filter: TeacherFilter, pagination: PaginationI
 export const getTeacherLessons = (teacherUuid: string): Promise<ApiResponse<TeacherWithLessons>> => {
     return Http.get(`${BASE_URL}/${teacherUuid}/lessons`);
 }
+
+export const createTeacher = (body: CreateTeacherSchema): Promise<ApiResponse<Teacher>> => {
+    return Http.post(`${BASE_URL}/`, body);
+};
+
+export const updateTeacherName = (teacherUuid: string, body: TeacherNameSchema): Promise<ApiResponse<Teacher>> => {
+    return Http.patch(`${BASE_URL}/${teacherUuid}/update_name`, body);
+};
+
+export const updateTeacherRank = (teacherUuid: string, body: TeacherRankSchema): Promise<ApiResponse<Teacher>> => {
+    return Http.patch(`${BASE_URL}/${teacherUuid}/update_rank`, body);
+};
