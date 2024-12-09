@@ -1,0 +1,5 @@
+import {ClientRole} from "../../enums/ClientRole.ts";
+
+export interface UpdateClientRoleSchema {
+    role: ClientRole;
+}

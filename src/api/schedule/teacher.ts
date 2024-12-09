@@ -33,13 +33,13 @@ export const getTeacherLessons = (teacherUuid: string): Promise<ApiResponse<Teac
 }
 
 export const createTeacher = (body: CreateTeacherSchema): Promise<ApiResponse<Teacher>> => {
-    return Http.post(`${BASE_URL}/`, body);
+    return Http.post<CreateTeacherSchema>(`${BASE_URL}/`, body);
 };
 
 export const updateTeacherName = (teacherUuid: string, body: TeacherNameSchema): Promise<ApiResponse<Teacher>> => {
-    return Http.patch(`${BASE_URL}/${teacherUuid}/update_name`, body);
+    return Http.patch<TeacherNameSchema>(`${BASE_URL}/${teacherUuid}/update_name`, body);
 };
 
 export const updateTeacherRank = (teacherUuid: string, body: TeacherRankSchema): Promise<ApiResponse<Teacher>> => {
-    return Http.patch(`${BASE_URL}/${teacherUuid}/update_rank`, body);
+    return Http.patch<TeacherRankSchema>(`${BASE_URL}/${teacherUuid}/update_rank`, body);
 };

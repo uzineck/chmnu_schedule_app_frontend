@@ -35,11 +35,11 @@ export const getHeadmanInfo = (headmanEmail: string): Promise<ApiResponse<GroupW
 }
 
 export const createGroup = (body: CreateGroupSchema): Promise<ApiResponse<GroupWithHeadman>> => {
-    return Http.post(`${BASE_URL}/`, body);
+    return Http.post<CreateGroupSchema>(`${BASE_URL}/`, body);
 }
 
 export const updateGroupHeadman = (groupUuid: string, body: UpdateGroupHeadmanSchema): Promise<ApiResponse<GroupWithHeadman>> => {
-    return Http.patch(`${BASE_URL}/${groupUuid}/update_headman`, body);
+    return Http.patch<UpdateGroupHeadmanSchema>(`${BASE_URL}/${groupUuid}/update_headman`, body);
 }
 
 export const addLessonToGroupAdmin = (groupUuid: string, lessonUuid: string, subgroup: Subgroup): Promise<ApiResponse<StatusResponse>> => {

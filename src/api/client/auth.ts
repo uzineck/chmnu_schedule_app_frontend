@@ -24,5 +24,5 @@ export const logout = (): Promise<ApiResponse<StatusResponse>> => {
 
 
 export const signUp = (body: SignUpSchema) : Promise<ApiResponse<ClientPrivate>> => {
-    return Http.post(`${BASE_URL}/sign-up`, body)
+    return Http.post<SignUpSchema>(`${BASE_URL}/sign-up`, body)
 }
