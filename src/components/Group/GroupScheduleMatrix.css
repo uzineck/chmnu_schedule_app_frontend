@@ -1,0 +1,46 @@
+/* GroupScheduleMatrix.css */
+.schedule-matrix table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensures equal width for all columns */
+}
+
+.schedule-matrix th, .schedule-matrix td {
+    width: 20%; /* Each column gets an equal share of the table's width */
+    height: 100px; /* Fixed height for each cell */
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: top;
+}
+
+.schedule-matrix td.has-lesson {
+    background-color: #e6f7ff;
+}
+
+.schedule-matrix td.no-lesson {
+    background-color: #f2f2f2;
+}
+
+.schedule-matrix td p {
+    margin: 0;
+    font-size: 12px;
+    overflow: hidden; /* Prevents content from overflowing */
+    text-overflow: ellipsis; /* Adds ellipsis for overflowed text */
+    white-space: nowrap; /* Prevents wrapping of text */
+}
+
+.schedule-matrix th:first-child {
+    background-color: #f7f7f7;
+    text-align: center;
+}
+
+
+.schedule-matrix th {
+    background-color: #f0f0f0;
+    font-size: 14px;
+}
+
+.schedule-matrix th, .schedule-matrix td {
+    font-size: 14px;
+}

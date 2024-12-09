@@ -4,6 +4,4 @@ export enum Day {
     WEDNESDAY = "WD",
     THURSDAY = "TH",
     FRIDAY = "FR",
-    SATURDAY = "ST",
-    SUNDAY = "SN",
 }

@@ -17,7 +17,7 @@ const TeacherSearch = ({ onTeacherSelect }: TeacherSearchProps) => {
             })}
             onEntitySelect={onTeacherSelect}
             placeholder="Select Teacher"
-            noOptionsMessage="Teacher not found"
+            noOptionsMessage="No teachers found"
         />
     );
 };

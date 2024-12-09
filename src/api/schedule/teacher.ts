@@ -28,8 +28,14 @@ export const getListOfTeachers = (filter: TeacherFilter, pagination: PaginationI
 };
 
 
-export const getTeacherLessons = (teacherUuid: string): Promise<ApiResponse<TeacherWithLessons>> => {
-    return Http.get(`${BASE_URL}/${teacherUuid}/lessons`);
+export const getTeacherLessons = (teacherUuid: string, is_even: boolean): Promise<ApiResponse<TeacherWithLessons>> => {
+    const queryParams = qs.stringify(
+        {
+            is_even,
+        },
+        { skipNulls: true }
+    );
+    return Http.get(`${BASE_URL}/${teacherUuid}/lessons?${queryParams}`);
 }
 
 export const createTeacher = (body: CreateTeacherSchema): Promise<ApiResponse<Teacher>> => {
