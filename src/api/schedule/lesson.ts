@@ -10,5 +10,5 @@ export const createLesson = (body: LessonSchema): Promise<ApiResponse<Lesson>> =
 };
 
 export const updateLesson = (lessonUuid: string, body: LessonSchema): Promise<ApiResponse<Lesson>> => {
-    return Http.patch<LessonSchema>(`${BASE_URL}/${lessonUuid}`, body)
+    return Http.patch<LessonSchema>(`${BASE_URL}/${lessonUuid}/update`, body)
 }
