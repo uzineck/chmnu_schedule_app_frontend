@@ -1,6 +1,6 @@
 import { ApiCallError } from "./errors.ts";
-import {updateAccessToken} from "./client/auth.ts";
-import {TokenSchema} from "../models/client/request/TokenSchema.ts";
+import { updateAccessToken } from "./client/auth.ts";
+import { TokenSchema } from "../models/client/request/TokenSchema.ts";
 
 const DOMAIN = `${import.meta.env.VITE_API_DOMAIN}`;
 const API = `${DOMAIN}/api`;
@@ -10,12 +10,104 @@ const defaultHeaders = {
 	"Content-Type": "application/json",
 };
 
-const getCsrfToken = (): string | null => {
-	const csrfToken = document.cookie
-		.split('; ')
-		.find(row => row.startsWith('csrftoken='))
-		?.split('=')[1];
-	return csrfToken || null;
+const getCsrfToken = (): string | undefined => {
+	return document.cookie
+		.split("; ")
+		.find((row) => row.startsWith("csrftoken="))
+		?.split("=")[1];
+};
+
+const getAuthorizationHeaders = (): Record<string, string> => {
+	const headers: Record<string, string> = { ...defaultHeaders };
+
+	const csrfToken = getCsrfToken();
+	if (csrfToken) {
+		headers["X-CSRFToken"] = csrfToken;
+	}
+
+	const accessToken = localStorage.getItem("accessToken");
+	if (accessToken) {
+		headers["Authorization"] = `Bearer ${accessToken}`;
+	}
+
+	return headers;
+};
+
+let tokenRefreshPromise: Promise<void> | null = null;
+
+const refreshAccessToken = async (): Promise<void> => {
+	if (!tokenRefreshPromise) {
+		const refreshToken = localStorage.getItem("refreshToken");
+		if (!refreshToken) {
+			clearTokens();
+			throw new ApiCallError("Please log in again.");
+		}
+
+		tokenRefreshPromise = (async () => {
+			try {
+				const data: TokenSchema = { token: refreshToken };
+				const newToken = await updateAccessToken(data);
+
+				localStorage.setItem("accessToken", newToken.data.access_token);
+			} catch {
+				clearTokens();
+				throw new ApiCallError("Please log in again.");
+			} finally {
+				tokenRefreshPromise = null;
+			}
+		})();
+	}
+
+	return tokenRefreshPromise;
+};
+
+const clearTokens = () => {
+	localStorage.removeItem("accessToken");
+	localStorage.removeItem("refreshToken");
+};
+
+const handleResponse = async (
+	response: Response,
+	requestUrl: string,
+	requestOptions: RequestInit
+) => {
+	if (response.ok) {
+		return await response.json();
+	}
+
+	if (response.status === 401) {
+		try {
+			await refreshAccessToken();
+
+			const newAccessToken = localStorage.getItem("accessToken");
+			if (newAccessToken) {
+				requestOptions.headers = {
+					...requestOptions.headers,
+					Authorization: `Bearer ${newAccessToken}`,
+				};
+			}
+
+			const retryResponse = await fetch(requestUrl, requestOptions);
+			if (!retryResponse.ok) {
+				throw new ApiCallError("Failed after token refresh");
+			}
+			return await retryResponse.json();
+		} catch (error) {
+			throw new ApiCallError("Unauthorized request. Please log in again.");
+		}
+	}
+
+	let errorDetail = "An error occurred";
+	try {
+		const errorBody = await response.json();
+		if (errorBody?.detail) {
+			errorDetail = errorBody.detail;
+		}
+	} catch (e) {
+		console.error("Failed to parse error response:", e);
+	}
+
+	throw new ApiCallError(errorDetail);
 };
 
 interface FetchOptions extends RequestInit {
@@ -23,108 +115,49 @@ interface FetchOptions extends RequestInit {
 	body?: string;
 }
 
+// Вспомогательная функция fetch
 const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
 	const { headers = {}, body, ...restOptions } = options;
 
-	const csrfToken = getCsrfToken();
-	const accessToken = localStorage.getItem('accessToken');
-
-	const requestHeaders: Record<string, string> = {
-		...defaultHeaders,
+	const requestHeaders = {
+		...getAuthorizationHeaders(),
 		...headers,
 	};
-
-	if (csrfToken) {
-		requestHeaders['X-CSRFToken'] = csrfToken;
-	}
-
-	if (accessToken) {
-		requestHeaders['Authorization'] = `Bearer ${accessToken}`;
-	}
 
 	const requestOptions: RequestInit = {
 		...restOptions,
 		headers: requestHeaders,
 		body,
-		credentials: 'include',
+		credentials: "include",
 	};
 
 	const url = BASE_URL + requestUrl;
+
 	const response = await fetch(url, requestOptions);
-
-	if (!response.ok) {
-		if (response.status === 401) {
-			console.warn('Access token expired. Attempting to refresh...');
-			const refreshToken = localStorage.getItem('refreshToken');
-
-			if (refreshToken) {
-				try {
-					const data: TokenSchema = { token: refreshToken };
-					const newToken = await updateAccessToken(data);
-
-					localStorage.setItem('accessToken', newToken.data.access_token);
-
-					requestHeaders['Authorization'] = `Bearer ${newToken.data.access_token}`;
-					const retryResponse = await fetch(url, {
-						...requestOptions,
-						headers: requestHeaders,
-					});
-
-					if (!retryResponse.ok) {
-						throw new ApiCallError('Failed after token refresh');
-					}
-
-					return await retryResponse.json();
-				} catch (refreshError) {
-					console.error('Token refresh failed:', refreshError);
-					throw new ApiCallError('Session expired. Please log in again.');
-				}
-			} else {
-				throw new ApiCallError('Refresh token missing. Please log in again.');
-			}
-		} else {
-			let errorDetail = 'An error occurred';
-			try {
-				const errorBody = await response.json();
-				if (errorBody?.detail) {
-					errorDetail = errorBody.detail;
-				}
-			} catch (e) {
-				console.error('Failed to parse error response:', e);
-			}
-
-			throw new ApiCallError(errorDetail);
-		}
-	}
-
-	return await response.json();
+	return handleResponse(response, url, requestOptions);
 };
-const Http = {
-	// GET request
-	get: (url: string, options: FetchOptions = {}) =>
-		fetchWrapper(url, { ...options, method: 'GET' }),
 
-	// POST request
+const Http = {
+	get: (url: string, options: FetchOptions = {}) =>
+		fetchWrapper(url, { ...options, method: "GET" }),
+
 	post: <T>(url: string, body: T, options: FetchOptions = {}) =>
 		fetchWrapper(url, {
 			...options,
-			method: 'POST',
-			body: body ? JSON.stringify(body) : undefined, // Serialize body to string
+			method: "POST",
+			body: body ? JSON.stringify(body) : undefined,
 		}),
 
-	// PUT request
 	put: <T>(url: string, body: T, options: FetchOptions = {}) =>
 		fetchWrapper(url, {
 			...options,
-			method: 'PUT',
-			body: body ? JSON.stringify(body) : undefined, // Serialize body to string
+			method: "PUT",
+			body: body ? JSON.stringify(body) : undefined,
 		}),
 
-	// DELETE request
 	delete: (url: string, options: FetchOptions = {}) =>
-		fetchWrapper(url, { ...options, method: 'DELETE' }),
+		fetchWrapper(url, { ...options, method: "DELETE" }),
 };
-
 
 export default Http;
 
