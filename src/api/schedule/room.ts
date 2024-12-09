@@ -21,5 +21,5 @@ export const updateRoomNumber = (roomUuid: string, body: RoomNumberSchema): Prom
 }
 
 export const updateRoomDescription = (roomUuid: string, body: RoomDescriptionSchema): Promise<ApiResponse<Room>> => {
-    return Http.patch<RoomDescriptionSchema>(`${BASE_URL}/${roomUuid}/update_description`, body);
+    return Http.patch<RoomDescriptionSchema >(`${BASE_URL}/${roomUuid}/update_description`, body);
 }
