@@ -149,10 +149,10 @@ const Http = {
 			body: body ? JSON.stringify(body) : undefined,
 		}),
 
-	put: <T>(url: string, body: T, options: FetchOptions = {}) =>
+	patch: <T>(url: string, body: T, options: FetchOptions = {}) =>
 		fetchWrapper(url, {
 			...options,
-			method: "PUT",
+			method: "PATCH",
 			body: body ? JSON.stringify(body) : undefined,
 		}),
 
