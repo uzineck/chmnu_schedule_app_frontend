@@ -3,17 +3,21 @@ import {GroupWithFaculty} from "../../models/group/GroupWithFaculty.ts";
 import {Teacher} from "../../models/teacher/Teacher.ts";
 import GroupSearch from "../Group/GroupSearch.tsx";
 import TeacherSearch from "../Teacher/TeacherSearch.tsx";
-import GroupSchedule from "../Schedule/GroupSchedule.tsx";
+import GroupSchedule from "../Group/GroupSchedule.tsx";
 import {Subgroup} from "../../models/enums/Subgroup.ts";
-import TeacherSchedule from "../Schedule/TeacherSchedule.tsx";
+import TeacherSchedule from "../Teacher/TeacherSchedule.tsx";
 import {Subject} from "../../models/subject/Subject.ts";
 import SubjectSearch from "../Subject/SubjectSearch.tsx";
+import {useLocation} from "react-router-dom";
 
 
 const MainScreen = () => {
     const [selectedGroup, setSelectedGroup] = useState<GroupWithFaculty | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+
+    const location = useLocation();
+    const message = location.state?.logout_message;
 
     const handleGroupSelect = (group: GroupWithFaculty | null) => {
         setSelectedGroup(group);
@@ -46,6 +50,7 @@ const MainScreen = () => {
                 />
             }
             {selectedSubject && <p>Subject: {selectedSubject.title}</p>}
+            {message && <p>{message}</p>}
         </>
     );
 };

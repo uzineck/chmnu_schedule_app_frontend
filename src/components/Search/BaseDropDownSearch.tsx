@@ -26,9 +26,8 @@ const BaseDropDownSearch: React.FC<BaseDropDownSearchProps> =
          isLoading=false,
          noOptionsMessage='No options'
     }) => {
-
         return (
-            <div className="base-dropdown">
+        <div className="base-dropdown">
             <Select
                 options={options}
                 onChange={onChange}

@@ -28,7 +28,6 @@ const EntitySearch = <T,>({
         ) || null;
         onEntitySelect(entity);
     };
-
     return (
         <BaseDropDownSearch
             options={options}

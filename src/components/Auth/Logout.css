@@ -1,0 +1,58 @@
+/* Modal overlay to cover the entire screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensure the modal appears above other elements */
+}
+
+/* Modal content (Logout confirmation) */
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Modal buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* Button styling */
+.modal-button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    width: 45%;
+}
+
+/* Cancel button */
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Confirm button */
+.confirm-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* Button hover effect */
+.modal-button:hover {
+    opacity: 0.8;
+}

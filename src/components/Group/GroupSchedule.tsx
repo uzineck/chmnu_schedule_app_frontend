@@ -1,7 +1,7 @@
 // Schedule.tsx (Group Schedule)
 import {useEffect, useState} from "react";
-import {getGroupLessons} from "../../api/schedule/group";
-import {Lesson} from "../../models/lesson/Lesson";
+import {getGroupLessons} from "../../api/schedule/group.ts";
+import {Lesson} from "../../models/lesson/Lesson.ts";
 import {Subgroup} from "../../models/enums/Subgroup.ts";
 
 interface GroupScheduleProps {

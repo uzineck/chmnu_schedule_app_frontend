@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getTeacherLessons } from "../../api/schedule/teacher";
-import { TeacherWithLessons } from "../../models/teacher/TeacherWithLessons";
+import { getTeacherLessons } from "../../api/schedule/teacher.ts";
+import { TeacherWithLessons } from "../../models/teacher/TeacherWithLessons.ts";
 
 interface TeacherScheduleProps {
     teacherUuid: string;

@@ -9,6 +9,6 @@ services:
     image: frontend_chmnu_schedule:latest
     container_name: frontend_main-app
     ports:
-      - '80:80'
+      - '81:81'
     environment:
       - NODE_ENV=production

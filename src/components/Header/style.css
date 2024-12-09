@@ -13,10 +13,21 @@
 .header-title {
     flex: 1;
     text-align: center;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     margin: 0;
+    text-decoration: none;
+    color: white;
 }
+
+.header-title:hover {
+    color: honeydew;
+}
+
+.header-title h1 {
+    margin: 0;
+}
+
 
 /* Container for buttons */
 .header-buttons {

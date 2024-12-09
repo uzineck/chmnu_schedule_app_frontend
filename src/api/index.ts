@@ -92,7 +92,7 @@ const handleResponse = async (
 				throw new ApiCallError("Failed after token refresh");
 			}
 			return await retryResponse.json();
-		} catch (error) {
+		} catch {
 			throw new ApiCallError("Unauthorized request. Please log in again.");
 		}
 	}
@@ -103,8 +103,8 @@ const handleResponse = async (
 		if (errorBody?.detail) {
 			errorDetail = errorBody.detail;
 		}
-	} catch (e) {
-		console.error("Failed to parse error response:", e);
+	} catch {
+		throw new ApiCallError(errorDetail)
 	}
 
 	throw new ApiCallError(errorDetail);
@@ -134,6 +134,7 @@ const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
 	const url = BASE_URL + requestUrl;
 
 	const response = await fetch(url, requestOptions);
+
 	return handleResponse(response, url, requestOptions);
 };
 
