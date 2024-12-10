@@ -2,6 +2,7 @@ import BaseDropDownSearch, {OptionType} from "../Search/BaseDropDownSearch.tsx";
 import {useFetchData} from "../../api/hooks/useFetchData.tsx";
 import {ApiResponse} from "../../models/ApiResponse.ts";
 import {SingleValue} from "react-select";
+import {useEffect} from "react";
 
 interface EntitySearchProps<T> {
     fetchData: () => Promise<ApiResponse<T[]>>;
@@ -9,6 +10,8 @@ interface EntitySearchProps<T> {
     onEntitySelect: (entity: T | null) => void;
     placeholder: string;
     noOptionsMessage: string;
+    selectedOption: OptionType | null;
+    onDataFetched: (data: T[]) => void;
 }
 
 const EntitySearch = <T,>({
@@ -17,8 +20,16 @@ const EntitySearch = <T,>({
                               onEntitySelect,
                               placeholder,
                               noOptionsMessage,
+                              selectedOption,
+                              onDataFetched
                           }: EntitySearchProps<T>) => {
     const { data: entities, isLoading } = useFetchData(fetchData);
+
+    useEffect(() => {
+        if (entities) {
+            onDataFetched(entities);
+        }
+    }, [entities, onDataFetched]);
 
     const options = (entities || []).map(mapToOptions);
 
@@ -35,6 +46,7 @@ const EntitySearch = <T,>({
             placeholder={placeholder}
             isLoading={isLoading}
             noOptionsMessage={noOptionsMessage}
+            value={selectedOption}
         />
     );
 };

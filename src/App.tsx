@@ -17,8 +17,10 @@ function App() {
                     <Route path="/" element={<MainScreen />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>}/>
-                    <Route path="/groups" element={<GroupScreen />} />
-                    <Route path="/teachers" element={<TeacherScreen />} />
+                    <Route path="/group" element={<GroupScreen />} />
+                    <Route path="/group/:groupUuid" element={<GroupScreen />} />
+                    <Route path="/teacher" element={<TeacherScreen />} />
+                    <Route path="/teacher/:teacherUuid" element={<TeacherScreen />} />
                 </Routes>
             </Router>
         </AuthProvider>

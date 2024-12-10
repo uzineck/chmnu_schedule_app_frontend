@@ -10,7 +10,7 @@ interface BaseScheduleMatrixProps {
 }
 
 const BaseScheduleMatrix = ({ lessons }: BaseScheduleMatrixProps) => {
-    const matrix: (Lesson | null)[][] = Array.from({ length: 6 }, () => Array(5).fill(null));
+    const matrix: (Lesson | LessonForTeacher)[][] = Array.from({ length: 6 }, () => Array(5).fill(null));
 
     // Map lessons to their appropriate cell in the matrix
     lessons.forEach((lesson) => {

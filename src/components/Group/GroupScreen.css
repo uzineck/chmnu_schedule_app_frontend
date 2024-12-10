@@ -1,20 +1,19 @@
-/* Container for the GroupScreen */
+/* GroupScreen CSS */
 .group-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     padding: 20px;
-    background-color: white;
+    background-color: #fff;
 }
 
-/* Title styling */
-.group-screen h1 {
-    font-size: 28px;
-    color: #4b0082;
+.group-search-container {
     margin-bottom: 20px;
 }
 
-/* Subgroup and Week Type button container */
+.group-search input {
+    padding: 10px;
+    width: 300px;
+    margin-right: 10px;
+}
+
 .button-container {
     display: flex;
     justify-content: center;
@@ -22,7 +21,6 @@
     margin-bottom: 20px;
 }
 
-/* Individual buttons for Subgroup and Week Type */
 .button-container button {
     padding: 10px 20px;
     background-color: mediumpurple;
@@ -39,24 +37,26 @@
     transform: scale(1.05);
 }
 
-/* Style for selected buttons */
 .button-container button.selected {
     background-color: white;
     color: #800080;
     border: 2px solid #800080;
 }
 
-/* Group schedule section */
 .group-schedule-section {
-    width: 100%;
-    max-width: 800px;
-    margin-top: 30px;
-    text-align: center;
+    margin-top: 20px;
 }
 
-/* Style for GroupSearch component */
-.group-search-container {
+.group-schedule-section table {
     width: 100%;
-    max-width: 400px;
-    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+.group-schedule-section th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.group-schedule-section th {
+    background-color: #f4f4f4;
 }

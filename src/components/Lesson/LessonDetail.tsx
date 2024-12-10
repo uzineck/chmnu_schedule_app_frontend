@@ -15,28 +15,24 @@ const LessonDetails = ({ lesson }: LessonDetailsProps) => {
         <>
             <strong>{lesson.subject.title}</strong>
             <p>{lesson.type}</p>
+            <p>Room: {lesson.room.number}</p>
 
-            {/* For regular Lesson, display teacher information */}
             {!isLessonForTeacher(lesson) ? (
                 <>
-                    <p>{lesson.teacher.first_name} {lesson.teacher.last_name}</p>
+                    <p>{lesson.teacher.last_name} {lesson.teacher.first_name.charAt(0)}. {lesson.teacher.middle_name.charAt(0)}.</p>
+
                 </>
             ) : (
-                // For LessonForTeacher, we don't have the teacher, so display group-related details instead
                 <></>
             )}
 
-            <p>{lesson.room.number}</p>
 
-            {/* Conditional rendering based on the type of lesson */}
             {isLessonForTeacher(lesson) ? (
-                // If it's a LessonForTeacher, display group-related details
                 <>
-                    <p>Groups: {lesson.groups.map(group => `${group.number} [${group.subgroups.join(", ")}]`).join(", ")}</p>
+                    <p>Groups: {lesson.groups.map(group => `${group.number} (${group.subgroups.join(",")})`).join(", ")}</p>
                 </>
             ) : (
-                // If it's a regular Lesson, you can display additional lesson-specific content
-                <p>No additional group details available for this lesson.</p>
+                <></>
             )}
         </>
     );

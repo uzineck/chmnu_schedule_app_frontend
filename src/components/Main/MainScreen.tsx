@@ -1,27 +1,42 @@
-import {useState} from "react";
-import {Subject} from "../../models/subject/Subject.ts";
-import SubjectSearch from "../Subject/SubjectSearch.tsx";
-import {useLocation} from "react-router-dom";
-
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import './MainScreen.css';
 
 const MainScreen = () => {
-    const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
-
     const location = useLocation();
     const message = location.state?.logout_message;
 
+    // State to track selected button
+    const [selectedPage, setSelectedPage] = useState<string | null>(null);
 
-    const handleSubjectSelect = (subject: Subject | null) => {
-        setSelectedSubject(subject);
-    }
+    const handleButtonClick = (page: string) => {
+        setSelectedPage(page);
+    };
 
     return (
-        <>
-            <SubjectSearch onSubjectSelect={handleSubjectSelect} />
+        <div className="main-screen">
+            <h1>Welcome to the Schedule</h1>
 
-            {selectedSubject && <p>Subject: {selectedSubject.title}</p>}
             {message && <p>{message}</p>}
-        </>
+
+            <div className="button-container">
+                <Link
+                    to="/group"
+                    className={`button ${selectedPage === 'group' ? 'selected' : ''}`}
+                    onClick={() => handleButtonClick('group')}
+                >
+                    Group
+                </Link>
+
+                <Link
+                    to="/teacher"
+                    className={`button ${selectedPage === 'teacher' ? 'selected' : ''}`}
+                    onClick={() => handleButtonClick('teacher')}
+                >
+                    Teacher
+                </Link>
+            </div>
+        </div>
     );
 };
 

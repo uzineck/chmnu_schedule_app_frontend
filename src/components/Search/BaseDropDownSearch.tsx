@@ -12,7 +12,7 @@ interface BaseDropDownSearchProps {
     options: OptionType[];
     onChange: (selectedOption: SingleValue<OptionType>) => void;
     placeholder?: string;
-    value?: OptionType;
+    value?: OptionType | null;
     isLoading?: boolean;
     noOptionsMessage?: string;
 }

@@ -6,16 +6,17 @@ import TeacherScheduleMatrix from "./TeacherScheduleMatrix.tsx";  // Import the 
 
 interface TeacherScheduleProps {
     teacherUuid: string;
+    is_even: boolean;
 }
 
-const TeacherSchedule = ({ teacherUuid }: TeacherScheduleProps) => {
+const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
     const [teacherData, setTeacherData] = useState<TeacherWithLessons | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         if (teacherUuid) {
             setIsLoading(true);
-            getTeacherLessons(teacherUuid)
+            getTeacherLessons(teacherUuid, is_even)
                 .then((response) => {
                     setTeacherData(response.data);
                     setIsLoading(false);
@@ -40,7 +41,7 @@ const TeacherSchedule = ({ teacherUuid }: TeacherScheduleProps) => {
             <h2>
                 {teacherData.teacher.first_name} {teacherData.teacher.last_name}'s Schedule
             </h2>
-            <TeacherScheduleMatrix lessons={teacherData.lessons} /> {/* Use TeacherScheduleMatrix */}
+            <TeacherScheduleMatrix lessons={teacherData.lessons} />
         </div>
     );
 };
