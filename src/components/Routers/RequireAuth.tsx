@@ -1,5 +1,5 @@
 import React from "react";
-import {useAuth} from "./AuthProvider.tsx";
+import {useAuth} from "../Auth/Context/AuthProvider.tsx";
 
 interface RequireAuthProps {
     children: React.ReactNode;

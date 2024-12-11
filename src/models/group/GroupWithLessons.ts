@@ -1,7 +1,7 @@
-import {Group} from "./Group.ts";
 import {Lesson} from "../lesson/Lesson.ts";
+import {GroupWithSubgroup} from "./GroupWithSubgroup.ts";
 
 export interface GroupWithLessons{
-    group: Group;
+    group: GroupWithSubgroup;
     lessons: Lesson[] | null;
 }

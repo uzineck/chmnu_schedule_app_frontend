@@ -1,11 +1,11 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { login } from '../../api/client/auth.ts';
+import { login } from '../../../api/client/auth.ts';
 import './Login.css';
-import { useAuth } from './AuthProvider.tsx';
+import { useAuth } from '../Context/AuthProvider.tsx';
 import { useNavigate } from 'react-router-dom';
 import {useState} from "react";
-import {ApiCallError} from "../../api/errors.ts";
+import {ApiCallError} from "../../../api/errors.ts";
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -17,7 +17,7 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
     const { loginProp } = useAuth();
-    const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const formik = useFormik({
@@ -27,7 +27,7 @@ const Login = () => {
         },
         validationSchema: LoginSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            setErrorMessage(null); // Clear previous error message
+            setErrorMessage(null);
             try {
                 const response = await login({
                     email: values.email,
@@ -35,7 +35,7 @@ const Login = () => {
                 });
                 loginProp( response.data.access_token, response.data.refresh_token );
                 navigate('/');
-            } catch (error: unknown) {
+            } catch (error) {
                 if (error instanceof ApiCallError) {
                     setErrorMessage(error.message);
                 } else {

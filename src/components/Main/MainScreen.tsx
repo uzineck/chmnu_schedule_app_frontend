@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import './MainScreen.css';
+import { useLocation } from "react-router-dom";
+import './module.css';
+import ButtonContainer from "../Button/ButtonContainer.tsx";
 
 const MainScreen = () => {
     const location = useLocation();
     const message = location.state?.logout_message;
 
-    // State to track selected button
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
 
     const handleButtonClick = (page: string) => {
@@ -15,27 +15,27 @@ const MainScreen = () => {
 
     return (
         <div className="main-screen">
-            <h1>Welcome to the Schedule</h1>
-
             {message && <p>{message}</p>}
 
-            <div className="button-container">
-                <Link
-                    to="/group"
-                    className={`button ${selectedPage === 'group' ? 'selected' : ''}`}
-                    onClick={() => handleButtonClick('group')}
-                >
-                    Group
-                </Link>
+            <ButtonContainer
+                options={[
+                    {
+                        label: 'Group',
+                        value: 'group',
+                        isLink: true,
+                        to: '/group'
+                    },
+                    {
+                        label: 'Teacher',
+                        value: 'teacher',
+                        isLink: true,
+                        to: '/teacher'
+                    }
+                ]}
+                selectedValue={selectedPage}
+                onChange={handleButtonClick}
+            />
 
-                <Link
-                    to="/teacher"
-                    className={`button ${selectedPage === 'teacher' ? 'selected' : ''}`}
-                    onClick={() => handleButtonClick('teacher')}
-                >
-                    Teacher
-                </Link>
-            </div>
         </div>
     );
 };

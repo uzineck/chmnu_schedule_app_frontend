@@ -1,29 +1,59 @@
-import "./style.css";
-import { Link } from "react-router-dom";
-import React from 'react';
-import {useAuth} from "../Auth/AuthProvider.tsx";
+import React, { useState } from "react";
+import { useAuth } from "../Auth/Context/AuthProvider.tsx";
+import ButtonContainer from "../Button/ButtonContainer.tsx";
+import "./module.css";
 
 export const Header: React.FC = () => {
     const { isLoggedIn } = useAuth();
+    const [selectedPage, setSelectedPage] = useState<string | null>(null);
+
+    const handleButtonClick = (page: string) => {
+        setSelectedPage(page);
+    };
 
     return (
-        <>
-            <header className="header">
-                <Link to="/" className="header-title">
-                    <h1>Schedule</h1>
-                </Link>
-                <div className="header-buttons">
-                    {isLoggedIn ? (
-                        <Link to="/logout" className="header-button">
-                            Logout
-                        </Link>
-                    ) : (
-                        <Link to="/login" className="header-button">
-                            Login
-                        </Link>
-                    )}
-                </div>
-            </header>
-        </>
-    );
+        <header className="header">
+            <div className="header-buttons">
+                <ButtonContainer
+                    options={[
+                        {
+                            label: isLoggedIn ? "Logout" : "Login",
+                            value: isLoggedIn ? "logout" : "login",
+                            isLink: true,
+                            to: isLoggedIn ? "/logout" : "/login",
+                        },
+
+                    ]}
+                    selectedValue={selectedPage}
+                    onChange={handleButtonClick}
+                >
+
+                </ButtonContainer>
+
+            </div>
+
+            <h1>CHMNU Schedule</h1>
+
+            <div className="header-buttons">
+                <ButtonContainer
+                    options={[
+                        {
+                            label: "Group",
+                            value: "group",
+                            isLink: true,
+                            to: "/group",
+                        },
+                        {
+                            label: "Teacher",
+                            value: "teacher",
+                            isLink: true,
+                            to: "/teacher",
+                        },
+                    ]}
+                    selectedValue={selectedPage}
+                    onChange={handleButtonClick}
+                />
+            </div>
+        </header>
+);
 };

@@ -1,4 +1,4 @@
-import { ApiCallError } from "./errors.ts";
+import {ApiCallError, ApiLoginError} from "./errors.ts";
 import { updateAccessToken } from "./client/auth.ts";
 import { TokenSchema } from "../models/client/request/TokenSchema.ts";
 
@@ -39,8 +39,9 @@ const refreshAccessToken = async (): Promise<void> => {
 	if (!tokenRefreshPromise) {
 		const refreshToken = localStorage.getItem("refreshToken");
 		if (!refreshToken) {
+
 			clearTokens();
-			throw new ApiCallError("Please log in again.");
+			throw new ApiLoginError("Please log in again.");
 		}
 
 		tokenRefreshPromise = (async () => {
@@ -48,14 +49,20 @@ const refreshAccessToken = async (): Promise<void> => {
 				const data: TokenSchema = { token: refreshToken };
 				const newToken = await updateAccessToken(data);
 
+
 				localStorage.setItem("accessToken", newToken.data.access_token);
 			} catch {
+
 				clearTokens();
-				throw new ApiCallError("Please log in again.");
+				throw new ApiLoginError("Please log in again.");
 			} finally {
+
 				tokenRefreshPromise = null;
 			}
 		})();
+	}
+	else {
+		throw new ApiLoginError("Please log in again.");
 	}
 
 	return tokenRefreshPromise;
@@ -85,29 +92,38 @@ const handleResponse = async (
 					...requestOptions.headers,
 					Authorization: `Bearer ${newAccessToken}`,
 				};
+
+				const retryResponse = await fetch(requestUrl, requestOptions);
+
+				if (!retryResponse.ok) {
+					throw new ApiLoginError("Failed after token refresh.");
+				}
+
+				return await retryResponse.json();
+			}
+		} catch (error) {
+			if (error instanceof ApiCallError) {
+				throw new ApiLoginError(error.message);
 			}
 
-			const retryResponse = await fetch(requestUrl, requestOptions);
-			if (!retryResponse.ok) {
-				throw new ApiCallError("Failed after token refresh");
+			throw new ApiCallError("An error occurred during authentication.");
+		}
+	}
+
+	if (response.status === 400 || response.status === 403) {
+		let errorDetail = "Api Call Error";
+		try {
+			const errorBody = await response.json();
+
+			if (errorBody?.detail) {
+				errorDetail = errorBody.detail;
 			}
-			return await retryResponse.json();
 		} catch {
-			throw new ApiCallError("Unauthorized request. Please log in again.");
+			throw new ApiCallError(errorDetail);
 		}
 	}
 
-	let errorDetail = "An error occurred";
-	try {
-		const errorBody = await response.json();
-		if (errorBody?.detail) {
-			errorDetail = errorBody.detail;
-		}
-	} catch {
-		throw new ApiCallError(errorDetail)
-	}
-
-	throw new ApiCallError(errorDetail);
+	throw new ApiCallError(`Unexpected error: ${response.status}`);
 };
 
 interface FetchOptions extends RequestInit {
@@ -115,7 +131,6 @@ interface FetchOptions extends RequestInit {
 	body?: string;
 }
 
-// Вспомогательная функция fetch
 const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
 	const { headers = {}, body, ...restOptions } = options;
 
@@ -132,9 +147,7 @@ const fetchWrapper = async (requestUrl: string, options: FetchOptions = {}) => {
 	};
 
 	const url = BASE_URL + requestUrl;
-
 	const response = await fetch(url, requestOptions);
-
 	return handleResponse(response, url, requestOptions);
 };
 

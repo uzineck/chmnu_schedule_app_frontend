@@ -1,6 +1,6 @@
-import { GroupWithFaculty } from "../../models/group/GroupWithFaculty.ts";
-import { getAllGroups } from "../../api/schedule/group.ts";
-import EntitySearch from "../Search/EntitySearch.tsx";
+import { GroupWithFaculty } from "../../../models/group/GroupWithFaculty.ts";
+import { getAllGroups } from "../../../api/schedule/group.ts";
+import EntitySearch from "../../Search/EntitySearch.tsx";
 
 interface GroupSearchProps {
     onGroupSelect: (group: GroupWithFaculty | null) => void;

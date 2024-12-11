@@ -1,6 +1,6 @@
-import EntitySearch from "../Search/EntitySearch.tsx";
-import {Subject} from "../../models/subject/Subject.ts";
-import {getAllSubjects} from "../../api/schedule/subject.ts";
+import EntitySearch from "../../Search/EntitySearch.tsx";
+import {Subject} from "../../../models/subject/Subject.ts";
+import {getAllSubjects} from "../../../api/schedule/subject.ts";
 
 interface SubjectSearchProps {
     onSubjectSelect: (subject: Subject | null) => void;

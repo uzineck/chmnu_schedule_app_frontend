@@ -10,6 +10,9 @@ import {UpdateClientRoleSchema} from "../../models/client/request/UpdateClientRo
 
 const BASE_URL = '/clients/client';
 
+export const getClientInfo = (): Promise<ApiResponse<ClientPrivate>> => {
+    return Http.get(`${BASE_URL}/info`);
+};
 
 export const updatePassword = (body: UpdatePasswordSchema): Promise<ApiResponse<StatusResponse>> => {
     return Http.patch<UpdatePasswordSchema>(`${BASE_URL}/update_password`, body);

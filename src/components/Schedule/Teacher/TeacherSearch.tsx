@@ -1,6 +1,6 @@
-import { Teacher } from "../../models/teacher/Teacher.ts";
-import { getAllTeachers } from "../../api/schedule/teacher.ts";
-import EntitySearch from "../Search/EntitySearch.tsx";
+import { Teacher } from "../../../models/teacher/Teacher.ts";
+import { getAllTeachers } from "../../../api/schedule/teacher.ts";
+import EntitySearch from "../../Search/EntitySearch.tsx";
 
 
 interface TeacherSearchProps {

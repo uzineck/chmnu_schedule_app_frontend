@@ -1,0 +1,95 @@
+/* Header container */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Ensures vertical centering of elements */
+    background-color: mediumpurple;
+    color: white;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(250, 50, 200, 0.3);
+}
+
+/* Title (Schedule) in the header */
+.header-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+    text-decoration: none;
+    color: white;
+    /* Ensure the title is centered properly */
+    flex-grow: 1;
+}
+
+/* Hover effect for header title */
+.header-title:hover {
+    color: honeydew;
+}
+
+.header-title h1 {
+    margin: 0;
+}
+
+/* Container for buttons in header */
+.header-buttons {
+    display: flex;
+    justify-content: center; /* Align buttons horizontally */
+    align-items: center; /* Vertically center the buttons */
+    gap: 10px;
+}
+
+/* Button styling inside button container */
+.header-button {
+    padding: 8px 16px;
+    background-color: white;
+    color: #800080;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for header button */
+.header-button:hover {
+    background-color: #800080;
+    color: white;
+}
+
+/* Styling for the button container (general) */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center; /* Vertically center items in the container */
+}
+
+/* Button styling for both buttons and links inside .button-container */
+.button-container button,
+.button-container a {
+    padding: 10px 20px;
+    background-color: mediumpurple;
+    color: white;
+    text-decoration: none;  /* Remove underline for links */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for both buttons and links inside .button-container */
+.button-container button:hover,
+.button-container a:hover {
+    background-color: darkviolet;
+    transform: scale(1.05);
+}
+
+/* Selected state for both buttons and links */
+.button-container button.selected,
+.button-container a.selected {
+    background-color: white;
+    color: #800080;
+    border: 2px solid #800080;
+}

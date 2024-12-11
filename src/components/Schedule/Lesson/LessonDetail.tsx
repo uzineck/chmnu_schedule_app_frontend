@@ -1,5 +1,5 @@
-import { Lesson } from "../../models/lesson/Lesson.ts";
-import { LessonForTeacher } from "../../models/lesson/LessonForTeacher.ts";
+import { Lesson } from "../../../models/lesson/Lesson.ts";
+import { LessonForTeacher } from "../../../models/lesson/LessonForTeacher.ts";
 
 // Type guard to check if the lesson is of type `LessonForTeacher`
 function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is LessonForTeacher {

@@ -1,15 +1,14 @@
-import BaseScheduleMatrix from "../Schedule/BaseScheduleMatrix.tsx";
-import {LessonForTeacher} from "../../models/lesson/LessonForTeacher.ts";
+import { LessonForTeacher } from "../../../models/lesson/LessonForTeacher.ts";
+
+import BaseScheduleMatrix from "../BaseScheduleMatrix.tsx";
 
 interface TeacherScheduleMatrixProps {
-    lessons: LessonForTeacher[];
+    lessons: LessonForTeacher[] | null;
 }
 
 const TeacherScheduleMatrix = ({ lessons }: TeacherScheduleMatrixProps) => {
     return (
-        <div className="schedule-matrix">
             <BaseScheduleMatrix lessons={lessons} />
-        </div>
     );
 };
 

@@ -8,6 +8,7 @@ import {GroupWithHeadman} from "../../models/group/GroupWithHeadman.ts";
 import {CreateGroupSchema} from "../../models/group/requests/CreateGroupSchema.ts";
 import {UpdateGroupHeadmanSchema} from "../../models/group/requests/UpdateGroupHeadmanSchema.ts";
 import {StatusResponse} from "../../models/StatusResponse.ts";
+import {Group} from "../../models/group/Group.ts";
 
 const BASE_URL = '/schedule/group';
 
@@ -32,6 +33,10 @@ export const getGroupInfo = (groupUuid: string): Promise<ApiResponse<GroupWithHe
 
 export const getHeadmanInfo = (headmanEmail: string): Promise<ApiResponse<GroupWithHeadman>> => {
     return Http.get(`${BASE_URL}/${headmanEmail}/headman_info`);
+}
+
+export const getHeadmanGroup = (): Promise<ApiResponse<Group>> => {
+    return Http.get(`${BASE_URL}/headman_group`);
 }
 
 export const createGroup = (body: CreateGroupSchema): Promise<ApiResponse<GroupWithHeadman>> => {
