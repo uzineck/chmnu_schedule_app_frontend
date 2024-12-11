@@ -1,11 +1,30 @@
-/* Form container */
+/* General Page Layout */
+.login-page {
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: flex-start; /* Align the container to the top of the page */
+    padding-top: 4rem; /* Add space from the top */
+}
+
+/* Form container styling */
 .login-container {
     max-width: 400px;
-    margin: 2rem auto;
+    width: 100%;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Title Styling */
+.login-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #4b4f5c;
 }
 
 /* Form layout */
@@ -26,28 +45,33 @@
 .form-group label {
     font-weight: 500;
     color: #333;
+    font-size: 0.9rem;
+    text-align: left;
 }
 
 /* Input field styling */
 .form-control {
     padding: 0.75rem;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 1rem;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 /* Input field focus styling */
 .form-control:focus {
-    border-color: mediumpurple;
+    border-color: #7f00ff;
+    box-shadow: 0 0 8px rgba(127, 0, 255, 0.3);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.2);
 }
 
 /* Error message styling */
 .error-message {
-    color: #dc3545;
+    color: #ff4d4d;
     font-size: 0.875rem;
-    margin-top: 0.25rem;
+    margin-top: -0.8rem;
+    text-align: left; /* Align the error message to the left */
+    margin-left: 0.5rem; /* Optional: Adds space from the left side */
 }
 
 /* Submit button styling */
@@ -56,15 +80,16 @@
     background-color: mediumpurple;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
 }
 
 /* Submit button hover effect */
 .submit-button:hover {
-    background-color: #8a2be2;
+    background-color: darkviolet;
+    transform: scale(1.05);
 }
 
 /* Disabled submit button */
@@ -77,15 +102,15 @@
 .status-message {
     padding: 10px;
     margin: 10px 0;
-    border-radius: 4px;
+    border-radius: 5px;
     text-align: center;
 }
 
 /* Error status message */
 .status-message.error {
-    background-color: #ffebee;
-    color: #c62828;
-    border: 1px solid #ffcdd2;
+    background-color: #ffe5e5;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
 }
 
 /* Success status message */

@@ -1,17 +1,19 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { login } from '../../../api/client/auth.ts';
-import './Login.css';
+import './module.css';
 import { useAuth } from '../Context/AuthProvider.tsx';
 import { useNavigate } from 'react-router-dom';
-import {useState} from "react";
-import {ApiCallError} from "../../../api/errors.ts";
+import { useState } from 'react';
+import { ApiCallError } from "../../../api/errors.ts";
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
         .email('Invalid email format')
+        .matches(/^.*@gmail\.com$/g, 'Invalid email domain, use @gmail.com')
         .required('Email is required'),
     password: Yup.string()
+        .min(8, 'Password must be at least 8 characters')
         .required('Password is required'),
 });
 
@@ -33,7 +35,7 @@ const Login = () => {
                     email: values.email,
                     password: values.password,
                 });
-                loginProp( response.data.access_token, response.data.refresh_token );
+                loginProp(response.data.access_token, response.data.refresh_token);
                 navigate('/');
             } catch (error) {
                 if (error instanceof ApiCallError) {
@@ -49,9 +51,8 @@ const Login = () => {
 
     return (
         <div className="login-page">
-            <div className="login-container full-page">
-                <h1 className="login-title">Welcome Back</h1>
-                <p className="login-subtitle">Log in to your schedule account</p>
+            <div className="login-container">
+                <div className="login-title">Log in to your schedule account</div>
 
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
 

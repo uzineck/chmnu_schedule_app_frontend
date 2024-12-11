@@ -30,7 +30,7 @@
     gap: 1rem;
 }
 
-/* Button styling */
+/* Buttons styling */
 .modal-button {
     padding: 0.75rem;
     font-size: 1rem;
@@ -52,7 +52,7 @@
     color: white;
 }
 
-/* Button hover effect */
+/* Buttons hover effect */
 .modal-button:hover {
     opacity: 0.8;
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import './module.css';
-import ButtonContainer from "../Button/ButtonContainer.tsx";
+import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 
 const MainScreen = () => {
     const location = useLocation();

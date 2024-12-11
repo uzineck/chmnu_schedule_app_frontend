@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../Auth/Context/AuthProvider.tsx";
-import ButtonContainer from "../Button/ButtonContainer.tsx";
+import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 import "./module.css";
 
 export const Header: React.FC = () => {

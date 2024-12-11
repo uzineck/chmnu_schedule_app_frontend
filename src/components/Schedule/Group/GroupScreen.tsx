@@ -5,8 +5,7 @@ import GroupSchedule from "./GroupSchedule.tsx";
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import { GroupWithFaculty } from "../../../models/group/GroupWithFaculty.ts";
 import './GroupScreen.css';
-import ButtonContainer from "../../Button/ButtonContainer.tsx";
-
+import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 
 const GroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
@@ -27,7 +26,7 @@ const GroupScreen = () => {
         }
 
         const isEven = searchParams.get("is_even");
-        setIsEvenWeek(isEven ? isEven === "true"  : true);
+        setIsEvenWeek(isEven ? isEven === "true" : true);
 
         const selectedSubgroup = searchParams.get("subgroup");
         if (selectedSubgroup === Subgroup.B) {
@@ -64,37 +63,40 @@ const GroupScreen = () => {
 
     return (
         <div className="group-screen">
+            <div className="group-screen-controls">
                 <GroupSearch
                     onGroupSelect={handleGroupSelect}
                     onGroupListFetched={handleGroupListFetched}
                     selectedGroup={selectedGroup}
                 />
-
-                <ButtonContainer
-                    options={[
-                        { label: 'A', value: Subgroup.A },
-                        { label: 'B', value: Subgroup.B }
-                    ]}
-                    selectedValue={subgroup}
-                    onChange={handleSubgroupChange}
-                />
-                <ButtonContainer
-                    options={[
-                        { label: 'Even', value: true },
-                        { label: 'Odd', value: false }
-                    ]}
-                    selectedValue={isEvenWeek}
-                    onChange={handleWeekTypeChange}
-                />
-
-                {selectedGroup && (
-                    <GroupSchedule
-                        key={`${selectedGroup.uuid}-${subgroup}-${isEvenWeek}`}
-                        groupUuid={selectedGroup.uuid}
-                        subgroup={subgroup}
-                        is_even={isEvenWeek}
+                <div className="button-container-column">
+                    <ButtonContainer
+                        options={[
+                            { label: 'A', value: Subgroup.A },
+                            { label: 'B', value: Subgroup.B }
+                        ]}
+                        selectedValue={subgroup}
+                        onChange={handleSubgroupChange}
                     />
-                )}
+                    <ButtonContainer
+                        options={[
+                            { label: 'Even', value: true },
+                            { label: 'Odd', value: false }
+                        ]}
+                        selectedValue={isEvenWeek}
+                        onChange={handleWeekTypeChange}
+                    />
+                </div>
+            </div>
+
+            {selectedGroup && (
+                <GroupSchedule
+                    key={`${selectedGroup.uuid}-${subgroup}-${isEvenWeek}`}
+                    groupUuid={selectedGroup.uuid}
+                    subgroup={subgroup}
+                    is_even={isEvenWeek}
+                />
+            )}
         </div>
     );
 };

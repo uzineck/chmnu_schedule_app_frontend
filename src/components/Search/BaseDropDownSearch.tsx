@@ -36,7 +36,11 @@ const BaseDropDownSearch: React.FC<BaseDropDownSearchProps> =
                 value={value}
                 isLoading={isLoading}
                 noOptionsMessage={() => isLoading ? "Loading..." : noOptionsMessage}
-                styles={customStyles}
+                menuPortalTarget={document.body}
+                styles={{
+                    ...customStyles,
+                    menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
             />
         </div>
     );

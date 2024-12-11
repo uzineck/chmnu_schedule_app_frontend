@@ -2,13 +2,13 @@
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 20px;
+    margin: 0;
     align-items: center;
 }
 
 .button-container button,
 .button-container a {
-    padding: 10px 20px;
+    padding: 10px 10px;
     background-color: mediumpurple;
     color: white;
     text-decoration: none;  /* Remove underline for links */

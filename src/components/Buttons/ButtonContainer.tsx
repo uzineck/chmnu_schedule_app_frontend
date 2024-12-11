@@ -1,31 +1,36 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import ToggleButton from "./ToggleButton.tsx";
 import "./module.css";
+import ButtonLink from "./ButtonLink.tsx";
 
 interface ButtonContainerProps {
     options: {
         label: string;
-        value: any;
+        value: undefined;
         isLink?: boolean;
         to?: string;
     }[];
-    selectedValue: any;
-    onChange: (newValue: any) => void;
+    selectedValue: undefined;
+    onChange: (newValue: undefined) => void;
 }
 
 const ButtonContainer: React.FC<ButtonContainerProps> = ({ options, selectedValue, onChange }) => {
+    const handleLinkClick = (value: undefined) => {
+        onChange(value);
+    };
+
     return (
         <div className="button-container">
             {options.map((option) => (
                 option.isLink ? (
-                    <Link
+                    <ButtonLink
                         key={option.value}
-                        to={option.to || "#"}
-                        className={selectedValue === option.value ? "selected" : ""}
-                    >
-                        {option.label}
-                    </Link>
+                        label={option.label}
+                        value={option.value}
+                        selectedValue={selectedValue}
+                        to={option.to}
+                        onClick={handleLinkClick}  // Pass the handleLinkClick to ButtonLink
+                    />
                 ) : (
                     <ToggleButton
                         key={option.value}

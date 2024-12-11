@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { getTeacherLessons } from "../../../api/schedule/teacher.ts";
 import TeacherScheduleMatrix from "./TeacherScheduleMatrix.tsx";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
-import Title from "../../Title/Title.tsx";
 
 interface TeacherScheduleProps {
     teacherUuid: string;
@@ -27,7 +26,6 @@ const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
 
     return (
         <>
-            <Title text={`${data?.teacher.last_name} ${data?.teacher.first_name.charAt(0)}. ${data?.teacher.middle_name.charAt(0)}.`} />
             <TeacherScheduleMatrix lessons={data ? data.lessons : null} />
         </>
     );

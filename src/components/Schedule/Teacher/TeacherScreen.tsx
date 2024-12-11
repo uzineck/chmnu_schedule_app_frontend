@@ -4,7 +4,7 @@ import TeacherSearch from "./TeacherSearch.tsx";
 import { Teacher } from "../../../models/teacher/Teacher.ts";
 import TeacherSchedule from "./TeacherSchedule.tsx";
 import './TeacherScreen.css';
-import ButtonContainer from "../../Button/ButtonContainer.tsx";
+import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 
 const TeacherScreen = () => {
     const { teacherUuid } = useParams<{ teacherUuid: string }>();
@@ -52,29 +52,32 @@ const TeacherScreen = () => {
 
     return (
         <div className="teacher-screen">
+            <div className="teacher-screen-controls">
                 <TeacherSearch
                     onTeacherSelect={handleTeacherSelect}
                     onTeacherListFetched={handleTeacherListFetched}
                     selectedTeacher={selectedTeacherOption}
                 />
-
-            <ButtonContainer
-                options={[
-                    { label: 'Even', value: true },
-                    { label: 'Odd', value: false }
-                ]}
-                selectedValue={isEvenWeek}
-                onChange={handleWeekTypeChange}
-            />
-                {selectedTeacher && (
-                    <TeacherSchedule
-                        key={`${selectedTeacher.uuid}-${isEvenWeek}`}
-                        teacherUuid={selectedTeacher.uuid}
-                        is_even={isEvenWeek}
+                <div className="button-container-column">
+                    <ButtonContainer
+                        options={[
+                            {label: 'Even', value: true},
+                            {label: 'Odd', value: false}
+                        ]}
+                        selectedValue={isEvenWeek}
+                        onChange={handleWeekTypeChange}
                     />
-                )}
+                </div>
+            </div>
+            {selectedTeacher && (
+                <TeacherSchedule
+                    key={`${selectedTeacher.uuid}-${isEvenWeek}`}
+                    teacherUuid={selectedTeacher.uuid}
+                    is_even={isEvenWeek}
+                />
+            )}
         </div>
     );
 };
 
-export default TeacherScreen;
+            export default TeacherScreen;

@@ -38,7 +38,7 @@
     gap: 10px;
 }
 
-/* Button styling inside button container */
+/* Buttons styling inside button container */
 .header-button {
     padding: 8px 16px;
     background-color: white;
@@ -65,7 +65,7 @@
     align-items: center; /* Vertically center items in the container */
 }
 
-/* Button styling for both buttons and links inside .button-container */
+/* Buttons styling for both buttons and links inside .button-container */
 .button-container button,
 .button-container a {
     padding: 10px 20px;
