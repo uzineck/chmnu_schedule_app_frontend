@@ -1,0 +1,68 @@
+/* Lesson details container */
+.lesson-details {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lesson-details:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Dynamic lesson type */
+.lesson-type {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    color: white;
+    border-radius: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Lesson type colors */
+.lesson-type.type-lecture {
+    background-color: #5c6bc0; /* For lectures */
+}
+
+.lesson-type.type-practice {
+    background-color: #800080; /* For practice */
+}
+
+
+/* Lesson title */
+.lesson-title {
+    font-size: 0.91rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+/* Room information */
+.lesson-room {
+    font-size: 0.95rem;
+    color: #444;
+    text-align: center;
+}
+
+/* Teacher information */
+.lesson-teacher {
+    font-size: 0.95rem;
+    color: #444;
+    text-align: center;
+}
+
+/* Groups information */
+.lesson-groups {
+    font-size: 0.95rem;
+    color: #666;
+    text-align: center;
+}

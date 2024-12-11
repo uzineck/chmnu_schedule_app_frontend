@@ -1,46 +1,95 @@
-/* module.css */
+/* General styling for the schedule matrix container */
+.schedule-matrix {
+    margin: 10px auto;
+    width: 95%;
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    font-family: "Arial", sans-serif;
+}
+
+/* Table styling */
 .schedule-matrix table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Ensures equal width for all columns */
+    table-layout: fixed;
 }
 
-.schedule-matrix th, .schedule-matrix td {
-    width: 20%; /* Each column gets an equal share of the table's width */
-    height: 100px; /* Fixed height for each cell */
+/* Header cells styling */
+.schedule-matrix th {
+    background-color: #f0f4f8;
+    color: #333;
     padding: 10px;
-    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0; /* Sticky header */
+    z-index: 1;
+}
+
+/* Time column styling */
+.schedule-matrix th.time-cell {
+    background-color: #f0f4f8;
+    color: #333;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Body cells styling */
+.schedule-matrix td.lesson-cell {
+    height: 120px;
     text-align: center;
     vertical-align: top;
+    padding: 10px;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.schedule-matrix td.has-lesson {
-    background-color: #e6f7ff;
-}
-
+/* Empty cells */
 .schedule-matrix td.no-lesson {
-    background-color: #f2f2f2;
+    background-color: #f9f9f9;
+    color: #999;
 }
 
-.schedule-matrix td p {
+/* Hover effect for cells with lessons */
+.schedule-matrix td.has-lesson:hover {
+    cursor: pointer;
+}
+
+/* Styling for the "No Lesson" text */
+.schedule-matrix td.no-lesson p {
+    color: #ccc;
+    font-style: italic;
     margin: 0;
-    font-size: 12px;
-    overflow: hidden; /* Prevents content from overflowing */
-    text-overflow: ellipsis; /* Adds ellipsis for overflowed text */
-    white-space: nowrap; /* Prevents wrapping of text */
 }
 
-.schedule-matrix th:first-child {
-    background-color: #f7f7f7;
-    text-align: center;
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .schedule-matrix {
+        font-size: 12px;
+    }
+
+    .schedule-matrix th,
+    .schedule-matrix td {
+        padding: 8px;
+    }
+
+    .schedule-matrix td.lesson-cell {
+        height: 100px;
+    }
 }
 
-
-.schedule-matrix th {
-    background-color: #f0f0f0;
-    font-size: 14px;
-}
-
-.schedule-matrix th, .schedule-matrix td {
-    font-size: 14px;
+/* Tablet responsiveness */
+@media (max-width: 1024px) {
+    .schedule-matrix {
+        font-size: 14px;
+    }
 }

@@ -1,7 +1,9 @@
-import { Lesson } from "../../../models/lesson/Lesson.ts";
-import { LessonForTeacher } from "../../../models/lesson/LessonForTeacher.ts";
+import React from "react";
+import "./module.css";
+import {Lesson} from "../../../models/lesson/Lesson";
+import {LessonForTeacher} from "../../../models/lesson/LessonForTeacher";
+import {LessonType} from "../../../models/enums/LessonType.ts";
 
-// Type guard to check if the lesson is of type `LessonForTeacher`
 function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is LessonForTeacher {
     return (lesson as LessonForTeacher).groups !== undefined;
 }
@@ -10,31 +12,36 @@ interface LessonDetailsProps {
     lesson: Lesson | LessonForTeacher;
 }
 
-const LessonDetails = ({ lesson }: LessonDetailsProps) => {
+const getLessonTypeStyle = (type: LessonType): string => {
+    switch (type) {
+        case LessonType.LECTURE:
+            return "type-lecture";
+        case LessonType.PRACTICE:
+            return "type-practice";
+    }
+};
+
+const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson }) => {
+    const lessonTypeClass = getLessonTypeStyle(lesson.type);
+
     return (
-        <>
-            <strong>{lesson.subject.title}</strong>
-            <p>{lesson.type}</p>
-            <p>Room: {lesson.room.number}</p>
-
-            {!isLessonForTeacher(lesson) ? (
-                <>
-                    <p>{lesson.teacher.last_name} {lesson.teacher.first_name.charAt(0)}. {lesson.teacher.middle_name.charAt(0)}.</p>
-
-                </>
-            ) : (
-                <></>
-            )}
-
-
+        <div className="lesson-details">
+            <div className={`lesson-type ${lessonTypeClass}`}>{lesson.type}</div>
+            <div className="lesson-title">{lesson.subject.title}</div>
+            <div className="lesson-room">Classroom: {lesson.room.number}</div>
             {isLessonForTeacher(lesson) ? (
-                <>
-                    <p>Groups: {lesson.groups.map(group => `${group.number} (${group.subgroups.join(",")})`).join(", ")}</p>
-                </>
+                <div className="lesson-groups">
+                    Groups:{" "}
+                    {lesson.groups
+                        .map(group => `${group.number} (${group.subgroups.join(", ")})`)
+                        .join(", ")}
+                </div>
             ) : (
-                <></>
+                <div className="lesson-teacher">
+                    Teacher: {lesson.teacher.last_name} {lesson.teacher.first_name.charAt(0)}. {lesson.teacher.middle_name.charAt(0)}.
+                </div>
             )}
-        </>
+        </div>
     );
 };
 

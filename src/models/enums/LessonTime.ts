@@ -1,12 +1,12 @@
 import {OrdinaryNumber} from "./OrdinaryNumber.ts";
 
 export enum LessonTime {
-    FIRST = "08:00-08:45",
-    SECOND = "09:00-09:45",
-    THIRD = "10:00-10:45",
-    FOURTH = "11:00-11:45",
-    FIFTH = "12:00-12:45",
-    SIXTH = "13:00-13:45",
+    FIRST = "09:00-10:20",
+    SECOND = "10:30-11:50",
+    THIRD = "12:30-13:50",
+    FOURTH = "14:00-15:20",
+    FIFTH = "15:30-16:50",
+    SIXTH = "17:00-18:20",
 }
 
 export const getLessonTime = (ordinaryNumber: OrdinaryNumber): { startTime: string, endTime: string } => {
