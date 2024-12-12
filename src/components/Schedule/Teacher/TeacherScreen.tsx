@@ -5,10 +5,12 @@ import { Teacher } from "../../../models/teacher/Teacher.ts";
 import TeacherSchedule from "./TeacherSchedule.tsx";
 import './TeacherScreen.css';
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
+import {useTime} from "../Time/Context/TimeContext.tsx";
 
 const TeacherScreen = () => {
     const { teacherUuid } = useParams<{ teacherUuid: string }>();
     const [searchParams] = useSearchParams();
+    const { currentTime } = useTime();
     const navigate = useNavigate();
 
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -21,16 +23,39 @@ const TeacherScreen = () => {
             if (teacher) {
                 setSelectedTeacher(teacher);
             }
+        } else {
+            const storedTeacher = localStorage.getItem("lastTeacherUuid");
+            if (storedTeacher && teacherList.length > 0) {
+                const group = teacherList.find(g => g.uuid === storedTeacher);
+                if (group) {
+                    setSelectedTeacher(group);
+                }
+            }
         }
 
-        const isEven = searchParams.get("is_even");
-        setIsEvenWeek(isEven ? isEven === "true"  : true);
+        const isEvenFromSearchParams = searchParams.get("is_even");
+        if (isEvenFromSearchParams !== null) {
+            setIsEvenWeek(isEvenFromSearchParams === "true");
+        } else if (currentTime) {
+            const isEven = currentTime.is_even;
+            setIsEvenWeek(isEven);
+        }
 
     }, [teacherUuid, searchParams, teacherList]);
+
+    useEffect(() => {
+        if (selectedTeacher) {
+            updateURL(selectedTeacher, isEvenWeek);
+        }
+    }, [selectedTeacher, isEvenWeek]);
 
     const handleTeacherSelect = (teacher: Teacher | null) => {
         setSelectedTeacher(teacher);
         updateURL(teacher, isEvenWeek);
+
+        if (teacher) {
+            localStorage.setItem("lastTeacherUuid", teacher.uuid);
+        }
     };
 
     const handleWeekTypeChange = (isEvenWeek: boolean) => {

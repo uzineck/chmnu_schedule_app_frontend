@@ -4,18 +4,28 @@ import GroupSearch from "./GroupSearch.tsx";
 import GroupSchedule from "./GroupSchedule.tsx";
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import { GroupWithFaculty } from "../../../models/group/GroupWithFaculty.ts";
-import './GroupScreen.css';
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
+import { useTime } from "../Time/Context/TimeContext.tsx";
+import './module.css';
 
 const GroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
     const [searchParams] = useSearchParams();
+    const { currentTime } = useTime();
     const navigate = useNavigate();
 
     const [selectedGroup, setSelectedGroup] = useState<GroupWithFaculty | null>(null);
     const [groupList, setGroupList] = useState<GroupWithFaculty[]>([]);
-    const [subgroup, setSubgroup] = useState<Subgroup>(Subgroup.A);
+    const [subgroup, setSubgroup] = useState<Subgroup>(Subgroup.A); // Default to A initially
     const [isEvenWeek, setIsEvenWeek] = useState<boolean>(true);
+
+    useEffect(() => {
+        const storedSubgroup = localStorage.getItem("lastSubgroup");
+
+        if (storedSubgroup && !searchParams.has('subgroup')) {
+            setSubgroup(storedSubgroup === Subgroup.B ? Subgroup.B : Subgroup.A);
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         if (groupUuid && groupList.length > 0) {
@@ -23,27 +33,51 @@ const GroupScreen = () => {
             if (group) {
                 setSelectedGroup(group);
             }
+        } else {
+            const storedGroup = localStorage.getItem("lastGroupUuid");
+            if (storedGroup && groupList.length > 0) {
+                const group = groupList.find(g => g.uuid === storedGroup);
+                if (group) {
+                    setSelectedGroup(group);
+                }
+            }
         }
 
-        const isEven = searchParams.get("is_even");
-        setIsEvenWeek(isEven ? isEven === "true" : true);
+        const isEvenFromSearchParams = searchParams.get("is_even");
+        if (isEvenFromSearchParams !== null) {
+            setIsEvenWeek(isEvenFromSearchParams === "true");
+        } else if (currentTime) {
+            const isEven = currentTime.is_even;
+            setIsEvenWeek(isEven);
+        }
 
         const selectedSubgroup = searchParams.get("subgroup");
         if (selectedSubgroup === Subgroup.B) {
             setSubgroup(Subgroup.B);
-        } else {
+        } else if (selectedSubgroup === Subgroup.A) {
             setSubgroup(Subgroup.A);
         }
-    }, [groupUuid, searchParams, groupList]);
+    }, [groupUuid, searchParams, groupList, currentTime]);
+
+    useEffect(() => {
+        if (selectedGroup) {
+            updateURL(selectedGroup, subgroup, isEvenWeek);
+        }
+    }, [selectedGroup, subgroup, isEvenWeek]);
 
     const handleGroupSelect = (group: GroupWithFaculty | null) => {
         setSelectedGroup(group);
         updateURL(group, subgroup, isEvenWeek);
+
+        if (group) {
+            localStorage.setItem("lastGroupUuid", group.uuid);
+        }
     };
 
     const handleSubgroupChange = (selectedSubgroup: Subgroup) => {
         setSubgroup(selectedSubgroup);
         updateURL(selectedGroup, selectedSubgroup, isEvenWeek);
+        localStorage.setItem("lastSubgroup", selectedSubgroup);
     };
 
     const handleWeekTypeChange = (isEvenWeek: boolean) => {

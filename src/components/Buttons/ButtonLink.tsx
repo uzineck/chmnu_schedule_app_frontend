@@ -4,10 +4,10 @@ import "./module.css";
 
 interface ButtonLinkProps {
     label: string;
-    value: undefined;
-    selectedValue: undefined;
+    value: any;
+    selectedValue: any;
     to?: string;
-    onClick: (value: undefined) => void;
+    onClick: (value: any) => void;
 }
 
 const ButtonLink: React.FC<ButtonLinkProps> = ({ label, value, selectedValue, to, onClick }) => {

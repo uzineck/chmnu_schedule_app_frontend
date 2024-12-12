@@ -1,16 +1,19 @@
+import "./module.css";
 import { Lesson } from "../../models/lesson/Lesson";
 import { Day } from "../../models/enums/Day";
 import { OrdinaryNumber } from "../../models/enums/OrdinaryNumber";
 import { getLessonTime } from "../../models/enums/LessonTime";
 import LessonDetails from "./Lesson/LessonDetail";
 import { LessonForTeacher } from "../../models/lesson/LessonForTeacher";
-import "./module.css";
+import {useTime} from "./Time/Context/TimeContext.tsx";
 
 interface BaseScheduleMatrixProps {
     lessons: Lesson[] | LessonForTeacher[] | null;
 }
 
 const BaseScheduleMatrix = ({ lessons }: BaseScheduleMatrixProps) => {
+    const { currentTime } = useTime();
+
     const matrix: (Lesson | LessonForTeacher)[][] = Array.from({ length: 6 }, () => Array(5).fill(null));
 
     lessons?.forEach((lesson) => {
@@ -44,7 +47,14 @@ const BaseScheduleMatrix = ({ lessons }: BaseScheduleMatrixProps) => {
                 <tr>
                     <th>Time</th>
                     {dayNames.map((dayName, index) => (
-                        <th key={index}>{dayName}</th>
+                        <th
+                            key={index}
+                            className={
+                                currentTime?.day === index + 1 ? "current-day-column" : ""
+                            }
+                        >
+                            {dayName}
+                        </th>
                     ))}
                 </tr>
                 </thead>
@@ -61,10 +71,17 @@ const BaseScheduleMatrix = ({ lessons }: BaseScheduleMatrixProps) => {
                             {row.map((lesson, colIndex) => (
                                 <td
                                     key={colIndex}
-                                    className={lesson ? "lesson-cell has-lesson" : "lesson-cell no-lesson"}
+                                    className={`lesson-cell ${
+                                        lesson && currentTime?.day === colIndex + 1 && currentTime?.lesson === rowIndex + 1
+                                            ? "current-lesson"
+                                            : lesson
+                                                ? "has-lesson"
+                                                : "no-lesson"
+                                    }`}
                                 >
-                                    {lesson ? <LessonDetails lesson={lesson} /> : <></>}
+                                    {lesson ? <LessonDetails lesson={lesson}/> : null}
                                 </td>
+
                             ))}
                         </tr>
                     );

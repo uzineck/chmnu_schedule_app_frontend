@@ -6,16 +6,16 @@ import ButtonLink from "./ButtonLink.tsx";
 interface ButtonContainerProps {
     options: {
         label: string;
-        value: undefined;
+        value: any;
         isLink?: boolean;
         to?: string;
     }[];
-    selectedValue: undefined;
-    onChange: (newValue: undefined) => void;
+    selectedValue: any;
+    onChange: (newValue: any) => void;
 }
 
 const ButtonContainer: React.FC<ButtonContainerProps> = ({ options, selectedValue, onChange }) => {
-    const handleLinkClick = (value: undefined) => {
+    const handleLinkClick = (value: any) => {
         onChange(value);
     };
 
@@ -29,7 +29,7 @@ const ButtonContainer: React.FC<ButtonContainerProps> = ({ options, selectedValu
                         value={option.value}
                         selectedValue={selectedValue}
                         to={option.to}
-                        onClick={handleLinkClick}  // Pass the handleLinkClick to ButtonLink
+                        onClick={handleLinkClick}
                     />
                 ) : (
                     <ToggleButton

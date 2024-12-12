@@ -1,0 +1,106 @@
+/* General Container for Forms */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Ensures center-aligned text for container */
+    transition: all 0.3s ease-in-out; /* Smooth transitions */
+    box-sizing: border-box;
+}
+
+/* Title Styling */
+.form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #4b4f5c;
+}
+
+/* Form Group Styling */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Input Focus Styling */
+.form-group input:focus {
+    outline: none;
+    border-color: #7f00ff;
+    box-shadow: 0 0 8px rgba(127, 0, 255, 0.3);
+}
+
+/* Error Message Styling */
+.error-message {
+    color: #ff4d4d;
+    font-size: 0.875rem;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+/* Submit Button Styling */
+.submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: mediumpurple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+}
+
+/* Submit Button Hover Effect */
+.submit-button:hover {
+    background-color: darkviolet;
+    transform: scale(1.05);
+}
+
+/* Disabled Submit Button */
+.submit-button:disabled {
+    background-color: #b19cd9;
+    cursor: not-allowed;
+}
+
+/* General Page Layout (for Login-Style Pages) */
+.page-layout {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 4rem;
+}
+
+/* Reusable Layout Container */
+.page-container {
+    max-width: 400px;
+    width: 100%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}

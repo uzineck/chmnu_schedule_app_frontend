@@ -3,6 +3,8 @@ import "./module.css";
 import {Lesson} from "../../../models/lesson/Lesson";
 import {LessonForTeacher} from "../../../models/lesson/LessonForTeacher";
 import {LessonType} from "../../../models/enums/LessonType.ts";
+import { LuDoorClosed } from "react-icons/lu";
+import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 
 function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is LessonForTeacher {
     return (lesson as LessonForTeacher).groups !== undefined;
@@ -28,7 +30,7 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson }) => {
         <div className="lesson-details">
             <div className={`lesson-type ${lessonTypeClass}`}>{lesson.type}</div>
             <div className="lesson-title">{lesson.subject.title}</div>
-            <div className="lesson-room">Classroom: {lesson.room.number}</div>
+            <div className="lesson-room"><LuDoorClosed /> {lesson.room.number}</div>
             {isLessonForTeacher(lesson) ? (
                 <div className="lesson-groups">
                     Groups:{" "}
@@ -38,7 +40,7 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson }) => {
                 </div>
             ) : (
                 <div className="lesson-teacher">
-                    Teacher: {lesson.teacher.last_name} {lesson.teacher.first_name.charAt(0)}. {lesson.teacher.middle_name.charAt(0)}.
+                    <LiaChalkboardTeacherSolid /> {lesson.teacher.last_name} {lesson.teacher.first_name.charAt(0)}. {lesson.teacher.middle_name.charAt(0)}.
                 </div>
             )}
         </div>

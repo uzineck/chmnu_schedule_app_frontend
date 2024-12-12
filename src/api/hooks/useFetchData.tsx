@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { ApiResponse } from "../../models/ApiResponse.ts";
-import {ApiCallError} from "../errors.ts";
 
 export const useFetchData = <T,>(fetchData: () => Promise<ApiResponse<T>>) => {
     const [data, setData] = useState<T | null>(null);
@@ -16,13 +15,9 @@ export const useFetchData = <T,>(fetchData: () => Promise<ApiResponse<T>>) => {
                 setIsLoading(false);
             })
             .catch((err) => {
-                console.error("Error fetching data:", err);
-                if (err instanceof ApiCallError) {
-                    setError(err.message);
-                } else {
-                    setError("An error occurred");
-                }
-
+                setError((err.message || "Unknown error occurred while fetching data"));
+            })
+            .finally(() => {
                 setIsLoading(false);
             });
     }, [fetchData]);

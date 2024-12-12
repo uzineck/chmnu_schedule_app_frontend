@@ -1,4 +1,4 @@
-/* Lesson details container */
+/* General Lesson Details Container */
 .lesson-details {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -17,7 +17,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Dynamic lesson type */
+/* Dynamic Lesson Type Styling */
 .lesson-type {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -28,17 +28,16 @@
     text-align: center;
 }
 
-/* Lesson type colors */
+/* Lesson Type Colors */
 .lesson-type.type-lecture {
-    background-color: #5c6bc0; /* For lectures */
+    background-color: #5c6bc0; /* Lecture Color */
 }
 
 .lesson-type.type-practice {
-    background-color: #800080; /* For practice */
+    background-color: #800080; /* Practice Color */
 }
 
-
-/* Lesson title */
+/* Lesson Title */
 .lesson-title {
     font-size: 0.91rem;
     font-weight: bold;
@@ -46,23 +45,49 @@
     text-align: center;
 }
 
-/* Room information */
+/* Lesson Room Information */
 .lesson-room {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* Spacing between icon and text */
     font-size: 0.95rem;
     color: #444;
-    text-align: center;
 }
 
-/* Teacher information */
+/* Teacher Information */
 .lesson-teacher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     font-size: 0.95rem;
     color: #444;
-    text-align: center;
 }
 
-/* Groups information */
+/* Groups Information */
 .lesson-groups {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     font-size: 0.95rem;
     color: #666;
-    text-align: center;
+}
+
+/* Icon Styling */
+.lesson-room svg,
+.lesson-teacher svg,
+.lesson-groups svg {
+    font-size: 1.1rem; /* Icon size */
+    margin-right: 0px; /* Spacing between icon and text */
+    vertical-align: middle; /* Align with text */
+    color: #888; /* Default icon color */
+}
+
+/* Hover Effect for Icons */
+.lesson-room:hover svg,
+.lesson-teacher:hover svg,
+.lesson-groups:hover svg {
+    color: #7f00ff; /* Optional hover color for icons */
 }

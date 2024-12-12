@@ -6,7 +6,7 @@
     overflow-x: auto;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: #f9f9f9;
     font-family: "Arial", sans-serif;
 }
 
@@ -55,8 +55,12 @@
 
 /* Empty cells */
 .schedule-matrix td.no-lesson {
-    background-color: #f9f9f9;
     color: #999;
+}
+
+/* Lesson cell */
+.schedule-matrix td.has-lesson {
+    background-color: #fff;
 }
 
 /* Hover effect for cells with lessons */
@@ -70,6 +74,37 @@
     font-style: italic;
     margin: 0;
 }
+
+/* Highlight current day column */
+.schedule-matrix th.current-day-column {
+    background-color: #e3f2fd; /* Light blue background */
+    color: #1565c0; /* Blue text color */
+}
+
+/* Highlight the current lesson */
+.schedule-matrix td.current-lesson {
+    position: relative;
+    background-color: #fff;
+    cursor: pointer;
+    color: #2e7d32; /* Dark green text color */
+    padding-top: 20px;/* Add padding to make space for the green button */
+}
+
+/* Add a green circle to indicate current lesson */
+.schedule-matrix td.current-lesson::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 5px; /* Position the circle inside the cell */
+    width: 10px;
+    height: 10px;
+    background-color: #2e7d32; /* Green circle color */
+    border-radius: 50%;
+    pointer-events: none; /* Prevent the circle from interfering with user interactions */
+}
+
+
+
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {

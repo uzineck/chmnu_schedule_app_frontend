@@ -112,17 +112,15 @@ const handleResponse = async (
 
 	if (response.status === 400 || response.status === 403) {
 		let errorDetail = "Api Call Error";
-		try {
-			const errorBody = await response.json();
-
-			if (errorBody?.detail) {
-				errorDetail = errorBody.detail;
-			}
-		} catch {
-			throw new ApiCallError(errorDetail);
+		const errorBody = await response.json();
+		if (errorBody?.detail) {
+			errorDetail = errorBody.detail;
 		}
+		throw new ApiLoginError(errorDetail);
 	}
-
+	if (response.status === 500) {
+		throw new ApiCallError("Server Error Occurred. Please notify admin`s");
+	}
 	throw new ApiCallError(`Unexpected error: ${response.status}`);
 };
 

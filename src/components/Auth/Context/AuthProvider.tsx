@@ -1,40 +1,70 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { ClientPrivate } from "../../../models/client/ClientPrivate.ts";
+import { getClientInfo } from "../../../api/client/client.ts";
 
 interface AuthContextProps {
     isLoggedIn: boolean;
-    loginProp: ( accessToken: string, refreshToken: string) => void;
+    client: ClientPrivate | null;
+    loginProp: (accessToken: string, refreshToken: string) => void;
     logoutProp: () => void;
+    updateClient: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [client, setClient] = useState<ClientPrivate | null>(null);
+    const [loading, setLoading] = useState(true); // Add loading state
+
+    const logoutProp = useCallback(() => {
+        setIsLoggedIn(false);
+        setClient(null);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+    }, []);
+
+    const fetchClientInfo = useCallback(async () => {
+        try {
+            const response = await getClientInfo();
+            setClient(response.data);
+            setIsLoggedIn(true);
+        } catch {
+            logoutProp();
+        } finally {
+            setLoading(false);
+        }
+    }, [logoutProp]);
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        setIsLoggedIn(!!token);
-    }, []);
+        if (token) {
+            fetchClientInfo();
+        } else {
+            setIsLoggedIn(false);
+            setLoading(false);
+        }
+    }, [fetchClientInfo]);
 
-    const loginProp = (accessToken: string, refreshToken: string) => {
+    const loginProp = useCallback((accessToken: string, refreshToken: string) => {
         setIsLoggedIn(true);
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
 
-    };
+        fetchClientInfo();
+    }, [fetchClientInfo]);
 
-    const logoutProp = () => {
-        setIsLoggedIn(false);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-    };
+    const updateClient = useCallback(() => {
+        fetchClientInfo();
+    }, [fetchClientInfo]);
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, loginProp, logoutProp }}>
-            {children}
+        <AuthContext.Provider value={{ isLoggedIn, client, loginProp, logoutProp, updateClient }}>
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
+
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
