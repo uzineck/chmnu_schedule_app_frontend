@@ -1,16 +1,21 @@
-import { useCallback } from "react";
+import {useCallback, useEffect} from "react";
 import { useFetchData } from "../../../api/hooks/useFetchData.tsx";  // Import the custom hook
 import { getGroupLessons } from "../../../api/schedule/group.ts";
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
-import GroupScheduleMatrix from "./GroupScheduleMatrix.tsx";
+import {message} from "antd";
+import BaseScheduleMatrix from "../BaseScheduleMatrix.tsx";
 
 interface GroupScheduleProps {
     groupUuid: string;
     subgroup: Subgroup;
     is_even: boolean;
+    isEditable?: boolean;
+
 }
 
-const GroupSchedule = ({ groupUuid, subgroup, is_even }: GroupScheduleProps) => {
+const GroupSchedule = ({ groupUuid, subgroup, is_even, isEditable }: GroupScheduleProps) => {
+    const [messageApi, contextHolder] = message.useMessage();
+
     const fetchLessons = useCallback(
         () => getGroupLessons(groupUuid, subgroup, is_even),
         [groupUuid, subgroup, is_even]
@@ -18,17 +23,33 @@ const GroupSchedule = ({ groupUuid, subgroup, is_even }: GroupScheduleProps) => 
 
     const { data, error, isLoading } = useFetchData(fetchLessons);
 
-    if (isLoading) {
-        return <p>Loading group schedule...</p>;
-    }
 
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
+    useEffect(() => {
+        if (isLoading) {
+            messageApi.open({
+                type: 'loading',
+                content: "Loading...",
+            });
+        }
+        else {
+            messageApi.destroy()
+        }
+    }, [isLoading, messageApi]);
+
+    useEffect(() => {
+        if (error) {
+            messageApi.open({
+                type: 'error',
+                content: error,
+                duration: 2,
+            });
+        }
+    }, [error, messageApi]);
 
     return (
         <>
-            <GroupScheduleMatrix lessons={data ? data.lessons : null} />
+            {contextHolder}
+            <BaseScheduleMatrix lessons={data ? data.lessons : null} isEditable={isEditable}/>
         </>
     );
 };

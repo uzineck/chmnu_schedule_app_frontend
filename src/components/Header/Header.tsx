@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useAuth } from "../Auth/Context/AuthProvider.tsx";
 import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 import "./module.css";
@@ -10,10 +10,43 @@ import {
     UserOutlined
 } from "@ant-design/icons";
 import { ClientRole } from "../../models/enums/ClientRole.ts";
+import {message} from "antd";
+import {useLocation} from "react-router-dom";
 
 export const Header: React.FC = () => {
     const { isLoggedIn, client } = useAuth();
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
+    const [messageApi, contextHolder] = message.useMessage();
+    const location = useLocation();
+
+    useEffect(() => {
+        const logoutMessage = location.state?.logoutMessage;
+        const logoutMessageError = location.state?.logoutMessageError;
+        const loginMessage = location.state?.loginMessage;
+
+
+        if (logoutMessage) {
+            messageApi.open({
+                type: 'success',
+                content: logoutMessage,
+                duration: 2,
+            });
+        }
+        if (logoutMessageError) {
+            messageApi.open({
+                type: 'error',
+                content: logoutMessageError,
+                duration: 2,
+            });
+        }
+        if (loginMessage) {
+            messageApi.open({
+                type: 'success',
+                content: loginMessage,
+                duration: 2,
+            });
+        }
+    }, [location.state, messageApi]);
 
     const handleButtonClick = (page: string) => {
         setSelectedPage(page);
@@ -29,9 +62,9 @@ export const Header: React.FC = () => {
         ...(client?.role === ClientRole.HEADMAN
             ? [
                 {
-                    label: "My Group",
-                    key: "my_group",
-                    to: "/my_group",
+                    label: "Manage Group Lessons",
+                    key: "group_lessons_manage",
+                    to: "/group/manage",
                     icon: <ScheduleOutlined />,
                 },
             ]
@@ -40,8 +73,8 @@ export const Header: React.FC = () => {
             ? [
                 {
                     label: "Admin Panel",
-                    key: "admin_panel",
-                    to: "/admin_panel",
+                    key: "admin",
+                    to: "/admin",
                     icon: <ContactsOutlined />,
                 },
             ]
@@ -56,6 +89,7 @@ export const Header: React.FC = () => {
 
     return (
         <header className="header">
+            {contextHolder}
             <div className="header-buttons">
                 {isLoggedIn ? (
                     <DropdownMenu

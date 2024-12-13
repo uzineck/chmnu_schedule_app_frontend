@@ -3,28 +3,40 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthProvider.tsx";
 import { logout } from "../../../api/client/auth.ts";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
+import {message} from "antd";
 
 const Logout = () => {
     const { logoutProp } = useAuth();
+    const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
+    const key = 'updatable';
 
     const { data, error, isLoading } = useFetchData(logout);
 
     useEffect(() => {
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Loading...',
+        });
         if (!isLoading) {
             if (data) {
                 logoutProp();
-                navigate("/", { state: { logout_message: data.status } });
+                messageApi.destroy();
+                navigate("/", {
+                    state: { logoutMessage: "Logged out successfully!" },
+                });
             } else if (error) {
                 logoutProp();
+                messageApi.destroy();
                 navigate("/", {
-                    state: { logout_message: error },
+                    state: { logoutMessageError: error },
                 });
             }
         }
-    }, [data, error, isLoading, logoutProp, navigate]);
+    }, [data, error, isLoading, logoutProp, navigate, messageApi]);
 
-    return null;
+    return <>{contextHolder}</>;
 };
 
 export default Logout;

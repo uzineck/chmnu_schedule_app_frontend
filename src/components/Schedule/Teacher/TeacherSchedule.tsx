@@ -1,7 +1,8 @@
-import { useCallback } from "react";
+import {useCallback, useEffect} from "react";
 import { getTeacherLessons } from "../../../api/schedule/teacher.ts";
 import TeacherScheduleMatrix from "./TeacherScheduleMatrix.tsx";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
+import {message} from "antd";
 
 interface TeacherScheduleProps {
     teacherUuid: string;
@@ -9,6 +10,8 @@ interface TeacherScheduleProps {
 }
 
 const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
+    const [messageApi, contextHolder] = message.useMessage();
+
     const fetchLessons = useCallback(
         () => getTeacherLessons(teacherUuid, is_even),
         [teacherUuid, is_even]
@@ -16,16 +19,31 @@ const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
 
     const { data, error, isLoading } = useFetchData(fetchLessons);
 
-    if (isLoading) {
-        return <p>Loading teacher schedule...</p>;
-    }
+    useEffect(() => {
+        if (isLoading) {
+            messageApi.open({
+                type: 'loading',
+                content: "Loading...",
+            });
+        }
+        else {
+            messageApi.destroy()
+        }
+    }, [isLoading, messageApi]);
 
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
+    useEffect(() => {
+        if (error) {
+            messageApi.open({
+                type: 'error',
+                content: error,
+                duration: 2,
+            });
+        }
+    }, [error, messageApi]);
 
     return (
         <>
+            {contextHolder}
             <TeacherScheduleMatrix lessons={data ? data.lessons : null} />
         </>
     );

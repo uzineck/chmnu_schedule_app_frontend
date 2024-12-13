@@ -4,8 +4,8 @@ import { login } from '../../../api/client/auth.ts';
 import './module.css';
 import { useAuth } from '../Context/AuthProvider.tsx';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { ApiCallError } from "../../../api/errors.ts";
+import {message} from "antd";
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -18,8 +18,9 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
     const { loginProp } = useAuth();
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
+    const key = 'updatable';
 
     const formik = useFormik({
         initialValues: {
@@ -28,19 +29,35 @@ const Login = () => {
         },
         validationSchema: LoginSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            setErrorMessage(null);
+            messageApi.open({
+                key,
+                type: 'loading',
+                content: 'Loading...',
+            });
             try {
                 const response = await login({
                     email: values.email,
                     password: values.password,
                 });
                 loginProp(response.data.access_token, response.data.refresh_token);
-                navigate('/');
+                navigate("/", {
+                    state: { loginMessage: "Logged in successfully!" },
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
-                    setErrorMessage(error.message);
+                    messageApi.open({
+                        key,
+                        type: 'error',
+                        content: error.message,
+                        duration: 2,
+                    });
                 } else {
-                    setErrorMessage("An unknown error occurred");
+                    messageApi.open({
+                        key,
+                        type: 'error',
+                        content: "Unknown error occurred.",
+                        duration: 2,
+                    });
                 }
             } finally {
                 setSubmitting(false);
@@ -50,10 +67,9 @@ const Login = () => {
 
     return (
         <div className="login-page">
+            {contextHolder}
             <div className="login-container">
                 <div className="login-title">Log in to your schedule account</div>
-
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
 
                 <form onSubmit={formik.handleSubmit} className="login-form">
                     <div className="form-group">

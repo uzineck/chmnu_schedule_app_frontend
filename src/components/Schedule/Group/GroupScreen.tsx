@@ -16,7 +16,7 @@ const GroupScreen = () => {
 
     const [selectedGroup, setSelectedGroup] = useState<GroupWithFaculty | null>(null);
     const [groupList, setGroupList] = useState<GroupWithFaculty[]>([]);
-    const [subgroup, setSubgroup] = useState<Subgroup>(Subgroup.A); // Default to A initially
+    const [subgroup, setSubgroup] = useState<Subgroup>(Subgroup.A);
     const [isEvenWeek, setIsEvenWeek] = useState<boolean>(true);
 
     useEffect(() => {

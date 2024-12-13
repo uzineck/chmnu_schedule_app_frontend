@@ -13,6 +13,13 @@ import ChangeEmailForm from "./components/Auth/Client/Forms/ChangeEmailForm.tsx"
 import ChangePasswordForm from "./components/Auth/Client/Forms/ChangePasswordForm.tsx";
 import ChangeCredentialsForm from "./components/Auth/Client/Forms/ChangeCredentialsForm.tsx";
 import {Header} from "./components/Header/Header.tsx";
+import AdminPanel from "./components/Admin/AdminPanel.tsx";
+import {ClientRole} from "./models/enums/ClientRole.ts";
+import HeadmanGroupScreen from "./components/Schedule/Group/Headman/HeadmanGroupScreen.tsx";
+import AddLesson from "./components/Schedule/Lesson/AddLesson.tsx";
+import EditLesson from "./components/Schedule/Lesson/EditLesson.tsx";
+import DeleteLesson from "./components/Schedule/Lesson/DeleteLesson.tsx";
+import {ScheduleProvider} from "./components/Schedule/Context/ScheduleContext.tsx";
 
 const router = createBrowserRouter([
     {
@@ -21,8 +28,10 @@ const router = createBrowserRouter([
             <AuthProvider>
                 <RoleProvider>
                     <TimeProvider>
-                        <Header />
-                        <Outlet />
+                        <ScheduleProvider>
+                            <Header />
+                            <Outlet />
+                        </ScheduleProvider>
                     </TimeProvider>
                 </RoleProvider>
             </AuthProvider>
@@ -40,7 +49,16 @@ const router = createBrowserRouter([
                 path: "group",
                 children: [
                     { index: true, element: <GroupScreen /> },
-                    { path: ":groupUuid", element: <GroupScreen /> },
+                    {  path: ":groupUuid", element: <GroupScreen /> },
+                    {
+                        path: "manage",
+                        element: <ProtectedRoute role={ClientRole.HEADMAN}><HeadmanGroupScreen /></ProtectedRoute>,
+                        children: [
+                            { path: "lesson/add", element: <AddLesson /> },
+                            { path: "lesson/:lessonUuid/edit", element: <EditLesson /> },
+                            { path: "lesson/:lessonUuid/delete", element: <DeleteLesson /> },
+                        ]
+                    }
                 ],
             },
             {
@@ -58,6 +76,10 @@ const router = createBrowserRouter([
                     { path: "change_password", element: <ChangePasswordForm /> },
                     { path: "change_credentials", element: <ChangeCredentialsForm /> },
                 ],
+            },
+            {
+                path: "admin",
+                element: <ProtectedRoute role={ClientRole.ADMIN}><AdminPanel/></ProtectedRoute>,
             },
         ],
     },

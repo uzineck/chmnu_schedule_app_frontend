@@ -75,10 +75,18 @@
     color: #666;
 }
 
+.lesson-actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
 /* Icon Styling */
 .lesson-room svg,
 .lesson-teacher svg,
-.lesson-groups svg {
+.lesson-groups svg,
+.lesson-actions svg{
     font-size: 1.1rem; /* Icon size */
     margin-right: 0px; /* Spacing between icon and text */
     vertical-align: middle; /* Align with text */
@@ -88,6 +96,7 @@
 /* Hover Effect for Icons */
 .lesson-room:hover svg,
 .lesson-teacher:hover svg,
-.lesson-groups:hover svg {
+.lesson-groups:hover svg,
+.lesson-action:hover svg{
     color: #7f00ff; /* Optional hover color for icons */
 }

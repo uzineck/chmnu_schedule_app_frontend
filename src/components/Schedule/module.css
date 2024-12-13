@@ -103,7 +103,16 @@
     pointer-events: none; /* Prevent the circle from interfering with user interactions */
 }
 
+.add-lesson-icon svg{
+    font-size: 1.1rem; /* Icon size */
+    margin-right: 0px; /* Spacing between icon and text */
+    vertical-align: middle; /* Align with text */
+    color: #888; /* Default icon color */
+}
 
+.add-lesson-icon:hover svg{
+    color: #7f00ff; /* Optional hover color for icons */
+}
 
 
 /* Mobile responsiveness */
