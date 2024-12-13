@@ -24,27 +24,14 @@ export const Header: React.FC = () => {
         const logoutMessageError = location.state?.logoutMessageError;
         const loginMessage = location.state?.loginMessage;
 
+        const successMessage = logoutMessage || loginMessage;
+        const errorMessage = logoutMessageError;
 
-        if (logoutMessage) {
-            messageApi.open({
-                type: 'success',
-                content: logoutMessage,
-                duration: 2,
-            });
+        if (successMessage) {
+            messageApi.success({content: successMessage, duration: 2});
         }
-        if (logoutMessageError) {
-            messageApi.open({
-                type: 'error',
-                content: logoutMessageError,
-                duration: 2,
-            });
-        }
-        if (loginMessage) {
-            messageApi.open({
-                type: 'success',
-                content: loginMessage,
-                duration: 2,
-            });
+        if (errorMessage) {
+            messageApi.error({content: errorMessage, duration: 2});
         }
     }, [location.state, messageApi]);
 

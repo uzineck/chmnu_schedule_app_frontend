@@ -37,11 +37,28 @@ const HeadmanGroupScreen = () => {
     }, [currentTime, setIsEvenWeek]);
 
     useEffect(() => {
+        const deleteLesson = location.state?.deleteLesson;
+        const deleteLessonError = location.state?.deleteLessonError;
+        const addLesson = location.state?.addLesson;
+        const addLessonError = location.state?.addLessonError;
+        const editLesson = location.state?.editLesson;
+        const editLessonError = location.state?.editLessonError;
+
+        const successMessage = deleteLesson || addLesson || editLesson;
+        const errorMessage = deleteLessonError || addLessonError || editLessonError;
+
+        if (successMessage) {
+            messageApi.success({ content: successMessage, duration: 2 });
+        }
+
+        if (errorMessage) {
+            messageApi.error({ content: errorMessage, duration: 2 });
+        }
+    }, [location.state, messageApi]);
+
+    useEffect(() => {
         if (isLoading) {
-            messageApi.open({
-                type: 'loading',
-                content: "Loading...",
-            });
+            messageApi.loading({ key: 'updatable', content: 'Loading...' });
         }
         else {
             messageApi.destroy()
@@ -50,11 +67,7 @@ const HeadmanGroupScreen = () => {
 
     useEffect(() => {
         if (error) {
-            messageApi.open({
-                type: 'error',
-                content: error,
-                duration: 2,
-            });
+            messageApi.error({ key: 'updatable', content: error, duration: 2 });
         }
     }, [error, messageApi]);
 

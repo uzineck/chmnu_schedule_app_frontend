@@ -30,39 +30,20 @@ const ChangePasswordForm: React.FC = () => {
         },
         validationSchema: ChangePasswordSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.open({
-                key,
-                type: 'loading',
-                content: 'Loading...',
-            });
+            messageApi.loading({ key: key, content: 'Loading...' });
             try {
                 await updatePassword({
                     old_password: values.currentPassword,
                     new_password: values.newPassword,
                     verify_password: values.verifyPassword,
                 });
-                messageApi.open({
-                    key,
-                    type: 'success',
-                    content: 'Password changed successfully!',
-                    duration: 2,
-                });
+                messageApi.success({ key: key, content: 'Password changed successfully!', duration: 2 });
                 navigate('/profile', { replace: true });
             } catch (error) {
                 if (error instanceof ApiCallError) {
-                    messageApi.open({
-                        key,
-                        type: 'error',
-                        content: error.message,
-                        duration: 2,
-                    });
+                    messageApi.error({ key: key, content: error.message, duration: 2 });
                 } else {
-                    messageApi.open({
-                        key,
-                        type: 'error',
-                        content: "Unknown error occurred.",
-                        duration: 2,
-                    });
+                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
                 }
             } finally {
                 setSubmitting(false);

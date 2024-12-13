@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useCallback} from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import GroupSearch from "./GroupSearch.tsx";
 import GroupSchedule from "./GroupSchedule.tsx";
@@ -18,6 +18,12 @@ const GroupScreen = () => {
     const [groupList, setGroupList] = useState<GroupWithFaculty[]>([]);
     const [subgroup, setSubgroup] = useState<Subgroup>(Subgroup.A);
     const [isEvenWeek, setIsEvenWeek] = useState<boolean>(true);
+
+    const updateURL = useCallback((group: GroupWithFaculty | null, subgroup: Subgroup, isEvenWeek: boolean) => {
+        if (group) {
+            navigate(`/group/${group.uuid}?subgroup=${subgroup}&is_even=${isEvenWeek}`, { replace: true });
+        }
+    }, [navigate]);
 
     useEffect(() => {
         const storedSubgroup = localStorage.getItem("lastSubgroup");
@@ -63,7 +69,7 @@ const GroupScreen = () => {
         if (selectedGroup) {
             updateURL(selectedGroup, subgroup, isEvenWeek);
         }
-    }, [selectedGroup, subgroup, isEvenWeek]);
+    }, [updateURL, selectedGroup, subgroup, isEvenWeek]);
 
     const handleGroupSelect = (group: GroupWithFaculty | null) => {
         setSelectedGroup(group);
@@ -89,11 +95,6 @@ const GroupScreen = () => {
         setGroupList(groups);
     };
 
-    const updateURL = (group: GroupWithFaculty | null, subgroup: Subgroup, isEvenWeek: boolean) => {
-        if (group) {
-            navigate(`/group/${group.uuid}?subgroup=${subgroup}&is_even=${isEvenWeek}`, { replace: true });
-        }
-    };
 
     return (
         <div className="group-screen">

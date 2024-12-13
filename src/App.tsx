@@ -17,9 +17,10 @@ import AdminPanel from "./components/Admin/AdminPanel.tsx";
 import {ClientRole} from "./models/enums/ClientRole.ts";
 import HeadmanGroupScreen from "./components/Schedule/Group/Headman/HeadmanGroupScreen.tsx";
 import AddLesson from "./components/Schedule/Lesson/AddLesson.tsx";
-import EditLesson from "./components/Schedule/Lesson/EditLesson.tsx";
 import DeleteLesson from "./components/Schedule/Lesson/DeleteLesson.tsx";
 import {ScheduleProvider} from "./components/Schedule/Context/ScheduleContext.tsx";
+import CreateLesson from "./components/Schedule/Lesson/Forms/CreateLesson.tsx";
+import UpdateLesson from "./components/Schedule/Lesson/Forms/UpdateLesson.tsx";
 
 const router = createBrowserRouter([
     {
@@ -54,8 +55,9 @@ const router = createBrowserRouter([
                         path: "manage",
                         element: <ProtectedRoute role={ClientRole.HEADMAN}><HeadmanGroupScreen /></ProtectedRoute>,
                         children: [
-                            { path: "lesson/add", element: <AddLesson /> },
-                            { path: "lesson/:lessonUuid/edit", element: <EditLesson /> },
+                            { path: "lesson/create", element: <CreateLesson /> },
+                            { path: "lesson/:lessonUuid/add", element: <AddLesson /> },
+                            { path: "lesson/:lessonUuid/edit", element: <UpdateLesson /> },
                             { path: "lesson/:lessonUuid/delete", element: <DeleteLesson /> },
                         ]
                     }

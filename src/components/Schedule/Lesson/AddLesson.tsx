@@ -1,9 +1,47 @@
-const AddLesson = () => {
-    return (
-        <div>
+import {useAuth} from "../../Auth/Context/AuthProvider.tsx";
+import {useScheduleContext} from "../Context/ScheduleContext.tsx";
+import {message} from "antd";
+import {useNavigate} from "react-router-dom";
+import {useCallback, useEffect} from "react";
+import {ClientRole} from "../../../models/enums/ClientRole.ts";
+import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
+import {addLessonToGroupAdmin, addLessonToGroupHeadman} from "../../../api/schedule/group.ts";
 
-        </div>
-    );
+const AddLesson = () => {
+    const { client } = useAuth()
+    const { groupUuid, subgroup, lessonUuid} = useScheduleContext();
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
+
+    const addLessonToGroup = useCallback(() => {
+        if (client?.role === ClientRole.HEADMAN) {
+            return addLessonToGroupHeadman(lessonUuid, subgroup)
+        }
+        else {
+            return addLessonToGroupAdmin(groupUuid, lessonUuid, subgroup)
+        }
+    }, [lessonUuid, client, groupUuid, subgroup]);
+
+    const { data, error, isLoading } = useFetchData(addLessonToGroup);
+
+    useEffect(() => {
+        messageApi.loading({ content: 'Loading...' });
+        if (!isLoading) {
+            if (data) {
+                messageApi.destroy();
+                navigate("/group/manage", {
+                    state: { addLesson: "Lesson added successfully!" },
+                });
+            } else if (error) {
+                messageApi.destroy();
+                navigate("/group/manage", {
+                    state: { addLessonError: error },
+                });
+            }
+        }
+    }, [data, error, isLoading, navigate, messageApi]);
+
+    return (<>{contextHolder}</>);
 };
 
 

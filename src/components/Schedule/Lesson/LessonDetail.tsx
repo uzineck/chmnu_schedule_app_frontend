@@ -28,13 +28,14 @@ const getLessonTypeStyle = (type: LessonType): string => {
 };
 
 const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = false }) => {
-    const { groupUuid, subgroup, setLessonUuid } = useScheduleContext();
+    const { subgroup, setLessonUuid, setLesson } = useScheduleContext();
     const lessonTypeClass = getLessonTypeStyle(lesson.type);
     const navigate = useNavigate();
 
     const handleEditLesson = () => {
         setLessonUuid(lesson.uuid);
-        navigate(`/group/${groupUuid}/lesson/${lesson.uuid}/edit?subgroup=${subgroup}`);
+        setLesson(lesson);
+        navigate(`/group/manage/lesson/${lesson.uuid}/edit?subgroup=${subgroup}`);
     };
 
     const handleDeleteLesson = () => {

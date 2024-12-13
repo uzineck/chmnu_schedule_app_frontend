@@ -21,10 +21,7 @@ const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
 
     useEffect(() => {
         if (isLoading) {
-            messageApi.open({
-                type: 'loading',
-                content: "Loading...",
-            });
+            messageApi.loading({ key: 'updatable', content: 'Loading...' });
         }
         else {
             messageApi.destroy()
@@ -33,11 +30,7 @@ const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
 
     useEffect(() => {
         if (error) {
-            messageApi.open({
-                type: 'error',
-                content: error,
-                duration: 2,
-            });
+            messageApi.error({ key: 'updatable', content: error, duration: 2 });
         }
     }, [error, messageApi]);
 

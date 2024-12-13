@@ -29,11 +29,7 @@ const Login = () => {
         },
         validationSchema: LoginSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.open({
-                key,
-                type: 'loading',
-                content: 'Loading...',
-            });
+            messageApi.loading({ key: key, content: 'Loading...' });
             try {
                 const response = await login({
                     email: values.email,
@@ -45,19 +41,9 @@ const Login = () => {
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
-                    messageApi.open({
-                        key,
-                        type: 'error',
-                        content: error.message,
-                        duration: 2,
-                    });
+                    messageApi.error({ key: key, content: error.message, duration: 2 });
                 } else {
-                    messageApi.open({
-                        key,
-                        type: 'error',
-                        content: "Unknown error occurred.",
-                        duration: 2,
-                    });
+                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
                 }
             } finally {
                 setSubmitting(false);

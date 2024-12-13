@@ -26,10 +26,7 @@ const GroupSchedule = ({ groupUuid, subgroup, is_even, isEditable }: GroupSchedu
 
     useEffect(() => {
         if (isLoading) {
-            messageApi.open({
-                type: 'loading',
-                content: "Loading...",
-            });
+            messageApi.loading({ key: 'updatable', content: 'Loading...' });
         }
         else {
             messageApi.destroy()
@@ -38,11 +35,7 @@ const GroupSchedule = ({ groupUuid, subgroup, is_even, isEditable }: GroupSchedu
 
     useEffect(() => {
         if (error) {
-            messageApi.open({
-                type: 'error',
-                content: error,
-                duration: 2,
-            });
+            messageApi.error({ key: 'updatable', content: error, duration: 2 });
         }
     }, [error, messageApi]);
 

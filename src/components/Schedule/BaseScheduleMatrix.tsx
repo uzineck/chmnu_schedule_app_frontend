@@ -20,7 +20,7 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
     const { setOrdinaryNumber, setDay } = useScheduleContext();
     const navigate = useNavigate();
 
-    const matrix: (Lesson | LessonForTeacher)[][] = Array.from({ length: 6 }, () => Array(5).fill(null));
+    const matrix: (Lesson | LessonForTeacher)[][][] = Array.from({ length: 6 }, () => Array(5).fill(null));
 
     lessons?.forEach((lesson) => {
         const dayIndex = Object.values(Day).indexOf(lesson.timeslot.day);
@@ -68,9 +68,9 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
     });
 
     const handleAddLesson = (dayIndex: number, ordNumberIndex: number) => {
-        setDay(dayIndexMap(dayIndex));
-        setOrdinaryNumber(ordNumberIndex);
-        navigate(`/group/manage/lesson/add`);
+        setDay(dayIndexMap(dayIndex+1));
+        setOrdinaryNumber(ordNumberIndex+1);
+        navigate(`/group/manage/lesson/create`);
     };
 
     return (

@@ -30,39 +30,20 @@ const ChangeEmailForm: React.FC = () => {
         },
         validationSchema: ChangeEmailSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.open({
-                key,
-                type: 'loading',
-                content: 'Loading...',
-            });
+            messageApi.loading({ key: key, content: 'Loading...' });
             try {
                 const response = await updateEmail({
                     new_email: values.email,
                     password: values.password,
                 });
                 loginProp(response.data.access_token, response.data.refresh_token)
-                messageApi.open({
-                    key,
-                    type: 'success',
-                    content: 'Email changed successfully!',
-                    duration: 2,
-                });
+                messageApi.success({ key: key, content: 'Email changed successfully!', duration: 2 });
                 navigate('/profile');
             } catch (error) {
                 if (error instanceof ApiCallError) {
-                    messageApi.open({
-                        key,
-                        type: 'error',
-                        content: error.message,
-                        duration: 2,
-                    });
+                    messageApi.error({ key: key, content: error.message, duration: 2 });
                 } else {
-                    messageApi.open({
-                        key,
-                        type: 'error',
-                        content: "Unknown error occurred.",
-                        duration: 2,
-                    });
+                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
                 }
             } finally {
                 setSubmitting(false);

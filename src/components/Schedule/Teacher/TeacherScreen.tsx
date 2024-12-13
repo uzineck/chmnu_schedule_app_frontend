@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import TeacherSearch from "./TeacherSearch.tsx";
 import { Teacher } from "../../../models/teacher/Teacher.ts";
@@ -17,6 +17,12 @@ const TeacherScreen = () => {
     const [teacherList, setTeacherList] = useState<Teacher[]>([]);
     const [isEvenWeek, setIsEvenWeek] = useState<boolean>(true);
 
+    const updateURL = useCallback((teacher: Teacher | null, isEvenWeek: boolean) => {
+        if (teacher) {
+            navigate(`/teacher/${teacher.uuid}?is_even=${isEvenWeek}`, { replace: true });
+        }
+    }, [navigate]);
+    
     useEffect(() => {
         if (teacherUuid && teacherList.length > 0) {
             const teacher = teacherList.find(t => t.uuid === teacherUuid);
@@ -41,13 +47,13 @@ const TeacherScreen = () => {
             setIsEvenWeek(isEven);
         }
 
-    }, [teacherUuid, searchParams, teacherList]);
+    }, [currentTime, teacherUuid, searchParams, teacherList]);
 
     useEffect(() => {
         if (selectedTeacher) {
             updateURL(selectedTeacher, isEvenWeek);
         }
-    }, [selectedTeacher, isEvenWeek]);
+    }, [updateURL, selectedTeacher, isEvenWeek]);
 
     const handleTeacherSelect = (teacher: Teacher | null) => {
         setSelectedTeacher(teacher);
@@ -63,11 +69,6 @@ const TeacherScreen = () => {
         updateURL(selectedTeacher, isEvenWeek);
     };
 
-    const updateURL = (teacher: Teacher | null, isEvenWeek: boolean) => {
-        if (teacher) {
-            navigate(`/teacher/${teacher.uuid}?is_even=${isEvenWeek}`, { replace: true });
-        }
-    };
 
     const handleTeacherListFetched = (teachers: Teacher[]) => {
         setTeacherList(teachers);

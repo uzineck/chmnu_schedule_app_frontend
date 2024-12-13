@@ -13,7 +13,6 @@ const DeleteLesson = () => {
     const { groupUuid, lessonUuid, subgroup } = useScheduleContext();
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
-    const key = 'updatable';
 
     const deleteLessonFromGroup = useCallback(() => {
         console.log(client?.role);
@@ -28,11 +27,7 @@ const DeleteLesson = () => {
     const { data, error, isLoading } = useFetchData(deleteLessonFromGroup);
 
     useEffect(() => {
-        messageApi.open({
-            key,
-            type: 'loading',
-            content: 'Loading...',
-        });
+        messageApi.loading({ content: 'Loading...' });
         if (!isLoading) {
             if (data) {
                 messageApi.destroy();
