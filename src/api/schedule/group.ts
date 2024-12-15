@@ -1,6 +1,6 @@
 import Http from "../index.ts";
 import {ApiResponse} from "../../models/ApiResponse.ts";
-import {GroupWithFaculty} from "../../models/group/GroupWithFaculty.ts";
+import {GroupAll} from "../../models/group/GroupAll.ts";
 import {GroupWithLessons} from "../../models/group/GroupWithLessons.ts";
 import qs from "qs";
 import {Subgroup} from "../../models/enums/Subgroup.ts";
@@ -12,11 +12,11 @@ import {Group} from "../../models/group/Group.ts";
 
 const BASE_URL = '/schedule/group';
 
-export const getAllGroups = (): Promise<ApiResponse<GroupWithFaculty[]>> => {
+export const getAllGroups = (): Promise<ApiResponse<GroupAll[]>> => {
     return Http.get(`${BASE_URL}/all`);
 }
 
-export const getGroupLessons = (groupUuid: string, subgroup: Subgroup, is_even: boolean): Promise<ApiResponse<GroupWithLessons>> => {
+export const getGroupLessons = (groupUuid: string, subgroup: Subgroup | null, is_even: boolean): Promise<ApiResponse<GroupWithLessons>> => {
     const queryParams = qs.stringify(
         {
             subgroup,

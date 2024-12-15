@@ -1,21 +1,20 @@
-import {useScheduleContext} from "../Context/ScheduleContext.tsx";
 import {useCallback, useEffect} from "react";
 import {removeLessonFromGroupAdmin, removeLessonToGroupHeadman} from "../../../api/schedule/group.ts";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
 import {useNavigate} from "react-router-dom";
 import {message} from "antd";
-import {useAuth} from "../../Auth/Context/AuthProvider.tsx";
 import {ClientRole} from "../../../models/enums/ClientRole.ts";
+import {useAuth} from "../../Auth/Context/hooks/useAuth.ts";
+import {useSchedule} from "../Context/hooks/useSchedule.ts";
 
 
 const DeleteLesson = () => {
     const { client } = useAuth()
-    const { groupUuid, lessonUuid, subgroup } = useScheduleContext();
+    const { groupUuid, lessonUuid, subgroup } = useSchedule();
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
 
     const deleteLessonFromGroup = useCallback(() => {
-        console.log(client?.role);
         if (client?.role === ClientRole.HEADMAN) {
             return removeLessonToGroupHeadman(lessonUuid, subgroup);
         }

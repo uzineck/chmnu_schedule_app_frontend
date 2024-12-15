@@ -6,7 +6,8 @@ import {updateCredentials} from "../../../../api/client/client.ts";
 import {ApiCallError} from "../../../../api/errors.ts";
 import {message} from "antd";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../Context/AuthProvider.tsx";
+
+import {useAuth} from "../../Context/hooks/useAuth.ts";
 
 const ChangeCredentialsSchema = Yup.object().shape({
     lastName: Yup.string().required('Last name is required'),

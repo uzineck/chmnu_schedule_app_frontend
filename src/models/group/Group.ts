@@ -1,5 +1,5 @@
-import {GroupWithFaculty} from "./GroupWithFaculty.ts";
+import {GroupAll} from "./GroupAll.ts";
 
-export interface Group extends GroupWithFaculty{
+export interface Group extends GroupAll{
     has_subgroups: boolean;
 }

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import {useScheduleContext} from "../../Context/ScheduleContext.tsx";
 import {Subject} from "../../../../models/subject/Subject.ts";
 import {Teacher} from "../../../../models/teacher/Teacher.ts";
 import {Room} from "../../../../models/room/Room.ts";
@@ -13,9 +12,10 @@ import SubjectSearch from "../../Subject/SubjectSearch.tsx";
 import TeacherSearch from "../../Teacher/TeacherSearch.tsx";
 import RoomSearch from "../../Room/RoomSearch.tsx";
 import "./module.css";
+import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 
 const CreateLesson = () => {
-    const { day, ordinaryNumber, isEvenWeek, setLessonUuid } = useScheduleContext();
+    const { day, ordinaryNumber, isEvenWeek, setLessonUuid } = useSchedule();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -87,7 +87,7 @@ const CreateLesson = () => {
         <div className="create-lesson">
             {contextHolder}
             <div className="lesson-card">
-                <h2 className="lesson-title">Create Lesson</h2>
+                <h2 className="lesson-title-form">Create Lesson</h2>
                 <div className="lesson-form">
                     <div className="search-container">
                         <div className="lesson-type-container">Lesson Type:

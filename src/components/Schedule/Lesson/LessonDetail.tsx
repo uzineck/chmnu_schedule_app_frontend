@@ -7,7 +7,8 @@ import { LuDoorClosed } from "react-icons/lu";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Edit and delete icons
 import {useNavigate} from "react-router-dom";
-import {useScheduleContext} from "../Context/ScheduleContext.tsx";
+
+import {useSchedule} from "../Context/hooks/useSchedule.ts";
 
 function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is LessonForTeacher {
     return (lesson as LessonForTeacher).groups !== undefined;
@@ -28,7 +29,7 @@ const getLessonTypeStyle = (type: LessonType): string => {
 };
 
 const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = false }) => {
-    const { subgroup, setLessonUuid, setLesson } = useScheduleContext();
+    const { subgroup, setLessonUuid, setLesson } = useSchedule();
     const lessonTypeClass = getLessonTypeStyle(lesson.type);
     const navigate = useNavigate();
 
@@ -52,7 +53,7 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
                 <div className="lesson-groups">
                     Groups:{" "}
                     {lesson.groups
-                        .map(group => `${group.number} (${group.subgroups.join(", ")})`)
+                        .map(group => `${group.number} ${group.subgroups ? `(${group.subgroups.join(", ")})` : ''}`)
                         .join(", ")}
                 </div>
             ) : (

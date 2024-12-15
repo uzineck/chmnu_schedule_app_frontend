@@ -2,10 +2,10 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { login } from '../../../api/client/auth.ts';
 import './module.css';
-import { useAuth } from '../Context/AuthProvider.tsx';
 import { useNavigate } from 'react-router-dom';
 import { ApiCallError } from "../../../api/errors.ts";
 import {message} from "antd";
+import {useAuth} from "../Context/hooks/useAuth.ts";
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()

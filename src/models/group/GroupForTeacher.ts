@@ -1,6 +1,6 @@
 import {Subgroup} from "../enums/Subgroup.ts";
-import {GroupWithFaculty} from "./GroupWithFaculty.ts";
+import {GroupAll} from "./GroupAll.ts";
 
-export interface GroupForTeacher extends GroupWithFaculty{
-    subgroups: Subgroup[];
+export interface GroupForTeacher extends Omit<GroupAll, 'faculty'>{
+    subgroups: Subgroup[] | null;
 }

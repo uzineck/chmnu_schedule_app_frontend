@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import {useScheduleContext} from "../../Context/ScheduleContext.tsx";
 import {Subject} from "../../../../models/subject/Subject.ts";
 import {Teacher} from "../../../../models/teacher/Teacher.ts";
 import {Room} from "../../../../models/room/Room.ts";
@@ -13,9 +12,10 @@ import TeacherSearch from "../../Teacher/TeacherSearch.tsx";
 import RoomSearch from "../../Room/RoomSearch.tsx";
 import {updateLesson} from "../../../../api/schedule/lesson.ts";
 import "./module.css";
+import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 
 const UpdateLesson = () => {
-    const { day, ordinaryNumber, isEvenWeek, setLessonUuid, lesson } = useScheduleContext();
+    const { day, ordinaryNumber, isEvenWeek, setLessonUuid, lesson } = useSchedule();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -90,7 +90,7 @@ const UpdateLesson = () => {
         <div className="update-lesson">
             {contextHolder}
             <div className="lesson-card">
-                <h2 className="lesson-title">Update Lesson</h2>
+                <h2 className="lesson-title-form">Update Lesson</h2>
                 <div className="lesson-form">
                     <div className="search-container">
                         <div className="lesson-type-container">Lesson Type:

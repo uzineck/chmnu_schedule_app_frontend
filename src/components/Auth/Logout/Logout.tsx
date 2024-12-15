@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Context/AuthProvider.tsx";
 import { logout } from "../../../api/client/auth.ts";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
 import {message} from "antd";
+import {useAuth} from "../Context/hooks/useAuth.ts";
 
 const Logout = () => {
     const { logoutProp } = useAuth();

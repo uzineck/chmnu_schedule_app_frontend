@@ -18,7 +18,7 @@ dev-down:
 		${DC} -f ${DEV_FILE} down
 
 prod:
-		${DC} -f ${PROD_FILE} up --force-recreate --build -d
+		${DC} -f ${PROD_FILE} up --build -d
 
 prod-down:
 		${DC} -f ${PROD_FILE} down

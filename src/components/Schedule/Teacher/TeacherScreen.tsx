@@ -5,7 +5,8 @@ import { Teacher } from "../../../models/teacher/Teacher.ts";
 import TeacherSchedule from "./TeacherSchedule.tsx";
 import './TeacherScreen.css';
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
-import {useTime} from "../Time/Context/TimeContext.tsx";
+
+import {useTime} from "../Context/hooks/useTime.ts";
 
 const TeacherScreen = () => {
     const { teacherUuid } = useParams<{ teacherUuid: string }>();
@@ -15,11 +16,11 @@ const TeacherScreen = () => {
 
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
     const [teacherList, setTeacherList] = useState<Teacher[]>([]);
-    const [isEvenWeek, setIsEvenWeek] = useState<boolean>(true);
+    const [selectedWeekType, setSelectedWeekType] = useState<boolean>(true);
 
-    const updateURL = useCallback((teacher: Teacher | null, isEvenWeek: boolean) => {
+    const updateURL = useCallback((teacher: Teacher | null, weekType: boolean) => {
         if (teacher) {
-            navigate(`/teacher/${teacher.uuid}?is_even=${isEvenWeek}`, { replace: true });
+            navigate(`/teacher/${teacher.uuid}/lessons?weekType=${weekType}`, { replace: true });
         }
     }, [navigate]);
     
@@ -39,34 +40,33 @@ const TeacherScreen = () => {
             }
         }
 
-        const isEvenFromSearchParams = searchParams.get("is_even");
-        if (isEvenFromSearchParams !== null) {
-            setIsEvenWeek(isEvenFromSearchParams === "true");
+        const weekTypeFromSearchParams = searchParams.get("weekType");
+        if (weekTypeFromSearchParams !== null) {
+            setSelectedWeekType(weekTypeFromSearchParams === "true");
         } else if (currentTime) {
-            const isEven = currentTime.is_even;
-            setIsEvenWeek(isEven);
+            setSelectedWeekType(currentTime.is_even);
         }
 
     }, [currentTime, teacherUuid, searchParams, teacherList]);
 
     useEffect(() => {
         if (selectedTeacher) {
-            updateURL(selectedTeacher, isEvenWeek);
+            updateURL(selectedTeacher, selectedWeekType);
         }
-    }, [updateURL, selectedTeacher, isEvenWeek]);
+    }, [updateURL, selectedTeacher, selectedWeekType]);
 
     const handleTeacherSelect = (teacher: Teacher | null) => {
         setSelectedTeacher(teacher);
-        updateURL(teacher, isEvenWeek);
+        updateURL(teacher, selectedWeekType);
 
         if (teacher) {
             localStorage.setItem("lastTeacherUuid", teacher.uuid);
         }
     };
 
-    const handleWeekTypeChange = (isEvenWeek: boolean) => {
-        setIsEvenWeek(isEvenWeek);
-        updateURL(selectedTeacher, isEvenWeek);
+    const handleWeekTypeChange = (weekType: boolean) => {
+        setSelectedWeekType(weekType);
+        updateURL(selectedTeacher, weekType);
     };
 
 
@@ -87,19 +87,19 @@ const TeacherScreen = () => {
                 <div className="button-container-column">
                     <ButtonContainer
                         options={[
-                            {label: 'Even', value: true},
-                            {label: 'Odd', value: false}
+                            {label: 'Тиждень над', value: true},
+                            {label: 'Тиждень під', value: false}
                         ]}
-                        selectedValue={isEvenWeek}
+                        selectedValue={selectedWeekType}
                         onChange={handleWeekTypeChange}
                     />
                 </div>
             </div>
             {selectedTeacher && (
                 <TeacherSchedule
-                    key={`${selectedTeacher.uuid}-${isEvenWeek}`}
+                    key={`${selectedTeacher.uuid}-${selectedWeekType}`}
                     teacherUuid={selectedTeacher.uuid}
-                    is_even={isEvenWeek}
+                    is_even={selectedWeekType}
                 />
             )}
         </div>

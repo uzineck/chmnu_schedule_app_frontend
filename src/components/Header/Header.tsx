@@ -1,17 +1,11 @@
 import React, {useEffect, useState} from "react";
-import { useAuth } from "../Auth/Context/AuthProvider.tsx";
 import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 import "./module.css";
 import DropdownMenu from "../Menus/DropdownMenu.tsx";
-import {
-    ContactsOutlined,
-    LogoutOutlined,
-    ScheduleOutlined,
-    UserOutlined
-} from "@ant-design/icons";
-import { ClientRole } from "../../models/enums/ClientRole.ts";
 import {message} from "antd";
 import {useLocation} from "react-router-dom";
+import {menuOptions} from "./HeaderMenuOptions.tsx";
+import {useAuth} from "../Auth/Context/hooks/useAuth.ts";
 
 export const Header: React.FC = () => {
     const { isLoggedIn, client } = useAuth();
@@ -39,41 +33,6 @@ export const Header: React.FC = () => {
         setSelectedPage(page);
     };
 
-    const menuOptions = [
-        {
-            label: "Profile",
-            key: "profile",
-            to: "/profile",
-            icon: <UserOutlined />,
-        },
-        ...(client?.role === ClientRole.HEADMAN
-            ? [
-                {
-                    label: "Manage Group Lessons",
-                    key: "group_lessons_manage",
-                    to: "/group/manage",
-                    icon: <ScheduleOutlined />,
-                },
-            ]
-            : []),
-        ...(client?.role === ClientRole.ADMIN
-            ? [
-                {
-                    label: "Admin Panel",
-                    key: "admin",
-                    to: "/admin",
-                    icon: <ContactsOutlined />,
-                },
-            ]
-            : []),
-        {
-            label: "Logout",
-            key: "logout",
-            to: "/logout",
-            icon: <LogoutOutlined />,
-        },
-    ];
-
     return (
         <header className="header">
             {contextHolder}
@@ -81,7 +40,7 @@ export const Header: React.FC = () => {
                 {isLoggedIn ? (
                     <DropdownMenu
                         menuName={`${client?.last_name} ${client?.first_name.charAt(0)}. ${client?.middle_name.charAt(0)}.`}
-                        options={menuOptions}
+                        options={menuOptions(client)}
                     />
                 ) : (
                     <ButtonContainer

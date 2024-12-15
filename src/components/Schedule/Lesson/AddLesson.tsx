@@ -1,15 +1,15 @@
-import {useAuth} from "../../Auth/Context/AuthProvider.tsx";
-import {useScheduleContext} from "../Context/ScheduleContext.tsx";
 import {message} from "antd";
 import {useNavigate} from "react-router-dom";
 import {useCallback, useEffect} from "react";
 import {ClientRole} from "../../../models/enums/ClientRole.ts";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
 import {addLessonToGroupAdmin, addLessonToGroupHeadman} from "../../../api/schedule/group.ts";
+import {useAuth} from "../../Auth/Context/hooks/useAuth.ts";
+import {useSchedule} from "../Context/hooks/useSchedule.ts";
 
 const AddLesson = () => {
     const { client } = useAuth()
-    const { groupUuid, subgroup, lessonUuid} = useScheduleContext();
+    const { groupUuid, subgroup, lessonUuid} = useSchedule();
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
 

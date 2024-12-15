@@ -7,7 +7,7 @@ import BaseScheduleMatrix from "../BaseScheduleMatrix.tsx";
 
 interface GroupScheduleProps {
     groupUuid: string;
-    subgroup: Subgroup;
+    subgroup: Subgroup | null;
     is_even: boolean;
     isEditable?: boolean;
 

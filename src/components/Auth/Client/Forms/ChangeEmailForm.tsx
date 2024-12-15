@@ -6,7 +6,8 @@ import { updateEmail } from "../../../../api/client/client.ts";
 import { useNavigate } from "react-router-dom";
 import { ApiCallError } from "../../../../api/errors.ts";
 import { message } from "antd";
-import {useAuth} from "../../Context/AuthProvider.tsx";
+
+import {useAuth} from "../../Context/hooks/useAuth.ts";
 
 const ChangeEmailSchema = Yup.object().shape({
     email: Yup.string()

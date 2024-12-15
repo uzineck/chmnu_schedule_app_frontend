@@ -1,8 +1,8 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../Auth/Context/AuthProvider.tsx";
-import { useRole } from "../Auth/Context/RoleProvider.tsx";
 import { ClientRole } from "../../models/enums/ClientRole.ts";
+import {useAuth} from "../Auth/Context/hooks/useAuth.ts";
+import {useRole} from "../Auth/Context/hooks/useRole.ts";
 
 interface ProtectedRouteProps {
     role?: ClientRole;

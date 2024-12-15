@@ -1,16 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { ClientPrivate } from "../../../models/client/ClientPrivate.ts";
-import { getClientInfo } from "../../../api/client/client.ts";
-
-interface AuthContextProps {
-    isLoggedIn: boolean;
-    client: ClientPrivate | null;
-    loginProp: (accessToken: string, refreshToken: string) => void;
-    logoutProp: () => void;
-    updateClient: () => void;
-}
-
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+import React, {useCallback, useEffect, useState} from "react";
+import {ClientPrivate} from "../../../../models/client/ClientPrivate.ts";
+import {getClientInfo} from "../../../../api/client/client.ts";
+import {AuthContext} from "../AuthContext.ts";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,10 +57,3 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-};

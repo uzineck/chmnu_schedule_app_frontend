@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import "./module.css";
-import { useAuth } from "../Context/AuthProvider.tsx";
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 import Title from "../../Title/Title.tsx";
 import {Outlet, useLocation} from "react-router-dom";
+import {useAuth} from "../Context/hooks/useAuth.ts";
 
 const Profile: React.FC = () => {
     const { client } = useAuth();

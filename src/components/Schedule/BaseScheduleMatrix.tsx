@@ -5,10 +5,10 @@ import { OrdinaryNumber } from "../../models/enums/OrdinaryNumber";
 import { getLessonTime } from "../../models/enums/LessonTime";
 import LessonDetails from "./Lesson/LessonDetail";
 import { LessonForTeacher } from "../../models/lesson/LessonForTeacher";
-import { useTime } from "./Time/Context/TimeContext.tsx";
 import { useNavigate } from "react-router-dom";
-import {useScheduleContext} from "./Context/ScheduleContext.tsx";
-import {AiOutlinePlus} from "react-icons/ai"; // Plus icon for adding lessons
+import {AiOutlinePlus} from "react-icons/ai";
+import {useSchedule} from "./Context/hooks/useSchedule.ts";
+import {useTime} from "./Context/hooks/useTime.ts"; // Plus icon for adding lessons
 
 interface BaseScheduleMatrixProps {
     lessons: Lesson[] | LessonForTeacher[] | null;
@@ -17,7 +17,7 @@ interface BaseScheduleMatrixProps {
 
 const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixProps) => {
     const { currentTime } = useTime();
-    const { setOrdinaryNumber, setDay } = useScheduleContext();
+    const { setOrdinaryNumber, setDay } = useSchedule();
     const navigate = useNavigate();
 
     const matrix: (Lesson | LessonForTeacher)[][][] = Array.from({ length: 6 }, () => Array(5).fill(null));
