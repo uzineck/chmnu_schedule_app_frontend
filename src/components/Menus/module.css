@@ -1,124 +1,18 @@
-/* Custom styles for the dropdown button */
-.dropdown-button {
-    padding: 10px 15px;
-    background-color: mediumpurple;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+/* styles.css */
+
+/* Remove underline from dropdown menu items */
+.ant-dropdown-menu-item {
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
 }
 
-.dropdown-button:hover {
-    background-color: darkviolet;
-    transform: scale(1.05);
+/* Optional: Remove underline from link items inside dropdown */
+.ant-dropdown-menu-item a {
+    text-decoration: none !important; /* Remove underline from links */
+    color: inherit; /* Inherit the color of the parent item */
 }
 
-.dropdown-button.open {
-    background-color: darkviolet;
-    transform: scale(1.05);
-}
-
-/* Custom styles for dropdown arrow */
-.dropdown-button .ant-dropdown-arrow {
-    color: white; /* Arrow color */
-}
-
-/* Dropdown menu container */
-.ant-dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    margin-top: 5px;
-    border-radius: 5px;
-}
-
-/* Adjusting dropdown menu placement */
-.ant-dropdown-placement-topLeft,
-.ant-dropdown-placement-topCenter,
-.ant-dropdown-placement-topRight {
-    border-color: lightblue;
-}
-
-.ant-dropdown-placement-bottomLeft,
-.ant-dropdown-placement-bottomCenter,
-.ant-dropdown-placement-bottomRight {
-    border-color: lightgreen;
-}
-
-/* Custom styles for dropdown items */
-.dropdown-item {
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.dropdown-item:hover {
-    background-color: #f1f1f1;
-}
-
-/* Custom selected state for dropdown items */
-.dropdown-item.selected {
-    background-color: #e7e7e7;
-    color: #800080;
-    border: 2px solid #800080;
-}
-
-/* Custom link styles inside the dropdown */
-.dropdown-item-link {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* Hover effect for links inside the dropdown */
-.dropdown-item-link:hover {
-    color: darkviolet;
-}
-
-/* Custom styles for the dropdown when it's open */
-.ant-dropdown-open .ant-dropdown-menu {
-    opacity: 1;
-    transition: opacity 0.3s ease;
-}
-
-/* Dropdown button open class - this will be used when the dropdown is active */
-.ant-dropdown-open .dropdown-button {
-    background-color: darkviolet;
-    transform: scale(1.05);
-}
-
-/* Positioning dropdown based on alignment prop */
-.custom-dropdown .ant-dropdown-align-left {
-    left: 0;
-}
-
-.custom-dropdown .ant-dropdown-align-right {
-    right: 0;
-}
-
-/* Custom styles for the dropdown trigger */
-.dropdown-trigger-click {
-    background-color: darkgreen;
-}
-
-.dropdown-trigger-hover {
-    background-color: darkblue;
-}
-
-/* Responsive Dropdown (for smaller screens) */
-@media (max-width: 768px) {
-    .dropdown-button {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-
-    .dropdown-item {
-        font-size: 14px;
-    }
+/* Hover styles for dropdown links */
+.ant-dropdown-menu-item a:hover {
+    text-decoration: none; /* Ensure no underline appears */
 }

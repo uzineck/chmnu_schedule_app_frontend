@@ -88,8 +88,8 @@
 .lesson-groups svg,
 .lesson-actions svg{
     font-size: 1.1rem; /* Icon size */
-    margin-right: 0px; /* Spacing between icon and text */
-    vertical-align: middle; /* Align with text */
+    margin-right: 0; /* Spacing between icon and text */
+    vertical-align: center; /* Align with text */
     color: #888; /* Default icon color */
 }
 

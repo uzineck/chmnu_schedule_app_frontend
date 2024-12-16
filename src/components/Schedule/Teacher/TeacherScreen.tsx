@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import TeacherSearch from "./TeacherSearch.tsx";
 import { Teacher } from "../../../models/teacher/Teacher.ts";
 import TeacherSchedule from "./TeacherSchedule.tsx";
-import './TeacherScreen.css';
+import './module.css';
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 
 import {useTime} from "../Context/hooks/useTime.ts";

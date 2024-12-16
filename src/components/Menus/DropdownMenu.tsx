@@ -1,8 +1,10 @@
 import React from 'react';
 import {DownOutlined, EllipsisOutlined} from '@ant-design/icons';
-import { Button, Dropdown, Space } from 'antd';
+import {Button, ConfigProvider, Dropdown, Space} from 'antd';
 import { Link } from 'react-router-dom';
 import type { MenuProps } from 'antd';
+import {theme} from "./theme.ts";
+import "./module.css";
 
 interface DropdownMenuProps {
     menuName: string;
@@ -31,16 +33,18 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ menuName, options }) => {
     };
 
     return (
-        <Space wrap>
-            <Dropdown menu={menuProps} className={"ant-dropdown-menu"}>
-                <Button className="dropdown-button">
-                    <Space>
-                        {menuName}
-                        <DownOutlined />
-                    </Space>
-                </Button>
-            </Dropdown>
-        </Space>
+        <ConfigProvider theme={theme}>
+            <Space wrap>
+                <Dropdown menu={menuProps}>
+                    <Button>
+                        <Space>
+                            {menuName}
+                            <DownOutlined />
+                        </Space>
+                    </Button>
+                </Dropdown>
+            </Space>
+        </ConfigProvider>
     );
 };
 

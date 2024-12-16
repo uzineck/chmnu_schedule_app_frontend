@@ -5,10 +5,10 @@ import { LessonForTeacher } from "../../../models/lesson/LessonForTeacher";
 import { LessonType } from "../../../models/enums/LessonType.ts";
 import { LuDoorClosed } from "react-icons/lu";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Edit and delete icons
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
-
 import {useSchedule} from "../Context/hooks/useSchedule.ts";
+import {HiUserGroup} from "react-icons/hi";
 
 function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is LessonForTeacher {
     return (lesson as LessonForTeacher).groups !== undefined;
@@ -51,9 +51,9 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
             <div className="lesson-room"><LuDoorClosed /> {lesson.room.number}</div>
             {isLessonForTeacher(lesson) ? (
                 <div className="lesson-groups">
-                    Groups:{" "}
+                    <HiUserGroup />{""}
                     {lesson.groups
-                        .map(group => `${group.number} ${group.subgroups ? `(${group.subgroups.join(", ")})` : ''}`)
+                        .map(group => `${group.number}${group.subgroups ? `(${group.subgroups.join(", ")})` : ''}`)
                         .join(", ")}
                 </div>
             ) : (

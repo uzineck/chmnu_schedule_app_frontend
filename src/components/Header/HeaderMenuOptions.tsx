@@ -12,8 +12,8 @@ export const menuOptions = (client: ClientPrivate | null)=>  [
     ...(client?.role === ClientRole.HEADMAN
         ? [
             {
-                label: "Manage Group Lessons",
-                key: "group_lessons_manage",
+                label: "Manage Group Schedule",
+                key: "group_schedule_manage",
                 to: "/group/manage",
                 icon: <ScheduleOutlined />,
             },
