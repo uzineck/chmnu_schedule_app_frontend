@@ -4,22 +4,25 @@ import {Day} from "../../../models/enums/Day.ts";
 import {OrdinaryNumber} from "../../../models/enums/OrdinaryNumber.ts";
 import {Lesson} from "../../../models/lesson/Lesson.ts";
 import {LessonForTeacher} from "../../../models/lesson/LessonForTeacher.ts";
+import {Group} from "../../../models/group/Group.ts";
 
 interface ScheduleContextProps {
     groupUuid: string;
-    lessonUuid: string;
-    lesson: Lesson | LessonForTeacher | null;
-    subgroup: Subgroup | null;
-    isEvenWeek: boolean;
-    day: Day;
-    ordinaryNumber: OrdinaryNumber;
-    setSubgroup: React.Dispatch<React.SetStateAction<Subgroup | null>>;
-    setIsEvenWeek: React.Dispatch<React.SetStateAction<boolean>>;
     setGroupUuid: React.Dispatch<React.SetStateAction<string>>;
+    group: Group | null;
+    setGroup: React.Dispatch<React.SetStateAction<Group | null>>;
+    lessonUuid: string;
     setLessonUuid: React.Dispatch<React.SetStateAction<string>>;
-    setOrdinaryNumber: React.Dispatch<React.SetStateAction<OrdinaryNumber>>;
-    setDay: React.Dispatch<React.SetStateAction<Day>>;
+    lesson: Lesson | LessonForTeacher | null;
     setLesson: React.Dispatch<React.SetStateAction<Lesson | LessonForTeacher | null>>
+    subgroup: Subgroup | null;
+    setSubgroup: React.Dispatch<React.SetStateAction<Subgroup | null>>;
+    day: Day;
+    setDay: React.Dispatch<React.SetStateAction<Day>>;
+    ordinaryNumber: OrdinaryNumber;
+    setOrdinaryNumber: React.Dispatch<React.SetStateAction<OrdinaryNumber>>;
+    setIsEvenWeek: React.Dispatch<React.SetStateAction<boolean>>;
+    isEvenWeek: boolean;
 
 }
 

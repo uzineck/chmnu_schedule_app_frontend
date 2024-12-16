@@ -27,6 +27,12 @@ export const menuOptions = (client: ClientPrivate | null)=>  [
                 to: "/admin",
                 icon: <ContactsOutlined />,
             },
+            {
+                label: "Manage Schedule",
+                key: "admin_schedule_manage",
+                to: "/admin/schedule/manage/group",
+                icon: <ContactsOutlined />,
+            },
         ]
         : []),
     ...(client?.role === ClientRole.MANAGER

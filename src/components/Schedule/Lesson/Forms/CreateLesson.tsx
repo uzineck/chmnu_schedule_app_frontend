@@ -13,8 +13,11 @@ import TeacherSearch from "../../Teacher/TeacherSearch.tsx";
 import RoomSearch from "../../Room/RoomSearch.tsx";
 import "./module.css";
 import {useSchedule} from "../../Context/hooks/useSchedule.ts";
+import {ClientRole} from "../../../../models/enums/ClientRole.ts";
+import {useAuth} from "../../../Auth/Context/hooks/useAuth.ts";
 
 const CreateLesson = () => {
+    const { client } = useAuth()
     const { day, ordinaryNumber, isEvenWeek, setLessonUuid } = useSchedule();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
@@ -56,7 +59,7 @@ const CreateLesson = () => {
             setLessonUuid(lessonUuid);
             messageApi.success({ content: "Lesson created successfully!", key: key });
 
-            navigate(`/group/manage/lesson/${lessonUuid}/add`);
+            navigate(`/lesson/${lessonUuid}/add`);
         } catch (error) {
             if (error instanceof ApiCallError) {
                 messageApi.error({ key: key, content: error.message, duration: 2 });
@@ -79,7 +82,7 @@ const CreateLesson = () => {
     };
 
     const handleGoBack = () => {
-        navigate("/group/manage");
+        navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/schedule/manage/group");
     };
 
 

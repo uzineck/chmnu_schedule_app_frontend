@@ -13,8 +13,11 @@ import RoomSearch from "../../Room/RoomSearch.tsx";
 import {updateLesson} from "../../../../api/schedule/lesson.ts";
 import "./module.css";
 import {useSchedule} from "../../Context/hooks/useSchedule.ts";
+import {ClientRole} from "../../../../models/enums/ClientRole.ts";
+import {useAuth} from "../../../Auth/Context/hooks/useAuth.ts";
 
 const UpdateLesson = () => {
+    const { client } = useAuth()
     const { day, ordinaryNumber, isEvenWeek, setLessonUuid, lesson } = useSchedule();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
@@ -83,7 +86,7 @@ const UpdateLesson = () => {
     };
 
     const handleGoBack = () => {
-        navigate("/group/manage");
+        navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/schedule/manage/group");
     };
 
     return (

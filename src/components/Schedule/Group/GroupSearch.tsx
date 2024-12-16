@@ -1,18 +1,18 @@
-import { GroupAll } from "../../../models/group/GroupAll.ts";
+import { Group } from "../../../models/group/Group.ts";
 import { getAllGroups } from "../../../api/schedule/group.ts";
 import EntitySearch from "../../Search/EntitySearch.tsx";
 
 interface GroupSearchProps {
-    onGroupSelect: (group: GroupAll | null) => void;
-    onGroupListFetched: (groups: GroupAll[]) => void;
-    selectedGroup: GroupAll | null;
+    onGroupSelect: (group: Group | null) => void;
+    onGroupListFetched: (groups: Group[]) => void;
+    selectedGroup: Group | null;
 }
 
 const GroupSearch = ({ onGroupSelect, selectedGroup, onGroupListFetched }: GroupSearchProps) => {
     return (
-        <EntitySearch<GroupAll>
+        <EntitySearch<Group>
             fetchData={getAllGroups}
-            mapToOptions={(group: GroupAll) => ({
+            mapToOptions={(group: Group) => ({
                 value: group.uuid,
                 label: `${group.number} (${group.faculty.code_name})`,
             })}

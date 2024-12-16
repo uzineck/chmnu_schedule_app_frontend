@@ -12,7 +12,7 @@ import ChangeEmailForm from "./components/Auth/Client/Forms/ChangeEmailForm.tsx"
 import ChangePasswordForm from "./components/Auth/Client/Forms/ChangePasswordForm.tsx";
 import ChangeCredentialsForm from "./components/Auth/Client/Forms/ChangeCredentialsForm.tsx";
 import {Header} from "./components/Header/Header.tsx";
-import AdminPanel from "./components/Schedule/Admin/AdminPanel.tsx";
+import AdminPanel from "./components/Admin/AdminPanel.tsx";
 import {ClientRole} from "./models/enums/ClientRole.ts";
 import HeadmanGroupScreen from "./components/Schedule/Group/Headman/HeadmanGroupScreen.tsx";
 import AddLesson from "./components/Schedule/Lesson/AddLesson.tsx";
@@ -21,6 +21,7 @@ import CreateLesson from "./components/Schedule/Lesson/Forms/CreateLesson.tsx";
 import UpdateLesson from "./components/Schedule/Lesson/Forms/UpdateLesson.tsx";
 import {ScheduleProvider} from "./components/Schedule/Context/providers/ScheduleProvider.tsx";
 import {TimeProvider} from "./components/Schedule/Context/providers/TimeProvider.tsx";
+import AdminGroupScreen from "./components/Admin/Schedule/AdminGroupScreen.tsx";
 
 const router = createBrowserRouter([
     {
@@ -53,13 +54,7 @@ const router = createBrowserRouter([
                     {  path: ":groupUuid/lessons", element: <GroupScreen /> },
                     {
                         path: "manage",
-                        element: <ProtectedRoute role={ClientRole.HEADMAN}><HeadmanGroupScreen /></ProtectedRoute>,
-                        children: [
-                            { path: "lesson/create", element: <CreateLesson /> },
-                            { path: "lesson/:lessonUuid/add", element: <AddLesson /> },
-                            { path: "lesson/:lessonUuid/edit", element: <UpdateLesson /> },
-                            { path: "lesson/:lessonUuid/delete", element: <DeleteLesson /> },
-                        ]
+                        element: <ProtectedRoute role={ClientRole.HEADMAN}><HeadmanGroupScreen /></ProtectedRoute>
                     }
                 ],
             },
@@ -81,8 +76,30 @@ const router = createBrowserRouter([
             },
             {
                 path: "admin",
-                element: <ProtectedRoute role={ClientRole.ADMIN}><AdminPanel/></ProtectedRoute>,
+                children: [
+                    { index: true, element: <ProtectedRoute role={ClientRole.ADMIN}><AdminPanel/></ProtectedRoute> },
+                    {
+                        path: "schedule",
+                        children: [
+                            {
+                                path: "manage",
+                                children: [
+                                    {
+                                        path: "group",
+                                        children: [
+                                            { index: true, element: <AdminGroupScreen /> },
+                                            { path: ":groupUuid/lessons", element: <AdminGroupScreen />},
+                                        ]
+                                    },
+                                ]
+                            }
+                    ]}
+                ],
             },
+            { path: "lesson/create", element: <ProtectedRoute><CreateLesson /></ProtectedRoute> },
+            { path: "lesson/:lessonUuid/add", element: <ProtectedRoute><AddLesson /></ProtectedRoute> },
+            { path: "lesson/:lessonUuid/edit", element: <ProtectedRoute><UpdateLesson /></ProtectedRoute> },
+            { path: "lesson/:lessonUuid/delete", element: <ProtectedRoute><DeleteLesson /></ProtectedRoute> },
         ],
     },
 ]);

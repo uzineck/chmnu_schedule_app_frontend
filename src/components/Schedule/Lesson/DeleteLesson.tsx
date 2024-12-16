@@ -30,17 +30,17 @@ const DeleteLesson = () => {
         if (!isLoading) {
             if (data) {
                 messageApi.destroy();
-                navigate("/group/manage", {
+                navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/schedule/manage/group", {
                     state: { deleteLesson: "Lesson removed successfully!" },
                 });
             } else if (error) {
                 messageApi.destroy();
-                navigate("/group/manage", {
+                navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/schedule/manage/group", {
                     state: { deleteLessonError: error },
                 });
             }
         }
-    }, [data, error, isLoading, navigate, messageApi]);
+    }, [client, data, error, isLoading, navigate, messageApi]);
 
     return <>{contextHolder}</>;
 };

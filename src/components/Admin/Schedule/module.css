@@ -1,0 +1,24 @@
+.group-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the entire content horizontally */
+    gap: 24px; /* Space between rows */
+    padding: 16px;
+}
+
+.group-screen-controls {
+    display: flex;
+    align-items: center; /* Vertically center GroupSearch and buttons container */
+    gap: 16px; /* Space between GroupSearch and the button containers */
+    justify-content: center; /* Center all items horizontally */
+}
+
+.button-container-column {
+    display: flex;
+    flex-direction: column; /* Stack the buttons vertically */
+    gap: 8px; /* Space between the two ButtonContainer components */
+}
+
+.group-screen-controls > * {
+    flex-shrink: 0; /* Prevent shrinking of the child elements */
+}

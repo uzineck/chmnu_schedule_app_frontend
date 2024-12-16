@@ -1,6 +1,6 @@
 import Http from "../index.ts";
 import {ApiResponse} from "../../models/ApiResponse.ts";
-import {GroupAll} from "../../models/group/GroupAll.ts";
+import {Group} from "../../models/group/Group.ts";
 import {GroupWithLessons} from "../../models/group/GroupWithLessons.ts";
 import qs from "qs";
 import {Subgroup} from "../../models/enums/Subgroup.ts";
@@ -12,7 +12,7 @@ import {Group} from "../../models/group/Group.ts";
 
 const BASE_URL = '/schedule/group';
 
-export const getAllGroups = (): Promise<ApiResponse<GroupAll[]>> => {
+export const getAllGroups = (): Promise<ApiResponse<Group[]>> => {
     return Http.get(`${BASE_URL}/all`);
 }
 
@@ -47,7 +47,7 @@ export const updateGroupHeadman = (groupUuid: string, body: UpdateGroupHeadmanSc
     return Http.patch<UpdateGroupHeadmanSchema>(`${BASE_URL}/${groupUuid}/update_headman`, body);
 }
 
-export const addLessonToGroupAdmin = (groupUuid: string, lessonUuid: string, subgroup: Subgroup): Promise<ApiResponse<StatusResponse>> => {
+export const addLessonToGroupAdmin = (groupUuid: string, lessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
     const queryParams = qs.stringify(
         {
             subgroup,
@@ -57,7 +57,7 @@ export const addLessonToGroupAdmin = (groupUuid: string, lessonUuid: string, sub
     return Http.patch(`${BASE_URL}/${groupUuid}/add/${lessonUuid}?${queryParams}`, {});
 }
 
-export const removeLessonFromGroupAdmin = (groupUuid: string, lessonUuid: string, subgroup: Subgroup): Promise<ApiResponse<StatusResponse>> => {
+export const removeLessonFromGroupAdmin = (groupUuid: string, lessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
     const queryParams = qs.stringify(
         {
             subgroup,
@@ -67,7 +67,7 @@ export const removeLessonFromGroupAdmin = (groupUuid: string, lessonUuid: string
     return Http.patch(`${BASE_URL}/${groupUuid}/remove/${lessonUuid}?${queryParams}`, {});
 }
 
-export const addLessonToGroupHeadman = (lessonUuid: string, subgroup: Subgroup): Promise<ApiResponse<StatusResponse>> => {
+export const addLessonToGroupHeadman = (lessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
     const queryParams = qs.stringify(
         {
             subgroup,
@@ -77,7 +77,7 @@ export const addLessonToGroupHeadman = (lessonUuid: string, subgroup: Subgroup):
     return Http.patch(`${BASE_URL}/add/${lessonUuid}?${queryParams}`, {});
 }
 
-export const removeLessonToGroupHeadman = (lessonUuid: string, subgroup: Subgroup): Promise<ApiResponse<StatusResponse>> => {
+export const removeLessonToGroupHeadman = (lessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
     const queryParams = qs.stringify(
         {
             subgroup,

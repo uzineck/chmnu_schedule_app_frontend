@@ -65,14 +65,37 @@
     color: #444;
 }
 
+.lesson-teacher a {
+    color: inherit; /* Default color of the teacher link */
+    text-decoration: none; /* Remove underline by default */
+}
+
+/* Hover Effect for Teacher Link */
+.lesson-teacher a:hover {
+    color: #7f00ff; /* Same hover color as SVG icons */
+    text-decoration: none; /* Ensure no underline appears on hover */
+}
+
+
 /* Groups Information */
 .lesson-groups {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap; /* Allow content to wrap if it overflows */
     gap: 6px;
     font-size: 0.95rem;
     color: #666;
+}
+
+.lesson-groups a {
+    color: inherit; /* Default color of the teacher link */
+    text-decoration: none; /* Remove underline by default */
+}
+
+.lesson-groups a:hover {
+    color: #7f00ff; /* Same hover color as SVG icons */
+    text-decoration: none; /* Ensure no underline appears on hover */
 }
 
 .lesson-actions{
@@ -91,6 +114,7 @@
     margin-right: 0; /* Spacing between icon and text */
     vertical-align: center; /* Align with text */
     color: #888; /* Default icon color */
+    flex-shrink: 0; /* Prevent icons from shrinking */
 }
 
 /* Hover Effect for Icons */

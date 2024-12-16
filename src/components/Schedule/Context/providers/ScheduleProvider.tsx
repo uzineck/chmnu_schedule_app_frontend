@@ -5,6 +5,7 @@ import {OrdinaryNumber} from "../../../../models/enums/OrdinaryNumber.ts";
 import {Lesson} from "../../../../models/lesson/Lesson.ts";
 import {LessonForTeacher} from "../../../../models/lesson/LessonForTeacher.ts";
 import {ScheduleContext} from "../ScheduleContext.tsx";
+import {Group} from "../../../../models/group/Group.ts";
 
 export const ScheduleProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const [subgroup, setSubgroup] = useState<Subgroup | null>(null);
@@ -14,6 +15,7 @@ export const ScheduleProvider: React.FC<{ children: ReactNode }> = ({children}) 
     const [day, setDay] = useState<Day>(Day.MONDAY);
     const [ordinaryNumber, setOrdinaryNumber] = useState<OrdinaryNumber>(OrdinaryNumber.FIRST);
     const [lesson, setLesson] = useState<Lesson | LessonForTeacher | null>(null);
+    const [group, setGroup] = useState<Group | null>(null);
 
 
     return (
@@ -25,6 +27,7 @@ export const ScheduleProvider: React.FC<{ children: ReactNode }> = ({children}) 
             day,
             ordinaryNumber,
             lesson,
+            group,
             setGroupUuid,
             setLessonUuid,
             setSubgroup,
@@ -32,6 +35,7 @@ export const ScheduleProvider: React.FC<{ children: ReactNode }> = ({children}) 
             setDay,
             setOrdinaryNumber,
             setLesson,
+            setGroup,
         }}>
             {children}
         </ScheduleContext.Provider>

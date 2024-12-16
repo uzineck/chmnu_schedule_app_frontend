@@ -1,31 +1,29 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import GroupSearch from "./GroupSearch.tsx";
-import GroupSchedule from "./GroupSchedule.tsx";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import { Group } from "../../../models/group/Group.ts";
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 import "./module.css";
-import {useTime} from "../Context/hooks/useTime.ts";
+import { useTime } from "../../Schedule/Context/hooks/useTime.ts";
+import GroupSearch from "../../Schedule/Group/GroupSearch.tsx";
+import GroupSchedule from "../../Schedule/Group/GroupSchedule.tsx";
+import { useSchedule } from "../../Schedule/Context/hooks/useSchedule.ts";  // Importing useSchedule
 
-const GroupScreen = () => {
+const AdminGroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
     const [searchParams] = useSearchParams();
     const { currentTime } = useTime();
     const navigate = useNavigate();
+    const { group, subgroup, isEvenWeek, setSubgroup, setIsEvenWeek, setGroupUuid, setGroup } = useSchedule();
 
-    const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
     const [groupList, setGroupList] = useState<Group[]>([]);
-    const [selectedSubgroup, setSelectedSubgroup] = useState<Subgroup | null>(null);
-    const [selectedWeekType, setSelectedWeekType] = useState<boolean>(true);
-
     const isUpdatingURL = useRef(false);
 
     const updateURL = useCallback(
         (group: Group | null, subgroup: Subgroup | null, weekType: boolean) => {
             if (!group) return;
 
-            const basePath = `/group/${group.uuid}`;
+            const basePath = `/admin/schedule/manage/group/${group.uuid}`;
             const queryParams = new URLSearchParams({
                 weekType: weekType.toString(),
                 ...(group.has_subgroups && { subgroup: subgroup || "" }),
@@ -40,11 +38,11 @@ const GroupScreen = () => {
         const storedSubgroup = localStorage.getItem("lastSubgroup");
         if (group?.has_subgroups) {
             const subgroup = searchParams.get("subgroup") || storedSubgroup;
-            setSelectedSubgroup(subgroup === Subgroup.B ? Subgroup.B : Subgroup.A);
+            setSubgroup(subgroup === Subgroup.B ? Subgroup.B : Subgroup.A);
         } else {
-            setSelectedSubgroup(null);
+            setSubgroup(null);
         }
-    }, [searchParams])
+    }, [setSubgroup, searchParams])
 
     useEffect(() => {
         const storedGroupUuid = localStorage.getItem("lastGroupUuid");
@@ -57,17 +55,19 @@ const GroupScreen = () => {
             initialGroup = groupList.find((g) => g.uuid === storedGroupUuid);
         }
 
-        setSelectedGroup(initialGroup || null);
-
+        if (initialGroup) {
+            setGroup(initialGroup);
+            setGroupUuid(initialGroup.uuid);
+        }
         checkSubgroupAndSet(initialGroup || null);
 
         const weekTypeFromSearchParams = searchParams.get("weekType");
         if (weekTypeFromSearchParams !== null) {
-            setSelectedWeekType(weekTypeFromSearchParams === "true");
+            setIsEvenWeek(weekTypeFromSearchParams === "true");
         } else if (currentTime) {
-            setSelectedWeekType(currentTime.is_even);
+            setIsEvenWeek(currentTime.is_even);
         }
-    }, [groupUuid, groupList, searchParams, currentTime, checkSubgroupAndSet]);
+    }, [checkSubgroupAndSet, setGroup, groupUuid, groupList, searchParams, currentTime, setGroupUuid, setSubgroup, setIsEvenWeek]);
 
     useEffect(() => {
         if (isUpdatingURL.current) {
@@ -75,31 +75,34 @@ const GroupScreen = () => {
             return;
         }
 
-        if (selectedGroup) {
+        if (group) {
             isUpdatingURL.current = true;
-            updateURL(selectedGroup, selectedSubgroup, selectedWeekType);
+            updateURL(group, subgroup, isEvenWeek);
         }
-    }, [selectedGroup, selectedSubgroup, selectedWeekType, updateURL]);
+    }, [group, subgroup, isEvenWeek, updateURL]);
 
     const handleGroupSelect = (group: Group | null) => {
-        setSelectedGroup(group);
-        checkSubgroupAndSet(group);
-        updateURL(group, selectedSubgroup, selectedWeekType);
+        if (group) {
+            setGroup(group);
+            setGroupUuid(group.uuid);
+        }
+        checkSubgroupAndSet(group || null);
+        updateURL(group, subgroup, isEvenWeek);
 
         if (group) {
             localStorage.setItem("lastGroupUuid", group.uuid);
         }
     };
 
-    const handleSubgroupChange = (subgroup: Subgroup) => {
-        setSelectedSubgroup(subgroup);
-        updateURL(selectedGroup, subgroup, selectedWeekType);
-        localStorage.setItem("lastSubgroup", subgroup);
+    const handleSubgroupChange = (selectedSubgroup: Subgroup) => {
+        setSubgroup(selectedSubgroup);
+        updateURL(group, selectedSubgroup, isEvenWeek);
+        localStorage.setItem("lastSubgroup", selectedSubgroup);
     };
 
     const handleWeekTypeChange = (weekType: boolean) => {
-        setSelectedWeekType(weekType);
-        updateURL(selectedGroup, selectedSubgroup, weekType);
+        setIsEvenWeek(weekType);
+        updateURL(group, subgroup, weekType);
     };
 
     const handleGroupListFetched = (groups: Group[]) => {
@@ -112,16 +115,16 @@ const GroupScreen = () => {
                 <GroupSearch
                     onGroupSelect={handleGroupSelect}
                     onGroupListFetched={handleGroupListFetched}
-                    selectedGroup={selectedGroup}
+                    selectedGroup={group}
                 />
                 <div className="button-container-column">
-                    {selectedGroup?.has_subgroups ? (
+                    {group?.has_subgroups ? (
                         <ButtonContainer
                             options={[
                                 { label: "Підгрупа A", value: Subgroup.A },
                                 { label: "Підгрупа B", value: Subgroup.B },
                             ]}
-                            selectedValue={selectedSubgroup}
+                            selectedValue={subgroup}
                             onChange={handleSubgroupChange}
                         />
                     ) : null}
@@ -130,22 +133,23 @@ const GroupScreen = () => {
                             { label: "Тиждень над", value: true },
                             { label: "Тиждень під", value: false },
                         ]}
-                        selectedValue={selectedWeekType}
+                        selectedValue={isEvenWeek}
                         onChange={handleWeekTypeChange}
                     />
                 </div>
             </div>
 
-            {selectedGroup && (
+            {groupUuid && (
                 <GroupSchedule
-                    key={`${selectedGroup.uuid}-${selectedSubgroup}-${selectedWeekType}`}
-                    groupUuid={selectedGroup.uuid}
-                    subgroup={selectedSubgroup}
-                    is_even={selectedWeekType}
+                    key={`${groupUuid}-${subgroup}-${isEvenWeek}`}
+                    groupUuid={groupUuid}
+                    subgroup={subgroup}
+                    is_even={isEvenWeek}
+                    isEditable={true}
                 />
             )}
         </div>
     );
 };
 
-export default GroupScreen;
+export default AdminGroupScreen;

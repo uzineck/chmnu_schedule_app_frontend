@@ -17,10 +17,7 @@ const HeadmanGroupScreen = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const location = useLocation();
 
-    const fetchGroup = useCallback(
-        () => getHeadmanGroup(),
-        []
-    );
+    const fetchGroup = useCallback(() => getHeadmanGroup(), []);
 
     const { data, error, isLoading } = useFetchData(fetchGroup);
 

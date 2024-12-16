@@ -1,14 +1,14 @@
 import "./module.css";
-import { Lesson } from "../../models/lesson/Lesson";
-import { Day } from "../../models/enums/Day";
-import { OrdinaryNumber } from "../../models/enums/OrdinaryNumber";
-import { getLessonTime } from "../../models/enums/LessonTime";
+import {Lesson} from "../../models/lesson/Lesson";
+import {Day} from "../../models/enums/Day";
+import {OrdinaryNumber} from "../../models/enums/OrdinaryNumber";
+import {getLessonTime} from "../../models/enums/LessonTime";
 import LessonDetails from "./Lesson/LessonDetail";
-import { LessonForTeacher } from "../../models/lesson/LessonForTeacher";
-import { useNavigate } from "react-router-dom";
+import {LessonForTeacher} from "../../models/lesson/LessonForTeacher";
+import {useNavigate} from "react-router-dom";
 import {AiOutlinePlus} from "react-icons/ai";
 import {useSchedule} from "./Context/hooks/useSchedule.ts";
-import {useTime} from "./Context/hooks/useTime.ts"; // Plus icon for adding lessons
+import {useTime} from "./Context/hooks/useTime.ts";
 
 interface BaseScheduleMatrixProps {
     lessons: Lesson[] | LessonForTeacher[] | null;
@@ -70,7 +70,7 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
     const handleAddLesson = (dayIndex: number, ordNumberIndex: number) => {
         setDay(dayIndexMap(dayIndex+1));
         setOrdinaryNumber(ordNumberIndex+1);
-        navigate(`/group/manage/lesson/create`);
+        navigate(`/lesson/create`);
     };
 
     return (

@@ -3,7 +3,7 @@ import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 import "./module.css";
 import DropdownMenu from "../Menus/DropdownMenu.tsx";
 import {message} from "antd";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {menuOptions} from "./HeaderMenuOptions.tsx";
 import {useAuth} from "../Auth/Context/hooks/useAuth.ts";
 
@@ -12,6 +12,32 @@ export const Header: React.FC = () => {
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
     const [messageApi, contextHolder] = message.useMessage();
     const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const currentPath = location.pathname;
+
+        if (currentPath.includes("/group") && !currentPath.includes("/manage")) {
+            setSelectedPage('group');
+            localStorage.setItem("lastPath", "/group");
+        } else if (currentPath.includes("/teacher")) {
+            setSelectedPage('teacher');
+            localStorage.setItem("lastPath", "/teacher");
+        } else if (currentPath.includes("/login")) {
+            setSelectedPage('login');
+        } else {
+            setSelectedPage(null);
+        }
+    }, [location]);
+
+    useEffect(() => {
+        if (location.pathname === "/") {
+            const lastPath = localStorage.getItem("lastPath");
+            if (lastPath) {
+                navigate(lastPath);
+            }
+        }
+    }, [location, navigate]);
 
     useEffect(() => {
         const logoutMessage = location.state?.logoutMessage;
