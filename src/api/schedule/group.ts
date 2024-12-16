@@ -8,7 +8,6 @@ import {GroupWithHeadman} from "../../models/group/GroupWithHeadman.ts";
 import {CreateGroupSchema} from "../../models/group/requests/CreateGroupSchema.ts";
 import {UpdateGroupHeadmanSchema} from "../../models/group/requests/UpdateGroupHeadmanSchema.ts";
 import {StatusResponse} from "../../models/StatusResponse.ts";
-import {Group} from "../../models/group/Group.ts";
 
 const BASE_URL = '/schedule/group';
 
