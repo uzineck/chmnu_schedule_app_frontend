@@ -52,6 +52,7 @@ const TeacherScreen = () => {
     useEffect(() => {
         if (selectedTeacher) {
             updateURL(selectedTeacher, selectedWeekType);
+            localStorage.setItem("lastTeacherUuid", selectedTeacher.uuid);
         }
     }, [updateURL, selectedTeacher, selectedWeekType]);
 

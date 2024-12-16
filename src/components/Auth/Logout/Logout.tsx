@@ -19,7 +19,7 @@ const Logout = () => {
                 logoutProp();
                 messageApi.destroy();
                 navigate("/", {
-                    state: { logoutMessage: "Logged out successfully!" },
+                    state: { logoutMessage: data.status },
                 });
             } else if (error) {
                 logoutProp();

@@ -6,14 +6,15 @@ import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
 import GroupSchedule from "../GroupSchedule.tsx";
 import {useFetchData} from "../../../../api/hooks/useFetchData.tsx";
 import {message} from "antd";
-import {Outlet, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 import {useTime} from "../../Context/hooks/useTime.ts";
 import Title from "../../../Title/Title.tsx";
+import {Group} from "../../../../models/group/Group.ts";
 
 const HeadmanGroupScreen = () => {
     const { currentTime } = useTime();
-    const { subgroup, isEvenWeek, setSubgroup, setIsEvenWeek, setGroupUuid } = useSchedule();
+    const { subgroup, isEvenWeek, setSubgroup, setIsEvenWeek, setGroupUuid, groupUuid } = useSchedule();
     const [messageApi, contextHolder] = message.useMessage();
     const location = useLocation();
 
@@ -21,24 +22,36 @@ const HeadmanGroupScreen = () => {
 
     const { data, error, isLoading } = useFetchData(fetchGroup);
 
-    useEffect(() => {
-        if (currentTime) {
-            const isEven = currentTime.is_even;
-            setIsEvenWeek(isEven);
+    const resolveSubgroup = useCallback(
+        (group: Group | null) => {
+            const storedSubgroup = localStorage.getItem("lastSubgroup");
+            if (group?.has_subgroups) {
+                setSubgroup(storedSubgroup === Subgroup.B ? Subgroup.B : Subgroup.A);
+            } else {
+                setSubgroup(null);
+            }
+        },
+        [setSubgroup]
+    );
+    const resolveWeekType = useCallback(() => {
+        const storedWeekType = localStorage.getItem("lastWeekType");
+        if (storedWeekType) {
+            setIsEvenWeek(storedWeekType === "true");
+        } else if (currentTime) {
+            const currentTimeWeekType =  currentTime.is_even;
+            setIsEvenWeek(currentTimeWeekType);
+            localStorage.setItem("lastWeekType", currentTimeWeekType.toString());
         }
-    }, [currentTime, setIsEvenWeek]);
+    }, [setIsEvenWeek, currentTime]);
 
     useEffect(() => {
         if (data) {
-            setGroupUuid(data.uuid)
-            if (data.has_subgroups){
-                setSubgroup(Subgroup.A)
-            }
-            else{
-                setSubgroup(null)
-            }
+            setGroupUuid(data.uuid);
+            resolveSubgroup(data || null);
+            resolveWeekType();
         }
-    }, [setSubgroup, setGroupUuid, data]);
+    }, [data, setGroupUuid, resolveSubgroup, resolveWeekType]);
+
 
     useEffect(() => {
         const deleteLesson = location.state?.deleteLesson;
@@ -56,38 +69,36 @@ const HeadmanGroupScreen = () => {
         }
 
         if (errorMessage) {
-            messageApi.error({ content: errorMessage, duration: 2 });
+            messageApi.error({ content: errorMessage, duration: 3 });
         }
     }, [location.state, messageApi]);
 
     useEffect(() => {
         if (isLoading) {
-            messageApi.loading({ key: 'updatable', content: 'Loading...' });
+            messageApi.loading({ key: 'loading', content: 'Loading...' });
         }
         else {
-            messageApi.destroy()
+            messageApi.destroy('loading')
         }
     }, [isLoading, messageApi]);
 
     useEffect(() => {
         if (error) {
-            messageApi.error({ key: 'updatable', content: error, duration: 2 });
+            messageApi.error({ content: error, duration: 3 });
         }
     }, [error, messageApi]);
 
 
-    const handleSubgroupChange = (selectedSubgroup: Subgroup | null) => {
+    const handleSubgroupChange = (selectedSubgroup: Subgroup) => {
         setSubgroup(selectedSubgroup);
+        localStorage.setItem("lastSubgroup", selectedSubgroup);
     };
 
-    const handleWeekTypeChange = (isEvenWeek: boolean) => {
-        setIsEvenWeek(isEvenWeek);
+    const handleWeekTypeChange = (weekType: boolean) => {
+        setIsEvenWeek(weekType);
+        localStorage.setItem("lastWeekType", weekType.toString());
     };
-    const isChildRouteActive = location.pathname.includes("/group/manage/lesson");
 
-    if (isChildRouteActive) {
-        return <Outlet />;
-    }
     return (
         <div className="group-screen">
             {contextHolder}
@@ -115,10 +126,10 @@ const HeadmanGroupScreen = () => {
                 </div>
             </div>
 
-            {data && (
+            {groupUuid && (
                 <GroupSchedule
-                    key={`${data.uuid}-${subgroup}-${isEvenWeek}`}
-                    groupUuid={data.uuid}
+                    key={`${groupUuid}-${subgroup}-${isEvenWeek}`}
+                    groupUuid={groupUuid}
                     subgroup={subgroup}
                     is_even={isEvenWeek}
                     isEditable={true}

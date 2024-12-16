@@ -40,7 +40,9 @@ const GroupScreen = () => {
         const storedSubgroup = localStorage.getItem("lastSubgroup");
         if (group?.has_subgroups) {
             const subgroup = searchParams.get("subgroup") || storedSubgroup;
-            setSelectedSubgroup(subgroup === Subgroup.B ? Subgroup.B : Subgroup.A);
+            const validSubgroup = subgroup === Subgroup.B ? Subgroup.B : Subgroup.A;
+            setSelectedSubgroup(validSubgroup);
+            localStorage.setItem("lastSubgroup", validSubgroup);
         } else {
             setSelectedSubgroup(null);
         }
@@ -77,6 +79,7 @@ const GroupScreen = () => {
 
         if (selectedGroup) {
             isUpdatingURL.current = true;
+            localStorage.setItem("lastGroupUuid", selectedGroup.uuid);
             updateURL(selectedGroup, selectedSubgroup, selectedWeekType);
         }
     }, [selectedGroup, selectedSubgroup, selectedWeekType, updateURL]);
@@ -94,7 +97,6 @@ const GroupScreen = () => {
     const handleSubgroupChange = (subgroup: Subgroup) => {
         setSelectedSubgroup(subgroup);
         updateURL(selectedGroup, subgroup, selectedWeekType);
-        localStorage.setItem("lastSubgroup", subgroup);
     };
 
     const handleWeekTypeChange = (weekType: boolean) => {

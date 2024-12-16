@@ -30,7 +30,7 @@ const AddLesson = () => {
             if (data) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/schedule/manage/group", {
-                    state: { addLesson: "Lesson added successfully!" },
+                    state: { addLesson: data.status },
                 });
             } else if (error) {
                 messageApi.destroy();
