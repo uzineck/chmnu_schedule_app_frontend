@@ -38,8 +38,9 @@ const ChangeEmailForm: React.FC = () => {
                     password: values.password,
                 });
                 loginProp(response.data.access_token, response.data.refresh_token)
-                messageApi.success({ key: key, content: 'Email changed successfully!', duration: 2 });
-                navigate('/profile');
+                navigate('/profile', {
+                    state: { changeEmail: 'Email changed successfully!' },
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 2 });

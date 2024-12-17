@@ -4,11 +4,13 @@ import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 import Title from "../../Title/Title.tsx";
 import {Outlet, useLocation} from "react-router-dom";
 import {useAuth} from "../Context/hooks/useAuth.ts";
+import {message} from "antd";
 
 const Profile: React.FC = () => {
     const { client } = useAuth();
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
     const location = useLocation();
+    const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
         if (location.pathname === "/profile") {
@@ -20,8 +22,22 @@ const Profile: React.FC = () => {
         setSelectedPage(page === selectedPage ? null : page);
     };
 
+    useEffect(() => {
+        const changeCredentials = location.state?.changeCredentials;
+        const changeEmail = location.state?.changeEmail;
+        const changePassword = location.state?.changePassword;
+
+
+        const successMessage = changeCredentials || changeEmail || changePassword;
+
+        if (successMessage) {
+            messageApi.success({ content: successMessage, duration: 2 });
+        }
+    }, [location.state, messageApi]);
+
     return (
         <div className="profile-page">
+            {contextHolder}
             <div className="profile-card">
                 <Title text="Profile" />
                 <div className="profile-info">
