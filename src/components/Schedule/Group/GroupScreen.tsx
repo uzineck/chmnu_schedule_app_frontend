@@ -7,11 +7,13 @@ import { Group } from "../../../models/group/Group.ts";
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 import "./module.css";
 import {useTime} from "../Context/hooks/useTime.ts";
+import {useSchedule} from "../Context/hooks/useSchedule.ts";
 
 const GroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
     const [searchParams] = useSearchParams();
     const { currentTime } = useTime();
+    const { setIsEvenWeek } = useSchedule();
     const navigate = useNavigate();
 
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
@@ -36,7 +38,7 @@ const GroupScreen = () => {
         [navigate]
     );
 
-    const checkSubgroupAndSet = useCallback((group: Group | null) => {
+    const resolveSubgroup = useCallback((group: Group | null) => {
         const storedSubgroup = localStorage.getItem("lastSubgroup");
         if (group?.has_subgroups) {
             const subgroup = searchParams.get("subgroup") || storedSubgroup;
@@ -61,15 +63,19 @@ const GroupScreen = () => {
 
         setSelectedGroup(initialGroup || null);
 
-        checkSubgroupAndSet(initialGroup || null);
+        resolveSubgroup(initialGroup || null);
 
         const weekTypeFromSearchParams = searchParams.get("weekType");
         if (weekTypeFromSearchParams !== null) {
-            setSelectedWeekType(weekTypeFromSearchParams === "true");
+            const weekType =  weekTypeFromSearchParams === "true";
+            setSelectedWeekType(weekType);
+            setIsEvenWeek(weekType);
         } else if (currentTime) {
-            setSelectedWeekType(currentTime.is_even);
+            const weekType =  currentTime.is_even;
+            setSelectedWeekType(weekType);
+            setIsEvenWeek(weekType);
         }
-    }, [groupUuid, groupList, searchParams, currentTime, checkSubgroupAndSet]);
+    }, [setIsEvenWeek, groupUuid, groupList, searchParams, currentTime, resolveSubgroup]);
 
     useEffect(() => {
         if (isUpdatingURL.current) {
@@ -86,7 +92,7 @@ const GroupScreen = () => {
 
     const handleGroupSelect = (group: Group | null) => {
         setSelectedGroup(group);
-        checkSubgroupAndSet(group);
+        resolveSubgroup(group);
         updateURL(group, selectedSubgroup, selectedWeekType);
 
         if (group) {
@@ -101,6 +107,7 @@ const GroupScreen = () => {
 
     const handleWeekTypeChange = (weekType: boolean) => {
         setSelectedWeekType(weekType);
+        setIsEvenWeek(weekType);
         updateURL(selectedGroup, selectedSubgroup, weekType);
     };
 

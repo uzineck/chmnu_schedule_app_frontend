@@ -17,7 +17,7 @@ interface BaseScheduleMatrixProps {
 
 const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixProps) => {
     const { currentTime } = useTime();
-    const { setOrdinaryNumber, setDay } = useSchedule();
+    const { isEvenWeek, setOrdinaryNumber, setDay } = useSchedule();
     const navigate = useNavigate();
 
     const matrix: (Lesson | LessonForTeacher)[][][] = Array.from({ length: 6 }, () => Array(5).fill(null));
@@ -103,7 +103,10 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
                                 <td
                                     key={colIndex}
                                     className={`lesson-cell ${
-                                        lessonCell && currentTime?.day === colIndex + 1 && currentTime?.lesson === rowIndex + 1
+                                        lessonCell 
+                                        && currentTime?.day === colIndex + 1 
+                                        && currentTime?.lesson === rowIndex + 1
+                                        && currentTime?.is_even === isEvenWeek 
                                             ? "current-lesson"
                                             : lessonCell
                                                 ? "has-lesson"

@@ -7,11 +7,13 @@ import './module.css';
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 
 import {useTime} from "../Context/hooks/useTime.ts";
+import {useSchedule} from "../Context/hooks/useSchedule.ts";
 
 const TeacherScreen = () => {
     const { teacherUuid } = useParams<{ teacherUuid: string }>();
     const [searchParams] = useSearchParams();
     const { currentTime } = useTime();
+    const { setIsEvenWeek } = useSchedule();
     const navigate = useNavigate();
 
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -42,12 +44,16 @@ const TeacherScreen = () => {
 
         const weekTypeFromSearchParams = searchParams.get("weekType");
         if (weekTypeFromSearchParams !== null) {
-            setSelectedWeekType(weekTypeFromSearchParams === "true");
+            const weekType =  weekTypeFromSearchParams === "true";
+            setSelectedWeekType(weekType);
+            setIsEvenWeek(weekType);
         } else if (currentTime) {
-            setSelectedWeekType(currentTime.is_even);
+            const weekType =  currentTime.is_even;
+            setSelectedWeekType(weekType);
+            setIsEvenWeek(weekType);
         }
 
-    }, [currentTime, teacherUuid, searchParams, teacherList]);
+    }, [setIsEvenWeek, currentTime, teacherUuid, searchParams, teacherList]);
 
     useEffect(() => {
         if (selectedTeacher) {
@@ -67,6 +73,7 @@ const TeacherScreen = () => {
 
     const handleWeekTypeChange = (weekType: boolean) => {
         setSelectedWeekType(weekType);
+        setIsEvenWeek(weekType);
         updateURL(selectedTeacher, weekType);
     };
 
