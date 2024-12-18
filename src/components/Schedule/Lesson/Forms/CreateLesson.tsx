@@ -11,10 +11,21 @@ import {ApiCallError} from "../../../../api/errors.ts";
 import SubjectSearch from "../../Subject/SubjectSearch.tsx";
 import TeacherSearch from "../../Teacher/TeacherSearch.tsx";
 import RoomSearch from "../../Room/RoomSearch.tsx";
-import "./module.css";
 import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 import {ClientRole} from "../../../../models/enums/ClientRole.ts";
 import {useAuth} from "../../../Auth/Context/hooks/useAuth.ts";
+import {
+    ButtonsContainer,
+    FormButton,
+    MediumFormDiv,
+    FormContainer,
+    FormTitle,
+    FormPage,
+    GoBackButton,
+    FormSelect,
+    FormLessonTypeContainer,
+    FormSearchContainer
+} from "./formStyled.ts";
 
 const CreateLesson = () => {
     const { client } = useAuth()
@@ -24,6 +35,7 @@ const CreateLesson = () => {
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
     const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
     const [selectedLessonType, setSelectedLessonType] = useState<LessonType>(LessonType.LECTURE);
+    const [isCreating, setIsCreating] = useState(false);
 
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -56,11 +68,14 @@ const CreateLesson = () => {
         };
 
         try {
+            setIsCreating(true)
             messageApi.loading({ content: "Creating lesson...", key: key });
+
             const response = await createLesson(lessonData);
 
             const lessonUuid = response.data.uuid;
             setLessonUuid(lessonUuid);
+
             messageApi.success({ content: "Lesson created successfully!", key: key });
 
             navigate(`/lesson/${lessonUuid}/add`);
@@ -70,19 +85,9 @@ const CreateLesson = () => {
             } else {
                 messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
             }
+        } finally {
+            setIsCreating(false);
         }
-    };
-
-    const handleTeacherSelect = (teacher: Teacher | null) => {
-        setSelectedTeacher(teacher);
-    };
-
-    const handleSubjectSelect = (subject: Subject | null) => {
-        setSelectedSubject(subject);
-    };
-
-    const handleRoomSelect = (room: Room | null) => {
-        setSelectedRoom(room);
     };
 
     const handleGoBack = () => {
@@ -91,47 +96,47 @@ const CreateLesson = () => {
 
 
     return (
-        <div className="create-lesson">
+        <FormPage>
             {contextHolder}
-            <div className="lesson-card">
-                <h2 className="lesson-title-form">Create Lesson</h2>
-                <div className="lesson-form">
-                    <div className="search-container">
-                        <div className="lesson-type-container">Lesson Type:
-                            <select value={selectedLessonType}
-                                    onChange={(e) => setSelectedLessonType(e.target.value as LessonType)}>
+            <MediumFormDiv>
+                <FormTitle>Create Lesson</FormTitle>
+                <FormContainer>
+                    <FormSearchContainer>
+                        <FormLessonTypeContainer>
+                            Lesson Type:
+                            <FormSelect
+                                value={selectedLessonType}
+                                onChange={(e) => setSelectedLessonType(e.target.value as LessonType)}
+                            >
                                 <option value={LessonType.LECTURE}>Lecture</option>
                                 <option value={LessonType.PRACTICE}>Practice</option>
-                            </select>
-                        </div>
+                            </FormSelect>
+                        </FormLessonTypeContainer>
                         <SubjectSearch
-                            onSubjectSelect={handleSubjectSelect}
-                            onSubjectListFetched={() => {
-                            }}
+                            onSubjectSelect={(subject: Subject | null) => setSelectedSubject(subject)}
+                            onSubjectListFetched={() => {}}
                             selectedSubject={selectedSubject}
                         />
                         <TeacherSearch
-                            onTeacherSelect={handleTeacherSelect}
-                            onTeacherListFetched={() => {
-                            }}
+                            onTeacherSelect={(teacher: Teacher | null) => setSelectedTeacher(teacher)}
+                            onTeacherListFetched={() => {}}
                             selectedTeacher={selectedTeacher}
                         />
                         <RoomSearch
-                            onRoomSelect={handleRoomSelect}
-                            onRoomListFetched={() => {
-                            }}
+                            onRoomSelect={(room: Room | null) => setSelectedRoom(room)}
+                            onRoomListFetched={() => {}}
                             selectedRoom={selectedRoom}
                         />
-                    </div>
-                    <div className="buttons-container">
-                        <button className="go-back-button" onClick={handleGoBack}>
-                            Go Back
-                        </button>
-                        <button onClick={handleCreateLesson}>Create Lesson</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </FormSearchContainer>
+                    <ButtonsContainer>
+                        <GoBackButton onClick={handleGoBack}>Go Back</GoBackButton>
+                        <FormButton onClick={handleCreateLesson} disabled={isCreating}>
+                            {isCreating ? "Creating..." : "Create Lesson"}
+                        </FormButton>
+                    </ButtonsContainer>
+                </FormContainer>
+            </MediumFormDiv>
+        </FormPage>
     );
 };
 

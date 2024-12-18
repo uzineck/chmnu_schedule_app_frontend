@@ -3,12 +3,12 @@ import { useLocation, useNavigate, useParams, useSearchParams } from "react-rout
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import { Group } from "../../../models/group/Group.ts";
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
-import "./module.css";
-import { useTime } from "../../Schedule/Context/hooks/useTime.ts";
-import GroupSearch from "../../Schedule/Group/GroupSearch.tsx";
-import GroupSchedule from "../../Schedule/Group/GroupSchedule.tsx";
-import { useSchedule } from "../../Schedule/Context/hooks/useSchedule.ts";
+import { useTime } from "../Context/hooks/useTime.ts";
+import GroupSearch from "../Group/GroupSearch.tsx";
+import GroupSchedule from "../Group/GroupSchedule.tsx";
+import { useSchedule } from "../Context/hooks/useSchedule.ts";
 import { message } from "antd";
+import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
 
 const AdminGroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
@@ -146,15 +146,15 @@ const AdminGroupScreen = () => {
     }, [location.state, messageApi]);
 
     return (
-        <div className="group-screen">
+        <ScheduleScreen>
             {contextHolder}
-            <div className="group-screen-controls">
+            <ScheduleScreenControls>
                 <GroupSearch
                     onGroupSelect={handleGroupSelect}
                     onGroupListFetched={handleGroupListFetched}
                     selectedGroup={group}
                 />
-                <div className="button-container-column">
+                <ScheduleButtonContainer>
                     {group?.has_subgroups ? (
                         <ButtonContainer
                             options={[
@@ -173,9 +173,8 @@ const AdminGroupScreen = () => {
                         selectedValue={isEvenWeek}
                         onChange={handleWeekTypeChange}
                     />
-                </div>
-            </div>
-
+                </ScheduleButtonContainer>
+            </ScheduleScreenControls>
             {groupUuid && isInitialized.current && (
                 <GroupSchedule
                     key={`${groupUuid}-${subgroup}-${isEvenWeek}`}
@@ -185,7 +184,7 @@ const AdminGroupScreen = () => {
                     isEditable={true}
                 />
             )}
-        </div>
+        </ScheduleScreen>
     );
 };
 

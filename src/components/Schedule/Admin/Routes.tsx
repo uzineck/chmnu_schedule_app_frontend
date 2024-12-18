@@ -1,7 +1,7 @@
-import ProtectedRoute from "../Routers/ProtectedRouter.tsx";
-import {ClientRole} from "../../models/enums/ClientRole.ts";
+import ProtectedRoute from "../../Routers/ProtectedRouter.tsx";
+import {ClientRole} from "../../../models/enums/ClientRole.ts";
 import AdminPanel from "./AdminPanel.tsx";
-import AdminGroupScreen from "./Schedule/AdminGroupScreen.tsx";
+import AdminGroupScreen from "./AdminGroupScreen.tsx";
 
 export const adminRoutes = [
     {

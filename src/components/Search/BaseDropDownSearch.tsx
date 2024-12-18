@@ -1,7 +1,6 @@
 import React from 'react';
 import Select, {SingleValue} from 'react-select';
-import './style.css'
-import {customStyles} from "./SelectStyle.ts";
+import {BaseDropdown, customStyles} from "./selectStyled.ts";
 
 export interface OptionType {
     value: string;
@@ -27,7 +26,7 @@ const BaseDropDownSearch: React.FC<BaseDropDownSearchProps> =
          noOptionsMessage='No options'
     }) => {
         return (
-        <div className="base-dropdown">
+        <BaseDropdown>
             <Select
                 options={options}
                 onChange={onChange}
@@ -42,7 +41,7 @@ const BaseDropDownSearch: React.FC<BaseDropDownSearchProps> =
                     menuPortal: base => ({ ...base, zIndex: 9999 })
                 }}
             />
-        </div>
+        </BaseDropdown>
     );
 };
 

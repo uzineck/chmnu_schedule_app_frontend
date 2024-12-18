@@ -1,11 +1,19 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { login } from '../../../api/client/auth.ts';
-import './module.css';
 import { useNavigate } from 'react-router-dom';
 import { ApiCallError } from "../../../api/errors.ts";
 import {message} from "antd";
 import {useAuth} from "../Context/hooks/useAuth.ts";
+import {
+    ErrorMessage,
+    FormInputGroup,
+    FormInput,
+    FormLabel,
+    SubmitButton,
+    FormSubmit
+} from "../Client/Forms/formikFormStyled.ts";
+import {FormTitle, FormPage, SmallFormDiv} from "../../Schedule/Lesson/Forms/formStyled.ts";
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -52,52 +60,41 @@ const Login = () => {
     });
 
     return (
-        <div className="login-page">
+        <FormPage>
             {contextHolder}
-            <div className="login-container">
-                <div className="login-title">Log in to your schedule account</div>
-
-                <form onSubmit={formik.handleSubmit} className="login-form">
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input
+            <SmallFormDiv>
+                <FormTitle>Log in to your schedule account</FormTitle>
+                <FormSubmit onSubmit={formik.handleSubmit}>
+                    <FormInputGroup>
+                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <FormInput
                             id="email"
                             type="email"
-                            className="form-control"
                             {...formik.getFieldProps('email')}
                         />
                         {formik.touched.email && formik.errors.email && (
-                            <div className="error-message">{formik.errors.email}</div>
+                            <ErrorMessage>{formik.errors.email}</ErrorMessage>
                         )}
-                    </div>
+                    </FormInputGroup>
 
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input
+                    <FormInputGroup>
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <FormInput
                             id="password"
                             type="password"
-                            className="form-control"
                             {...formik.getFieldProps('password')}
                         />
                         {formik.touched.password && formik.errors.password && (
-                            <div className="error-message">{formik.errors.password}</div>
+                            <ErrorMessage>{formik.errors.password}</ErrorMessage>
                         )}
-                    </div>
+                    </FormInputGroup>
 
-                    {formik.status && (
-                        <div className="status-message error">{formik.status}</div>
-                    )}
-
-                    <button
-                        type="submit"
-                        className="submit-button"
-                        disabled={formik.isSubmitting}
-                    >
+                    <SubmitButton type="submit" disabled={formik.isSubmitting}>
                         {formik.isSubmitting ? 'Logging in...' : 'Log In'}
-                    </button>
-                </form>
-            </div>
-        </div>
+                    </SubmitButton>
+                </FormSubmit>
+            </SmallFormDiv>
+        </FormPage>
     );
 };
 

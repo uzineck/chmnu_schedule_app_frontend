@@ -1,7 +1,7 @@
 import React from "react";
 import ToggleButton from "./ToggleButton.tsx";
-import "./module.css";
 import ButtonLink from "./ButtonLink.tsx";
+import {ButtonContainerWrapper} from "./buttonStyled.ts";
 
 interface ButtonContainerProps {
     options: {
@@ -20,7 +20,7 @@ const ButtonContainer: React.FC<ButtonContainerProps> = ({ options, selectedValu
     };
 
     return (
-        <div className="button-container">
+        <ButtonContainerWrapper>
             {options.map((option) => (
                 option.isLink ? (
                     <ButtonLink
@@ -40,7 +40,7 @@ const ButtonContainer: React.FC<ButtonContainerProps> = ({ options, selectedValu
                     />
                 )
             ))}
-        </div>
+        </ButtonContainerWrapper>
     );
 };
 

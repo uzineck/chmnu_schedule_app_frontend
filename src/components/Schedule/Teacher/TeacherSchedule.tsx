@@ -1,8 +1,8 @@
 import {useCallback, useEffect} from "react";
 import { getTeacherLessons } from "../../../api/schedule/teacher.ts";
-import TeacherScheduleMatrix from "./TeacherScheduleMatrix.tsx";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
 import {message} from "antd";
+import BaseScheduleMatrix from "../BaseScheduleMatrix.tsx";
 
 interface TeacherScheduleProps {
     teacherUuid: string;
@@ -37,7 +37,7 @@ const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
     return (
         <>
             {contextHolder}
-            <TeacherScheduleMatrix lessons={data ? data.lessons : null} />
+            <BaseScheduleMatrix lessons={data ? data.lessons : null} />
         </>
     );
 };

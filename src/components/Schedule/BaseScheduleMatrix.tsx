@@ -1,4 +1,3 @@
-import "./module.css";
 import {Lesson} from "../../models/lesson/Lesson";
 import {Day} from "../../models/enums/Day";
 import {OrdinaryNumber} from "../../models/enums/OrdinaryNumber";
@@ -9,6 +8,15 @@ import {useNavigate} from "react-router-dom";
 import {AiOutlinePlus} from "react-icons/ai";
 import {useSchedule} from "./Context/hooks/useSchedule.ts";
 import {useTime} from "./Context/hooks/useTime.ts";
+import {
+    AddLessonIcon,
+    BodyCell,
+    CurrentLessonIndicator,
+    DayCell,
+    ScheduleMatrixWrapper,
+    MatrixTable,
+    TimeCell
+} from "./scheduleMatrixStyled.ts";
 
 interface BaseScheduleMatrixProps {
     lessons: Lesson[] | LessonForTeacher[] | null;
@@ -74,18 +82,18 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
     };
 
     return (
-        <div className="schedule-matrix">
-            <table>
+        <ScheduleMatrixWrapper>
+            <MatrixTable>
                 <thead>
                 <tr>
-                    <th>Time</th>
+                    <TimeCell>Time</TimeCell>
                     {dayNames.map((dayName, index) => (
-                        <th
+                        <DayCell
                             key={index}
-                            className={currentTime?.day === index + 1 ? "current-day-column" : ""}
+                            isCurrentDay={currentTime?.day === index + 1}
                         >
                             {dayName}
-                        </th>
+                        </DayCell>
                     ))}
                 </tr>
                 </thead>
@@ -96,46 +104,49 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
 
                     return (
                         <tr key={rowIndex}>
-                            <th className="time-cell">
+                            <TimeCell>
                                 {lessonTime.startTime} - {lessonTime.endTime}
-                            </th>
+                            </TimeCell>
                             {row.map((lessonCell, colIndex) => (
-                                <td
+                                <BodyCell
                                     key={colIndex}
-                                    className={`lesson-cell ${
-                                        lessonCell 
-                                        && currentTime?.day === colIndex + 1 
-                                        && currentTime?.lesson === rowIndex + 1
-                                        && currentTime?.is_even === isEvenWeek 
-                                            ? "current-lesson"
-                                            : lessonCell
-                                                ? "has-lesson"
-                                                : "no-lesson"
-                                    }`}
+                                    hasLesson={!!lessonCell}
+                                    isCurrentLesson={
+                                        lessonCell &&
+                                        currentTime?.day === colIndex + 1 &&
+                                        currentTime?.lesson === rowIndex + 1 &&
+                                        currentTime?.is_even === isEvenWeek
+                                    }
                                 >
                                     {lessonCell && (
-                                        <div className="lessons">
+                                        <div>
                                             {lessonCell.map((lesson, idx) => (
-                                                <LessonDetails key={idx} lesson={lesson} isEditable={isEditable} />
+                                                <LessonDetails
+                                                    key={idx}
+                                                    lesson={lesson}
+                                                    isEditable={isEditable}
+                                                />
                                             ))}
                                         </div>
                                     )}
                                     {isEditable && (
-                                        <div
-                                            className="add-lesson-icon"
-                                            onClick={() => handleAddLesson(colIndex, rowIndex)}
-                                        >
+                                        <AddLessonIcon onClick={() => handleAddLesson(colIndex, rowIndex)}>
                                             <AiOutlinePlus size={24} />
-                                        </div>
+                                        </AddLessonIcon>
                                     )}
-                                </td>
+                                    {lessonCell &&
+                                        currentTime?.day === colIndex + 1 &&
+                                        currentTime?.lesson === rowIndex + 1 && (
+                                            <CurrentLessonIndicator />
+                                        )}
+                                </BodyCell>
                             ))}
                         </tr>
                     );
                 })}
                 </tbody>
-            </table>
-        </div>
+            </MatrixTable>
+        </ScheduleMatrixWrapper>
     );
 };
 

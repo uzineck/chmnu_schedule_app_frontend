@@ -1,4 +1,5 @@
 import React from "react";
+import {StyledToggleButton} from "./buttonStyled.ts";
 
 interface ToggleButtonProps {
     label: string;
@@ -8,12 +9,12 @@ interface ToggleButtonProps {
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({ label, isSelected, onClick }) => {
     return (
-        <button
+        <StyledToggleButton
             className={isSelected ? "selected" : ""}
             onClick={onClick}
         >
             {label}
-        </button>
+        </StyledToggleButton>
     );
 };
 

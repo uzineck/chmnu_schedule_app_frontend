@@ -1,11 +1,11 @@
 import {useCallback, useEffect} from "react";
-import {removeLessonFromGroupAdmin, removeLessonToGroupHeadman} from "../../../api/schedule/group.ts";
-import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
+import {removeLessonFromGroupAdmin, removeLessonToGroupHeadman} from "../../../../api/schedule/group.ts";
+import {useFetchData} from "../../../../api/hooks/useFetchData.tsx";
 import {useNavigate} from "react-router-dom";
 import {message} from "antd";
-import {ClientRole} from "../../../models/enums/ClientRole.ts";
-import {useAuth} from "../../Auth/Context/hooks/useAuth.ts";
-import {useSchedule} from "../Context/hooks/useSchedule.ts";
+import {ClientRole} from "../../../../models/enums/ClientRole.ts";
+import {useAuth} from "../../../Auth/Context/hooks/useAuth.ts";
+import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 
 
 const DeleteLesson = () => {

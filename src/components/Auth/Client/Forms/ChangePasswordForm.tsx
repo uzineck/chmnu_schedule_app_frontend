@@ -1,11 +1,11 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import './module.css';
 import {message} from "antd";
 import {useNavigate} from "react-router-dom";
 import { updatePassword } from "../../../../api/client/client.ts";
 import {ApiCallError} from "../../../../api/errors.ts";
+import {ErrorMessage, FormCard, FormInputGroup, FormInput, FormLabel, SubmitButton} from "./formikFormStyled.ts";
 
 const ChangePasswordSchema = Yup.object().shape({
     currentPassword: Yup.string().required('Current password is required'),
@@ -53,51 +53,48 @@ const ChangePasswordForm: React.FC = () => {
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} className="form-container">
+        <FormCard onSubmit={formik.handleSubmit}>
             {contextHolder}
-            <div className="form-group">
-                <label htmlFor="currentPassword">Current Password</label>
-                <input
+            <FormInputGroup>
+                <FormLabel htmlFor="currentPassword">Current Password</FormLabel>
+                <FormInput
                     id="currentPassword"
                     type="password"
-                    className="form-control"
                     {...formik.getFieldProps('currentPassword')}
                 />
                 {formik.touched.currentPassword && formik.errors.currentPassword && (
-                    <div className="error-message">{formik.errors.currentPassword}</div>
+                    <ErrorMessage>{formik.errors.currentPassword}</ErrorMessage>
                 )}
-            </div>
+            </FormInputGroup>
 
-            <div className="form-group">
-                <label htmlFor="newPassword">New Password</label>
-                <input
+            <FormInputGroup>
+                <FormLabel htmlFor="newPassword">New Password</FormLabel>
+                <FormInput
                     id="newPassword"
                     type="password"
-                    className="form-control"
                     {...formik.getFieldProps('newPassword')}
                 />
                 {formik.touched.newPassword && formik.errors.newPassword && (
-                    <div className="error-message">{formik.errors.newPassword}</div>
+                    <ErrorMessage>{formik.errors.newPassword}</ErrorMessage>
                 )}
-            </div>
+            </FormInputGroup>
 
-            <div className="form-group">
-                <label htmlFor="verifyPassword">Verify New Password</label>
-                <input
+            <FormInputGroup>
+                <FormLabel htmlFor="verifyPassword">Verify New Password</FormLabel>
+                <FormInput
                     id="verifyPassword"
                     type="password"
-                    className="form-control"
                     {...formik.getFieldProps('verifyPassword')}
                 />
                 {formik.touched.verifyPassword && formik.errors.verifyPassword && (
-                    <div className="error-message">{formik.errors.verifyPassword}</div>
+                    <ErrorMessage>{formik.errors.verifyPassword}</ErrorMessage>
                 )}
-            </div>
+            </FormInputGroup>
 
-            <button type="submit" className="submit-button" disabled={formik.isSubmitting}>
+            <SubmitButton type="submit" disabled={formik.isSubmitting}>
                 {formik.isSubmitting ? 'Saving...' : 'Save'}
-            </button>
-        </form>
+            </SubmitButton>
+        </FormCard>
     );
 };
 

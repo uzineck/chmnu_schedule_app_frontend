@@ -1,13 +1,15 @@
-.profile-page {
+import styled from "styled-components";
+
+export const ProfilePage = styled.div`
     display: flex;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
     font-family: Arial, sans-serif;
     padding: 2rem;
-}
+`;
 
-.profile-card {
+export const ProfileCard = styled.div`
     width: 100%;
     max-width: 600px;
     padding: 2rem;
@@ -17,31 +19,26 @@
     flex-direction: column;
     gap: 2rem;
     margin: 4.5rem auto;
-}
+`;
 
-.profile-name {
-    font-size: 1rem;
-    color: #333;
-}
-
-.profile-info {
+export const ProfileInfo = styled.div`
     text-align: left;
-}
+`;
 
-.profile-info-item {
+export const ProfileInfoItem = styled.div`
     font-size: 1rem;
     color: #555;
     margin-bottom: 0.5rem;
-}
+`;
 
-.profile-buttons {
+export const ProfileButtons = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-top: auto;
-}
+`;
 
-.profile-content {
+export const ProfileContent = styled.div`
     flex: 1;
     max-width: 800px;
     padding: 2rem;
@@ -49,10 +46,4 @@
     margin-top: revert;
     justify-content: center;
     align-items: center;
-}
-
-.default-message {
-    text-align: center;
-    font-size: 1.25rem;
-    color: #777;
-}
+`;

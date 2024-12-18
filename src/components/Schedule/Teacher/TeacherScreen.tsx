@@ -3,11 +3,10 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import TeacherSearch from "./TeacherSearch.tsx";
 import { Teacher } from "../../../models/teacher/Teacher.ts";
 import TeacherSchedule from "./TeacherSchedule.tsx";
-import './module.css';
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
-
 import {useTime} from "../Context/hooks/useTime.ts";
 import {useSchedule} from "../Context/hooks/useSchedule.ts";
+import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
 
 const TeacherScreen = () => {
     const { teacherUuid } = useParams<{ teacherUuid: string }>();
@@ -85,14 +84,14 @@ const TeacherScreen = () => {
     const selectedTeacherOption = selectedTeacher ? selectedTeacher : null;
 
     return (
-        <div className="teacher-screen">
-            <div className="teacher-screen-controls">
+        <ScheduleScreen>
+            <ScheduleScreenControls>
                 <TeacherSearch
                     onTeacherSelect={handleTeacherSelect}
                     onTeacherListFetched={handleTeacherListFetched}
                     selectedTeacher={selectedTeacherOption}
                 />
-                <div className="button-container-column">
+                <ScheduleButtonContainer>
                     <ButtonContainer
                         options={[
                             {label: 'Тиждень над', value: true},
@@ -101,8 +100,8 @@ const TeacherScreen = () => {
                         selectedValue={selectedWeekType}
                         onChange={handleWeekTypeChange}
                     />
-                </div>
-            </div>
+                </ScheduleButtonContainer>
+            </ScheduleScreenControls>
             {selectedTeacher && (
                 <TeacherSchedule
                     key={`${selectedTeacher.uuid}-${selectedWeekType}`}
@@ -110,7 +109,7 @@ const TeacherScreen = () => {
                     is_even={selectedWeekType}
                 />
             )}
-        </div>
+        </ScheduleScreen>
     );
 };
 

@@ -1,0 +1,139 @@
+/*!* General styling for the schedule matrix container *!*/
+/*.schedule-matrix {*/
+/*    margin: 10px auto;*/
+/*    width: 95%;*/
+/*    max-width: 100%;*/
+/*    overflow-x: auto;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+/*    background-color: #f9f9f9;*/
+/*    font-family: "Arial", sans-serif;*/
+/*}*/
+
+/*!* Table styling *!*/
+/*.schedule-matrix table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    table-layout: fixed;*/
+/*}*/
+
+/*!* Header cells styling *!*/
+/*.schedule-matrix th {*/
+/*    background-color: #f0f4f8;*/
+/*    color: #333;*/
+/*    padding: 10px;*/
+/*    text-align: center;*/
+/*    font-size: 16px;*/
+/*    font-weight: bold;*/
+/*    text-transform: uppercase;*/
+/*    position: sticky;*/
+/*    top: 0; !* Sticky header *!*/
+/*    z-index: 1;*/
+/*}*/
+
+/*!* Time column styling *!*/
+/*.schedule-matrix th.time-cell {*/
+/*    background-color: #f0f4f8;*/
+/*    color: #333;*/
+/*    text-align: center;*/
+/*    font-size: 14px;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*!* Body cells styling *!*/
+/*.schedule-matrix td.lesson-cell {*/
+/*    height: 120px;*/
+/*    text-align: center;*/
+/*    vertical-align: top;*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ddd;*/
+/*    transition: background-color 0.3s ease;*/
+/*    font-size: 14px;*/
+/*    overflow: hidden;*/
+/*    text-overflow: ellipsis;*/
+/*}*/
+
+/*!* Empty cells *!*/
+/*.schedule-matrix td.no-lesson {*/
+/*    color: #999;*/
+/*}*/
+
+/*!* Lesson cell *!*/
+/*.schedule-matrix td.has-lesson {*/
+/*    background-color: #fff;*/
+/*}*/
+
+/*!* Hover effect for cells with lessons *!*/
+/*.schedule-matrix td.has-lesson:hover {*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*!* Styling for the "No Lesson" text *!*/
+/*.schedule-matrix td.no-lesson p {*/
+/*    color: #ccc;*/
+/*    font-style: italic;*/
+/*    margin: 0;*/
+/*}*/
+
+/*!* Highlight current day column *!*/
+/*.schedule-matrix th.current-day-column {*/
+/*    background-color: #e3f2fd; !* Light blue background *!*/
+/*    color: #1565c0; !* Blue text color *!*/
+/*}*/
+
+/*!* Highlight the current lesson *!*/
+/*.schedule-matrix td.current-lesson {*/
+/*    position: relative;*/
+/*    background-color: #fff;*/
+/*    cursor: pointer;*/
+/*    color: #2e7d32; !* Dark green text color *!*/
+/*    padding-top: 20px;!* Add padding to make space for the green button *!*/
+/*}*/
+
+/*!* Add a green circle to indicate current lesson *!*/
+/*.schedule-matrix td.current-lesson::before {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    top: 5px;*/
+/*    right: 5px; !* Position the circle inside the cell *!*/
+/*    width: 10px;*/
+/*    height: 10px;*/
+/*    background-color: #2e7d32; !* Green circle color *!*/
+/*    border-radius: 50%;*/
+/*    pointer-events: none; !* Prevent the circle from interfering with user interactions *!*/
+/*}*/
+
+/*.add-lesson-icon svg{*/
+/*    font-size: 1.1rem; !* Icon size *!*/
+/*    margin-right: 0; !* Spacing between icon and text *!*/
+/*    vertical-align: middle; !* Align with text *!*/
+/*    color: #888; !* Default icon color *!*/
+/*}*/
+
+/*.add-lesson-icon:hover svg{*/
+/*    color: #7f00ff; !* Optional hover color for icons *!*/
+/*}*/
+
+
+/*!* Mobile responsiveness *!*/
+/*@media (max-width: 768px) {*/
+/*    .schedule-matrix {*/
+/*        font-size: 12px;*/
+/*    }*/
+
+/*    .schedule-matrix th,*/
+/*    .schedule-matrix td {*/
+/*        padding: 8px;*/
+/*    }*/
+
+/*    .schedule-matrix td.lesson-cell {*/
+/*        height: 100px;*/
+/*    }*/
+/*}*/
+
+/*!* Tablet responsiveness *!*/
+/*@media (max-width: 1024px) {*/
+/*    .schedule-matrix {*/
+/*        font-size: 14px;*/
+/*    }*/
+/*}*/

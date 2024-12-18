@@ -1,5 +1,14 @@
+import styled from "styled-components";
 import {StylesConfig} from "react-select";
 import {OptionType} from "./BaseDropDownSearch.tsx";
+
+export const BaseDropdown = styled.div`
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 10px;
+`;
+
 
 export const customStyles: StylesConfig<OptionType, false> = {
     control: (provided, state) => ({

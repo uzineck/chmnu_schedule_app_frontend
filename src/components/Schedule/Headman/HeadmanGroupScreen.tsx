@@ -1,16 +1,16 @@
 import { useEffect, useCallback } from "react";
-import './module.css';
-import {Subgroup} from "../../../../models/enums/Subgroup.ts";
-import {getHeadmanGroup} from "../../../../api/schedule/group.ts";
-import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
-import GroupSchedule from "../GroupSchedule.tsx";
-import {useFetchData} from "../../../../api/hooks/useFetchData.tsx";
+import {Subgroup} from "../../../models/enums/Subgroup.ts";
+import {getHeadmanGroup} from "../../../api/schedule/group.ts";
+import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
+import GroupSchedule from "../Group/GroupSchedule.tsx";
+import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
 import {message} from "antd";
 import {useLocation} from "react-router-dom";
-import {useSchedule} from "../../Context/hooks/useSchedule.ts";
-import {useTime} from "../../Context/hooks/useTime.ts";
-import Title from "../../../Title/Title.tsx";
-import {Group} from "../../../../models/group/Group.ts";
+import {useSchedule} from "../Context/hooks/useSchedule.ts";
+import {useTime} from "../Context/hooks/useTime.ts";
+import Title from "../../Title/Title.tsx";
+import {Group} from "../../../models/group/Group.ts";
+import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
 
 const HeadmanGroupScreen = () => {
     const { currentTime } = useTime();
@@ -106,10 +106,10 @@ const HeadmanGroupScreen = () => {
     };
 
     return (
-        <div className="group-screen">
+        <ScheduleScreen>
             {contextHolder}
-            <div className="group-screen-controls">
-                <div className="button-container-column">
+            <ScheduleScreenControls>
+                <ScheduleButtonContainer>
                     <Title text={data ? data.number : ''} />
                     {data?.has_subgroups ? (
                         <ButtonContainer
@@ -124,13 +124,13 @@ const HeadmanGroupScreen = () => {
                     <ButtonContainer
                         options={[
                             { label: 'Тиждень над', value: true },
-                            { label: 'Тиждень під', value: false }
+                            { label: 'Тиждень під', value: false },
                         ]}
                         selectedValue={isEvenWeek}
                         onChange={handleWeekTypeChange}
                     />
-                </div>
-            </div>
+                </ScheduleButtonContainer>
+            </ScheduleScreenControls>
 
             {groupUuid && (
                 <GroupSchedule
@@ -141,7 +141,7 @@ const HeadmanGroupScreen = () => {
                     isEditable={true}
                 />
             )}
-        </div>
+        </ScheduleScreen>
     );
 };
 

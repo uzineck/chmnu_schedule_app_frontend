@@ -4,7 +4,7 @@ import {Button, ConfigProvider, Dropdown, Space} from 'antd';
 import { Link } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import {theme} from "./theme.ts";
-import "./module.css";
+import "./ant-dropdown.css";
 
 interface DropdownMenuProps {
     menuName: string;

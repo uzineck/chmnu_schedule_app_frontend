@@ -11,10 +11,21 @@ import SubjectSearch from "../../Subject/SubjectSearch.tsx";
 import TeacherSearch from "../../Teacher/TeacherSearch.tsx";
 import RoomSearch from "../../Room/RoomSearch.tsx";
 import {updateLesson} from "../../../../api/schedule/lesson.ts";
-import "./module.css";
 import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 import {ClientRole} from "../../../../models/enums/ClientRole.ts";
 import {useAuth} from "../../../Auth/Context/hooks/useAuth.ts";
+import {
+    ButtonsContainer,
+    FormButton,
+    MediumFormDiv,
+    FormContainer,
+    FormTitle,
+    FormPage,
+    GoBackButton,
+    FormSelect,
+    FormLessonTypeContainer,
+    FormSearchContainer
+} from "./formStyled.ts";
 
 const EditLesson = () => {
     const { client } = useAuth()
@@ -73,10 +84,13 @@ const EditLesson = () => {
             setIsUpdating(true);
             messageApi.loading({ content: "Updating lesson...", key: key });
             const response = await updateLesson(lesson.uuid, lessonData);
+
             const oldLesson = response.data.old_lesson;
             const newLessonUuid = response.data.updated_lesson.uuid;
+
             setLesson(oldLesson)
             setLessonUuid(newLessonUuid);
+
             messageApi.success({ content: "Lesson updated successfully!", key: key });
 
             navigate(`/lesson/${oldLesson.uuid}/update/${newLessonUuid}`);
@@ -96,49 +110,47 @@ const EditLesson = () => {
     };
 
     return (
-        <div className="update-lesson">
+        <FormPage>
             {contextHolder}
-            <div className="lesson-card">
-                <h2 className="lesson-title-form">Update Lesson</h2>
-                <div className="lesson-form">
-                    <div className="search-container">
-                        <div className="lesson-type-container">Lesson Type:
-                            <select value={selectedLessonType}
-                                    onChange={(e) => setSelectedLessonType(e.target.value as LessonType)}>
+            <MediumFormDiv>
+                <FormTitle>Update Lesson</FormTitle>
+                <FormContainer>
+                    <FormSearchContainer>
+                        <FormLessonTypeContainer>
+                            Lesson Type:
+                            <FormSelect
+                                value={selectedLessonType}
+                                onChange={(e) => setSelectedLessonType(e.target.value as LessonType)}
+                            >
                                 <option value={LessonType.LECTURE}>Lecture</option>
                                 <option value={LessonType.PRACTICE}>Practice</option>
-                            </select>
-                        </div>
+                            </FormSelect>
+                        </FormLessonTypeContainer>
                         <SubjectSearch
                             onSubjectSelect={(subject: Subject | null) => setSelectedSubject(subject)}
-                            onSubjectListFetched={() => {
-                            }}
                             selectedSubject={selectedSubject}
+                            onSubjectListFetched={() => {}}
                         />
                         <TeacherSearch
                             onTeacherSelect={(teacher: Teacher | null) => setSelectedTeacher(teacher)}
-                            onTeacherListFetched={() => {
-                            }}
                             selectedTeacher={selectedTeacher}
+                            onTeacherListFetched={() => {}}
                         />
                         <RoomSearch
                             onRoomSelect={(room: Room | null) => setSelectedRoom(room)}
-                            onRoomListFetched={() => {
-                            }}
                             selectedRoom={selectedRoom}
+                            onRoomListFetched={() => {}}
                         />
-                    </div>
-                    <div className="buttons-container">
-                        <button className="go-back-button" onClick={handleGoBack}>
-                            Go Back
-                        </button>
-                        <button onClick={handleUpdateLesson} disabled={isUpdating}>
+                    </FormSearchContainer>
+                    <ButtonsContainer>
+                        <GoBackButton onClick={handleGoBack}>Go Back</GoBackButton>
+                        <FormButton onClick={handleUpdateLesson} disabled={isUpdating}>
                             {isUpdating ? "Updating..." : "Update Lesson"}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </FormButton>
+                    </ButtonsContainer>
+                </FormContainer>
+            </MediumFormDiv>
+        </FormPage>
     );
 };
 

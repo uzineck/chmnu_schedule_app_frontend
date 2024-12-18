@@ -1,5 +1,6 @@
 import React from 'react';
-import './module.css';
+import './titleStyled.ts';
+import {TitleStyled} from "./titleStyled.ts";
 
 interface TitleProps {
     text: string;
@@ -7,9 +8,7 @@ interface TitleProps {
 
 const Title: React.FC<TitleProps> = ({ text }) => {
     return (
-        <h1 className="title">
-            {text}
-        </h1>
+        <TitleStyled>{text}</TitleStyled>
     );
 };
 

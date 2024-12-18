@@ -5,9 +5,9 @@ import GroupSchedule from "./GroupSchedule.tsx";
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import { Group } from "../../../models/group/Group.ts";
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
-import "./module.css";
 import {useTime} from "../Context/hooks/useTime.ts";
 import {useSchedule} from "../Context/hooks/useSchedule.ts";
+import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
 
 const GroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
@@ -116,35 +116,34 @@ const GroupScreen = () => {
     };
 
     return (
-        <div className="group-screen">
-            <div className="group-screen-controls">
-                <GroupSearch
-                    onGroupSelect={handleGroupSelect}
-                    onGroupListFetched={handleGroupListFetched}
-                    selectedGroup={selectedGroup}
-                />
-                <div className="button-container-column">
-                    {selectedGroup?.has_subgroups ? (
+        <ScheduleScreen>
+            <ScheduleScreenControls>
+                    <GroupSearch
+                        onGroupSelect={handleGroupSelect}
+                        onGroupListFetched={handleGroupListFetched}
+                        selectedGroup={selectedGroup}
+                    />
+                    <ScheduleButtonContainer>
+                        {selectedGroup?.has_subgroups ? (
+                            <ButtonContainer
+                                options={[
+                                    { label: "Підгрупа A", value: Subgroup.A },
+                                    { label: "Підгрупа B", value: Subgroup.B },
+                                ]}
+                                selectedValue={selectedSubgroup}
+                                onChange={handleSubgroupChange}
+                            />
+                        ) : null}
                         <ButtonContainer
                             options={[
-                                { label: "Підгрупа A", value: Subgroup.A },
-                                { label: "Підгрупа B", value: Subgroup.B },
+                                { label: "Тиждень над", value: true },
+                                { label: "Тиждень під", value: false },
                             ]}
-                            selectedValue={selectedSubgroup}
-                            onChange={handleSubgroupChange}
+                            selectedValue={selectedWeekType}
+                            onChange={handleWeekTypeChange}
                         />
-                    ) : null}
-                    <ButtonContainer
-                        options={[
-                            { label: "Тиждень над", value: true },
-                            { label: "Тиждень під", value: false },
-                        ]}
-                        selectedValue={selectedWeekType}
-                        onChange={handleWeekTypeChange}
-                    />
-                </div>
-            </div>
-
+                    </ScheduleButtonContainer>
+            </ScheduleScreenControls>
             {selectedGroup && (
                 <GroupSchedule
                     key={`${selectedGroup.uuid}-${selectedSubgroup}-${selectedWeekType}`}
@@ -153,7 +152,7 @@ const GroupScreen = () => {
                     is_even={selectedWeekType}
                 />
             )}
-        </div>
+        </ScheduleScreen>
     );
 };
 

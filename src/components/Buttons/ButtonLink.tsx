@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "./module.css";
+import {StyledLinkButton} from "./buttonStyled.ts";
 
 interface ButtonLinkProps {
     label: string;
@@ -16,13 +15,13 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, value, selectedValue, to
     };
 
     return (
-        <Link
+        <StyledLinkButton
             to={to || "#"}
             className={selectedValue === value ? "selected" : ""}
             onClick={handleClick}
         >
             {label}
-        </Link>
+        </StyledLinkButton>
     );
 };
 

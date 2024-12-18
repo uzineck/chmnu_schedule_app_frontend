@@ -1,11 +1,11 @@
 import {message} from "antd";
 import {useNavigate} from "react-router-dom";
 import {useCallback, useEffect} from "react";
-import {ClientRole} from "../../../models/enums/ClientRole.ts";
-import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
-import {addLessonToGroupAdmin, addLessonToGroupHeadman} from "../../../api/schedule/group.ts";
-import {useAuth} from "../../Auth/Context/hooks/useAuth.ts";
-import {useSchedule} from "../Context/hooks/useSchedule.ts";
+import {ClientRole} from "../../../../models/enums/ClientRole.ts";
+import {useFetchData} from "../../../../api/hooks/useFetchData.tsx";
+import {addLessonToGroupAdmin, addLessonToGroupHeadman} from "../../../../api/schedule/group.ts";
+import {useAuth} from "../../../Auth/Context/hooks/useAuth.ts";
+import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 
 const AddLesson = () => {
     const { client } = useAuth()

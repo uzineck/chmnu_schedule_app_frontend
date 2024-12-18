@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import ButtonContainer from "../Buttons/ButtonContainer.tsx";
-import "./module.css";
 import DropdownMenu from "../Menus/DropdownMenu.tsx";
 import {message} from "antd";
 import {useLocation, useNavigate} from "react-router-dom";
 import {menuOptions} from "./HeaderMenuOptions.tsx";
 import {useAuth} from "../Auth/Context/hooks/useAuth.ts";
+import {HeaderButtons, HeaderContainer} from "./headerStyled.ts";
 
 export const Header: React.FC = () => {
     const { isLoggedIn, client } = useAuth();
@@ -61,9 +61,9 @@ export const Header: React.FC = () => {
     };
 
     return (
-        <header className="header">
+        <HeaderContainer>
             {contextHolder}
-            <div className="header-buttons">
+            <HeaderButtons>
                 {isLoggedIn ? (
                     <DropdownMenu
                         menuName={`${client?.last_name} ${client?.first_name.charAt(0)}. ${client?.middle_name.charAt(0)}.`}
@@ -83,11 +83,11 @@ export const Header: React.FC = () => {
                         onChange={handleButtonClick}
                     />
                 )}
-            </div>
+            </HeaderButtons>
 
             <h1>CHMNU Schedule</h1>
 
-            <div className="header-buttons">
+            <HeaderButtons>
                 <ButtonContainer
                     options={[
                         {
@@ -106,7 +106,7 @@ export const Header: React.FC = () => {
                     selectedValue={selectedPage}
                     onChange={handleButtonClick}
                 />
-            </div>
-        </header>
+            </HeaderButtons>
+        </HeaderContainer>
     );
 };

@@ -1,14 +1,10 @@
 import React from "react";
-import "./module.css";
+import { LessonDetailsContainer, LessonTypeContainer, LessonTitle, LessonRoom, LessonTeacher, LessonGroups, LessonActions } from "./lessonDetailStyled.ts";
 import { Lesson } from "../../../models/lesson/Lesson";
 import { LessonForTeacher } from "../../../models/lesson/LessonForTeacher";
-import { LessonType } from "../../../models/enums/LessonType.ts";
-import { LuDoorClosed } from "react-icons/lu";
-import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import {Link, useNavigate} from "react-router-dom";
-import {useSchedule} from "../Context/hooks/useSchedule.ts";
-import {HiUserGroup} from "react-icons/hi";
+import { Link, useNavigate } from "react-router-dom";
+import { useSchedule } from "../Context/hooks/useSchedule.ts";
+import {DoorIcon, EditIcon, GroupIcon, TeacherIcon, TrashIcon} from "./lessonIcons.tsx";
 
 function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is LessonForTeacher {
     return (lesson as LessonForTeacher).groups !== undefined;
@@ -16,21 +12,12 @@ function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is Lesson
 
 interface LessonDetailsProps {
     lesson: Lesson | LessonForTeacher;
-    isEditable?: boolean; // Add isEditable prop
+    isEditable?: boolean;
 }
 
-const getLessonTypeStyle = (type: LessonType): string => {
-    switch (type) {
-        case LessonType.LECTURE:
-            return "type-lecture";
-        case LessonType.PRACTICE:
-            return "type-practice";
-    }
-};
 
 const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = false }) => {
     const { setLessonUuid, setLesson, setDay, setOrdinaryNumber } = useSchedule();
-    const lessonTypeClass = getLessonTypeStyle(lesson.type);
     const navigate = useNavigate();
 
     const handleEditLesson = () => {
@@ -47,13 +34,13 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
     };
 
     return (
-        <div className="lesson-details">
-            <div className={`lesson-type ${lessonTypeClass}`}>{lesson.type}</div>
-            <div className="lesson-title">{lesson.subject.title}</div>
-            <div className="lesson-room"><LuDoorClosed /> {lesson.room.number}</div>
+        <LessonDetailsContainer>
+            <LessonTypeContainer type={lesson.type}>{lesson.type}</LessonTypeContainer>
+            <LessonTitle>{lesson.subject.title}</LessonTitle>
+            <LessonRoom><DoorIcon /> {lesson.room.number}</LessonRoom>
             {isLessonForTeacher(lesson) ? (
-                <div className="lesson-groups">
-                    <HiUserGroup/>{" "}
+                <LessonGroups>
+                    <GroupIcon/>{" "}
                     {lesson.groups.map((group, index) => (
                         <span key={group.uuid}>
                             <Link
@@ -68,23 +55,23 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
                             {index < lesson.groups.length - 1 && ","}
                         </span>
                     ))}
-                </div>
+                </LessonGroups>
             ) : (
-                <div className="lesson-teacher">
-                    <LiaChalkboardTeacherSolid/>
+                <LessonTeacher>
+                    <TeacherIcon/>
                     <Link to={`/teacher/${lesson.teacher.uuid}/lessons`}>
                         {lesson.teacher.last_name} {lesson.teacher.first_name.charAt(0)}. {lesson.teacher.middle_name.charAt(0)}.
                     </Link>
-                </div>
+                </LessonTeacher>
             )}
 
             {isEditable && (
-                <div className="lesson-actions">
-                    <div className="lesson-action"><FaEdit onClick={handleEditLesson}/></div>
-                    <div className="lesson-action"><FaTrashAlt onClick={handleDeleteLesson}/></div>
-                </div>
+                <LessonActions>
+                    <EditIcon onClick={handleEditLesson} />
+                    <TrashIcon onClick={handleDeleteLesson} />
+                </LessonActions>
             )}
-        </div>
+        </LessonDetailsContainer>
     );
 };
 

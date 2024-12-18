@@ -5,7 +5,7 @@ import {Header} from "./components/Header/Header.tsx";
 import {ScheduleProvider} from "./components/Schedule/Context/providers/ScheduleProvider.tsx";
 import {TimeProvider} from "./components/Schedule/Context/providers/TimeProvider.tsx";
 import {lessonRoutes} from "./components/Schedule/Lesson/Routes.tsx";
-import {adminRoutes} from "./components/Admin/Routes.tsx";
+import {adminRoutes} from "./components/Schedule/Admin/Routes.tsx";
 import {clientRoutes} from "./components/Auth/Client/Routes.tsx";
 import {authRoutes} from "./components/Auth/Routes.tsx";
 import {groupRoutes} from "./components/Schedule/Group/Routes.tsx";
