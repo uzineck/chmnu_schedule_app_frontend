@@ -12,8 +12,8 @@ export const ScheduleProvider: React.FC<{ children: ReactNode }> = ({children}) 
     const [isEvenWeek, setIsEvenWeek] = useState<boolean>(true);
     const [groupUuid, setGroupUuid] = useState<string>('');
     const [lessonUuid, setLessonUuid] = useState<string>('');
-    const [day, setDay] = useState<Day>(Day.MONDAY);
-    const [ordinaryNumber, setOrdinaryNumber] = useState<OrdinaryNumber>(OrdinaryNumber.FIRST);
+    const [day, setDay] = useState<Day | null>(null);
+    const [ordinaryNumber, setOrdinaryNumber] = useState<OrdinaryNumber | null>(null);
     const [lesson, setLesson] = useState<Lesson | LessonForTeacher | null>(null);
     const [group, setGroup] = useState<Group | null>(null);
 

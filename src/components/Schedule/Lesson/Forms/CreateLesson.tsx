@@ -31,7 +31,11 @@ const CreateLesson = () => {
 
     const handleCreateLesson = async () => {
         if (!selectedSubject || !selectedTeacher || !selectedRoom) {
-            messageApi.error("Please fill in all fields.");
+            messageApi.warning({key: key, content:"Please fill in all fields", duration: 3});
+            return;
+        }
+        if (!day || !ordinaryNumber){
+            messageApi.error({key: key, content:"Timeslot data is not available", duration: 3});
             return;
         }
 

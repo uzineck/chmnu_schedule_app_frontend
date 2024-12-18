@@ -29,13 +29,15 @@ const getLessonTypeStyle = (type: LessonType): string => {
 };
 
 const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = false }) => {
-    const { setLessonUuid, setLesson } = useSchedule();
+    const { setLessonUuid, setLesson, setDay, setOrdinaryNumber } = useSchedule();
     const lessonTypeClass = getLessonTypeStyle(lesson.type);
     const navigate = useNavigate();
 
     const handleEditLesson = () => {
         setLessonUuid(lesson.uuid);
         setLesson(lesson);
+        setDay(lesson.timeslot.day)
+        setOrdinaryNumber(lesson.timeslot.ord_number)
         navigate(`/lesson/${lesson.uuid}/edit`);
     };
 

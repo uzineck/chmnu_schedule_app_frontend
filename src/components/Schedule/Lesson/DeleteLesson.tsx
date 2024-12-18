@@ -15,13 +15,19 @@ const DeleteLesson = () => {
     const navigate = useNavigate();
 
     const deleteLessonFromGroup = useCallback(() => {
+        if (groupUuid==='' || lessonUuid===''){
+            navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/schedule/manage/group", {
+                state: { incorrectUsageError: "Please delete lesson only from management panel" },
+            });
+            return Promise.reject({message: "Please delete lesson only from management panel"});
+        }
         if (client?.role === ClientRole.HEADMAN) {
             return removeLessonToGroupHeadman(lessonUuid, subgroup);
         }
         else {
             return removeLessonFromGroupAdmin(groupUuid, lessonUuid, subgroup);
         }
-    }, [client, groupUuid, lessonUuid, subgroup]);
+    }, [navigate, client, groupUuid, lessonUuid, subgroup]);
 
     const { data, error, isLoading } = useFetchData(deleteLessonFromGroup);
 

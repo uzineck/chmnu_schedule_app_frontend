@@ -124,11 +124,13 @@ const AdminGroupScreen = () => {
         const deleteLessonError = location.state?.deleteLessonError;
         const addLesson = location.state?.addLesson;
         const addLessonError = location.state?.addLessonError;
-        const editLesson = location.state?.editLesson;
-        const editLessonError = location.state?.editLessonError;
+        const editLesson = location.state?.updateLesson;
+        const editLessonError = location.state?.updateLessonError;
+        const incorrectUsageError = location.state?.incorrectUsageError;
 
         const successMessage = deleteLesson || addLesson || editLesson;
         const errorMessage = deleteLessonError || addLessonError || editLessonError;
+        const warningMessage = incorrectUsageError;
 
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });
@@ -136,6 +138,10 @@ const AdminGroupScreen = () => {
 
         if (errorMessage) {
             messageApi.error({ content: errorMessage, duration: 3 });
+        }
+
+        if (warningMessage) {
+            messageApi.warning({ content: warningMessage, duration: 3 });
         }
     }, [location.state, messageApi]);
 

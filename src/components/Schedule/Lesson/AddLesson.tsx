@@ -14,13 +14,20 @@ const AddLesson = () => {
     const navigate = useNavigate();
 
     const addLessonToGroup = useCallback(() => {
+        if (groupUuid==='' || lessonUuid===''){
+            navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/schedule/manage/group", {
+                state: { incorrectUsageError: "Please add lesson only from management panel" },
+            });
+            return Promise.reject({message: "Please add lesson only from management panel"});
+        }
+
         if (client?.role === ClientRole.HEADMAN) {
             return addLessonToGroupHeadman(lessonUuid, subgroup)
         }
         else {
             return addLessonToGroupAdmin(groupUuid, lessonUuid, subgroup)
         }
-    }, [lessonUuid, client, groupUuid, subgroup]);
+    }, [navigate, lessonUuid, client, groupUuid, subgroup]);
 
     const { data, error, isLoading } = useFetchData(addLessonToGroup);
 

@@ -41,12 +41,15 @@ const EditLesson = () => {
 
     const handleUpdateLesson = async () => {
         if (!selectedSubject || !selectedTeacher || !selectedRoom) {
-            messageApi.error("Please fill in all fields.");
+            messageApi.warning({key: key, content:"Please fill in all fields", duration: 3});
             return;
         }
-
         if (!lesson || !lesson.uuid) {
-            messageApi.error("Lesson data is not available.");
+            messageApi.error({key: key, content:"Lesson data is not available.", duration: 3});
+            return;
+        }
+        if (!day || !ordinaryNumber){
+            messageApi.error({key: key, content:"Timeslot data is not available", duration: 3});
             return;
         }
 
@@ -59,7 +62,7 @@ const EditLesson = () => {
             lesson_schema: {
                 type: selectedLessonType,
                 timeslot: {
-                    day,
+                    day: day,
                     ord_number: ordinaryNumber,
                     is_even: isEvenWeek,
                 },
