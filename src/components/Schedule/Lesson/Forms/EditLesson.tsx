@@ -16,9 +16,9 @@ import {useSchedule} from "../../Context/hooks/useSchedule.ts";
 import {ClientRole} from "../../../../models/enums/ClientRole.ts";
 import {useAuth} from "../../../Auth/Context/hooks/useAuth.ts";
 
-const UpdateLesson = () => {
+const EditLesson = () => {
     const { client } = useAuth()
-    const { day, ordinaryNumber, isEvenWeek, setLessonUuid, lesson } = useSchedule();
+    const { day, ordinaryNumber, isEvenWeek, setLessonUuid, lesson, setLesson } = useSchedule();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -69,16 +69,19 @@ const UpdateLesson = () => {
         try {
             setIsUpdating(true);
             messageApi.loading({ content: "Updating lesson...", key: key });
-            await updateLesson(lesson.uuid, lessonData);
-            setLessonUuid(lesson.uuid);
+            const response = await updateLesson(lesson.uuid, lessonData);
+            const oldLesson = response.data.old_lesson;
+            const newLessonUuid = response.data.updated_lesson.uuid;
+            setLesson(oldLesson)
+            setLessonUuid(newLessonUuid);
             messageApi.success({ content: "Lesson updated successfully!", key: key });
 
-            navigate(`/group/manage/`);
+            navigate(`/lesson/${oldLesson.uuid}/update/${newLessonUuid}`);
         } catch (error) {
             if (error instanceof ApiCallError) {
-                messageApi.error({ key: key, content: error.message, duration: 2 });
+                messageApi.error({ key: key, content: error.message, duration: 3 });
             } else {
-                messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
+                messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
             }
         } finally {
             setIsUpdating(false);
@@ -136,4 +139,4 @@ const UpdateLesson = () => {
     );
 };
 
-export default UpdateLesson;
+export default EditLesson;

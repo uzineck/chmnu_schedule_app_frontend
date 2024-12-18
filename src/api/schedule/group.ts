@@ -56,6 +56,16 @@ export const addLessonToGroupAdmin = (groupUuid: string, lessonUuid: string, sub
     return Http.patch(`${BASE_URL}/${groupUuid}/add/${lessonUuid}?${queryParams}`, {});
 }
 
+export const updateLessonInGroupAdmin = (groupUuid: string, lessonUuid: string, oldLessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
+    const queryParams = qs.stringify(
+        {
+            subgroup,
+        },
+        { skipNulls: true }
+    );
+    return Http.patch(`${BASE_URL}/${groupUuid}/${oldLessonUuid}/update/${lessonUuid}?${queryParams}`, {});
+}
+
 export const removeLessonFromGroupAdmin = (groupUuid: string, lessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
     const queryParams = qs.stringify(
         {
@@ -74,6 +84,16 @@ export const addLessonToGroupHeadman = (lessonUuid: string, subgroup: Subgroup |
         { skipNulls: true }
     );
     return Http.patch(`${BASE_URL}/add/${lessonUuid}?${queryParams}`, {});
+}
+
+export const updateLessonInGroupHeadman = (lessonUuid: string, oldLessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
+    const queryParams = qs.stringify(
+        {
+            subgroup,
+        },
+        { skipNulls: true }
+    );
+    return Http.patch(`${BASE_URL}/${oldLessonUuid}/update/${lessonUuid}?${queryParams}`, {});
 }
 
 export const removeLessonToGroupHeadman = (lessonUuid: string, subgroup: Subgroup | null): Promise<ApiResponse<StatusResponse>> => {
