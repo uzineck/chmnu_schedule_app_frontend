@@ -43,9 +43,10 @@ export const Header: React.FC = () => {
         const logoutMessage = location.state?.logoutMessage;
         const logoutMessageError = location.state?.logoutMessageError;
         const loginMessage = location.state?.loginMessage;
+        const unauthorized = location.state?.unauthorized;
 
         const successMessage = logoutMessage || loginMessage;
-        const errorMessage = logoutMessageError;
+        const errorMessage = logoutMessageError || unauthorized;
 
         if (successMessage) {
             messageApi.success({content: successMessage, duration: 2});
