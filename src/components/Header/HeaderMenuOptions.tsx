@@ -31,7 +31,7 @@ export const menuOptions = (client: ClientPrivate | null)=>  [
                 label: "Manage Schedule",
                 key: "admin_schedule_manage",
                 to: "/admin/schedule/manage/group",
-                icon: <ContactsOutlined />,
+                icon: <ScheduleOutlined />,
             },
         ]
         : []),

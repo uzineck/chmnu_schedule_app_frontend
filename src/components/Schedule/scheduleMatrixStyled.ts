@@ -60,8 +60,8 @@ export const BodyCell = styled.td<{ hasLesson: boolean; isCurrentLesson?: boolea
 
 export const CurrentLessonIndicator = styled.div`
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 2px;
+    right: 2px;
     width: 10px;
     height: 10px;
     background-color: #2e7d32;

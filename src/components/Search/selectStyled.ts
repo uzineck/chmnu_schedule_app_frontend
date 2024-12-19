@@ -4,9 +4,10 @@ import {OptionType} from "./BaseDropDownSearch.tsx";
 
 export const BaseDropdown = styled.div`
     width: 100%;
-    max-width: 400px;
+    max-width: 66%;
     margin: 0 auto;
     padding: 10px;
+    flex-shrink: 0;
 `;
 
 
@@ -46,8 +47,8 @@ export const customStyles: StylesConfig<OptionType, false> = {
     // @ts-expect-error  stop
     option: (provided, state) => ({
         ...provided,
-        backgroundColor: state.isSelected ? '#4B0082' : null,
-        color: state.isSelected ? 'white' : 'black', // Text color when option is selected
+        backgroundColor: state.isFocused ? '#E6E6FA' : state.isSelected ? '#4B0082' : null,
+        color: state.isFocused ? 'black' : state.isSelected ? 'white' : 'black', // Text color when option is selected
         cursor: 'pointer',
         padding: '10px',
         fontSize: state.isSelected ? '14px' : '16px', // Smaller text when selected

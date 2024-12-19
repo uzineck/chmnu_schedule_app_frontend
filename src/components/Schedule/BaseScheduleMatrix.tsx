@@ -136,7 +136,8 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
                                     )}
                                     {lessonCell &&
                                         currentTime?.day === colIndex + 1 &&
-                                        currentTime?.lesson === rowIndex + 1 && (
+                                        currentTime?.lesson === rowIndex + 1 &&
+                                        currentTime?.is_even === isEvenWeek && (
                                             <CurrentLessonIndicator />
                                         )}
                                 </BodyCell>
