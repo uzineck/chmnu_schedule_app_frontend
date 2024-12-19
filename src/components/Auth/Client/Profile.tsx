@@ -23,12 +23,7 @@ const Profile: React.FC = () => {
     };
 
     useEffect(() => {
-        const changeCredentials = location.state?.changeCredentials;
-        const changeEmail = location.state?.changeEmail;
-        const changePassword = location.state?.changePassword;
-
-
-        const successMessage = changeCredentials || changeEmail || changePassword;
+        const successMessage = location.state?.successMessage;
 
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });

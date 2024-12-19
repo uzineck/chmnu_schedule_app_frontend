@@ -5,7 +5,6 @@ import { message } from "antd";
 import {ClientRole} from "../../../../../models/enums/ClientRole.ts";
 import {signUp} from "../../../../../api/client/auth.ts";
 import {ApiCallError} from "../../../../../api/errors.ts";
-import {FormTitle} from "../../../Lesson/Forms/formStyled.ts";
 import {
     ErrorMessage, FormCard,
     FormInput,
@@ -65,7 +64,7 @@ const SignUp = () => {
                     verify_password: values.verify_password,
                 });
                 navigate("/admin/manage/client", {
-                    state: { signUpMessage: response.data.status },
+                    state: { successMessage: response.data.status },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
@@ -82,7 +81,6 @@ const SignUp = () => {
     return (
         <FormCard onSubmit={formik.handleSubmit}>
             {contextHolder}
-                <FormTitle>Create a new account</FormTitle>
                     {/* First Name */}
                     <FormInputGroup>
                         <FormLabel htmlFor="first_name">First Name</FormLabel>

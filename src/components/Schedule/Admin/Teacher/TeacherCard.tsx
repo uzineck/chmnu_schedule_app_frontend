@@ -4,14 +4,17 @@ import {Outlet, useLocation} from "react-router-dom";
 import {
     DoubleFormPage,
     MainCard,
-    MainCardButtons,
+    MainCardButtons, MainCardInfo, MainCardInfoItem,
     SecondaryCard
 } from "../../../Auth/Client/doubleFormStyled.ts";
 import Title from "../../../Title/Title.tsx";
 import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
+import {Teacher} from "../../../../models/teacher/Teacher.ts";
 
 const TeacherCard: React.FC = () => {
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
+    const [teacherInfo, setTeacherInfo] = useState<Teacher | null>(null);
+
     const location = useLocation();
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -26,15 +29,13 @@ const TeacherCard: React.FC = () => {
     };
 
     useEffect(() => {
-        const createTeacherMessage = location.state?.createTeacherMessage;
-        const updateTeacherNameMessage = location.state?.updateTeacherNameMessage;
-        const updateTeacherRankMessage = location.state?.updateTeacherRankMessage;
-        const deactivateTeacherMessage = location.state?.deactivateTeacherMessage;
-
-        const successMessage = createTeacherMessage || updateTeacherNameMessage || updateTeacherRankMessage || deactivateTeacherMessage;
-
+        const successMessage = location.state?.successMessage;
+        const teacherInfo = location.state?.teacherInfo;
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });
+        }
+        if (teacherInfo){
+            setTeacherInfo(teacherInfo);
         }
     }, [location.state, messageApi]);
 
@@ -43,6 +44,14 @@ const TeacherCard: React.FC = () => {
             {contextHolder}
             <MainCard>
                 <Title text="Manage Teachers" />
+                {teacherInfo &&
+                    (
+                        <MainCardInfo>
+                            <MainCardInfoItem>Full name: {teacherInfo.last_name} {teacherInfo.first_name} {teacherInfo.middle_name}</MainCardInfoItem>
+                            <MainCardInfoItem>Rank: {teacherInfo.rank}</MainCardInfoItem>
+                        </MainCardInfo>
+                    )
+                }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[

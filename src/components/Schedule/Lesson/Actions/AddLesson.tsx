@@ -16,7 +16,7 @@ const AddLesson = () => {
     const addLessonToGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
             navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                state: { incorrectUsageError: "Please add lesson only from management panel" },
+                state: { warningMessage: "Please add lesson only from management panel" },
             });
             return Promise.reject({message: "Please add lesson only from management panel"});
         }
@@ -37,12 +37,12 @@ const AddLesson = () => {
             if (data) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { addLesson: data.status },
+                    state: { successMessage: data.status },
                 });
             } else if (error) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { addLessonError: error },
+                    state: { errorMessage: error },
                 });
             }
         }

@@ -17,7 +17,7 @@ const DeleteLesson = () => {
     const deleteLessonFromGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
             navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                state: { incorrectUsageError: "Please delete lesson only from management panel" },
+                state: { warningMessage: "Please delete lesson only from management panel" },
             });
             return Promise.reject({message: "Please delete lesson only from management panel"});
         }
@@ -37,12 +37,12 @@ const DeleteLesson = () => {
             if (data) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { deleteLesson: data.status },
+                    state: { successMessage: data.status },
                 });
             } else if (error) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { deleteLessonError: error },
+                    state: { errorMessage: error },
                 });
             }
         }

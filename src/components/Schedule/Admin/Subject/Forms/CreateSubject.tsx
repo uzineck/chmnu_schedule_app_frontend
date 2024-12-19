@@ -32,7 +32,12 @@ const CreateSubject = () => {
                 const response = await createSubject({
                     title: values.title,
                 });
-                navigate("/admin/manage/subject", { state: { createSubjectMessage: `Subject created successfully!(${response.data.title})` } });
+                navigate("/admin/manage/subject", { state:
+                        {
+                            successMessage: `Subject created successfully`,
+                            subjectInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

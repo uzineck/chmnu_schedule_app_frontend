@@ -4,14 +4,16 @@ import {Outlet, useLocation} from "react-router-dom";
 import {
     DoubleFormPage,
     MainCard,
-    MainCardButtons,
+    MainCardButtons, MainCardInfo, MainCardInfoItem,
     SecondaryCard
 } from "../../../Auth/Client/doubleFormStyled.ts";
 import Title from "../../../Title/Title.tsx";
 import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
+import {Subject} from "../../../../models/subject/Subject.ts";
 
 const SubjectCard: React.FC = () => {
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
+    const [subjectInfo, setSubjectInfo] = useState<Subject | null>(null);
     const location = useLocation();
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -26,15 +28,15 @@ const SubjectCard: React.FC = () => {
     };
 
     useEffect(() => {
-        const createSubjectMessage = location.state?.createSubjectMessage;
-        const updateSubjectNumberMessage = location.state?.updateSubjectNumberMessage;
-        const updateSubjectDescriptionMessage = location.state?.updateSubjectDescriptionMessage;
-        const deleteSubjectMessage = location.state?.deleteSubjectMessage;
-
-        const successMessage = createSubjectMessage || updateSubjectNumberMessage || updateSubjectDescriptionMessage || deleteSubjectMessage;
+        const successMessage = location.state?.successMessage;
+        const subjectInfo = location.state?.subjectInfo;
 
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });
+        }
+
+        if (subjectInfo){
+            setSubjectInfo(subjectInfo);
         }
     }, [location.state, messageApi]);
 
@@ -43,6 +45,14 @@ const SubjectCard: React.FC = () => {
             {contextHolder}
             <MainCard>
                 <Title text="Manage Subjects" />
+                {subjectInfo &&
+                    (
+                        <MainCardInfo>
+                            <MainCardInfoItem>Title: {subjectInfo.title}</MainCardInfoItem>
+                            <MainCardInfoItem>Slug: {subjectInfo.slug}</MainCardInfoItem>
+                        </MainCardInfo>
+                    )
+                }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[

@@ -32,13 +32,18 @@ const UpdateSubjectTitle = () => {
         },
         validationSchema: UpdateSubjectTitleValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Updating subject number...' });
+            messageApi.loading({ key: key, content: 'Updating subject title...' });
             try {
                 const response = await updateSubject(
                     values.subject_uuid,
                     {title: values.title},
                 );
-                navigate("/admin/manage/subject", { state: { deleteSubjectMessage: `Subject number updated successfully (${response.data.title})` } });
+                navigate("/admin/manage/subject", { state:
+                        {
+                            successMessage: `Subject number updated successfully`,
+                            subjectInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

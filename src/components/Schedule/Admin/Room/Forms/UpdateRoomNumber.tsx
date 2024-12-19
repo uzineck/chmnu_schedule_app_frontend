@@ -38,7 +38,12 @@ const UpdateRoomNumber = () => {
                     values.room_uuid,
                     {number: values.number},
                 );
-                navigate("/admin/manage/room", { state: { updateRoomNumberMessage: `Room number updated successfully (${response.data.number})` } });
+                navigate("/admin/manage/room", { state:
+                        {
+                            successMessage: `Room number updated successfully`,
+                            roomInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

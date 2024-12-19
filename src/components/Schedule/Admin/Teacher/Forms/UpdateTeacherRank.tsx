@@ -43,7 +43,12 @@ const UpdateTeacherRank = () => {
                         rank: values.rank,
                     }
                 );
-                navigate("/admin/manage/teacher", { state: { updateTeacherRankMessage: `Teacher Rank updated successfully (${response.data.rank})` } });
+                navigate("/admin/manage/teacher", { state:
+                        {
+                            successMessage: `Teacher Rank updated successfully`,
+                            teacherInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

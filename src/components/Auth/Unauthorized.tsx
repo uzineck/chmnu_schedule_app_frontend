@@ -5,7 +5,7 @@ const Unauthorized = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        navigate("/", {state: { unauthorized: "Forbidden resource" },});
+        navigate("/", {state: { errorMessage: "Forbidden resource" },});
     }, [navigate]);
 
     return <></>;

@@ -34,7 +34,11 @@ const DeactivateTeacher = () => {
             messageApi.loading({ key: key, content: 'Deactivating teacher...' });
             try {
                 const response = await deactivateTeacher(values.teacher_uuid);
-                navigate("/admin/manage/teacher", { state: { updateTeacherRankMessage: response.data.status } });
+                navigate("/admin/manage/teacher", { state:
+                        {
+                            successMessage: response.data.status
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

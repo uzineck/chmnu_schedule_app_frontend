@@ -44,7 +44,12 @@ const CreateTeacher = () => {
                     middle_name: values.middle_name,
                     rank: values.rank,
                 });
-                navigate("/admin/manage/teacher", { state: { createTeacherMessage: `Teacher created successfully (${response.data.last_name} ${response.data.first_name.charAt(0)} ${response.data.middle_name.charAt(0)})` } });
+                navigate("/admin/manage/teacher", { state:
+                        {
+                            successMessage: `Teacher created successfully`,
+                            teacherInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

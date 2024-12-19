@@ -46,7 +46,12 @@ const UpdateTeacherName = () => {
                         middle_name: values.middle_name,
                     },
                 );
-                navigate("/admin/manage/teacher", { state: { updateTeacherNameMessage: `Teacher Name updated successfully (${response.data.last_name} ${response.data.first_name.charAt(0)} ${response.data.middle_name.charAt(0)})` } });
+                navigate("/admin/manage/teacher", { state:
+                        {
+                            successMessage: `Teacher Name updated successfully`,
+                            teacherInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

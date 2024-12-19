@@ -38,7 +38,7 @@ const ChangeCredentialsForm: React.FC = () => {
                 });
                 updateClient();
                 navigate('/profile', {
-                    state: { changeCredentials: 'Credentials changed successfully!' },
+                    state: { successMessage: 'Credentials changed successfully' },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {

@@ -4,13 +4,15 @@ import {Outlet, useLocation} from "react-router-dom";
 import {
     DoubleFormPage,
     MainCard,
-    MainCardButtons,
+    MainCardButtons, MainCardInfo, MainCardInfoItem,
     SecondaryCard
 } from "../../../Auth/Client/doubleFormStyled.ts";
 import Title from "../../../Title/Title.tsx";
 import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
+import {ClientPrivate} from "../../../../models/client/ClientPrivate.ts";
 
 const ClientCard: React.FC = () => {
+    const [clientInfo, setClientInfo] = useState<ClientPrivate | null>(null);
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
     const location = useLocation();
     const [messageApi, contextHolder] = message.useMessage();
@@ -26,12 +28,14 @@ const ClientCard: React.FC = () => {
     };
 
     useEffect(() => {
-        const signUpMessage = location.state?.signUpMessage;
-
-        const successMessage = signUpMessage;
+        const successMessage = location.state?.successMessage;
+        const clientInfo = location.state?.clientInfo;
 
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });
+        }
+        if (clientInfo){
+            setClientInfo(clientInfo);
         }
     }, [location.state, messageApi]);
 
@@ -40,13 +44,20 @@ const ClientCard: React.FC = () => {
                 {contextHolder}
             <MainCard>
                 <Title text="Manage Clients" />
+                {clientInfo &&
+                    (
+                        <MainCardInfo>
+                            <MainCardInfoItem>Full name: {clientInfo.last_name} {clientInfo.first_name} {clientInfo.middle_name}</MainCardInfoItem>
+                            <MainCardInfoItem>Email: {clientInfo.email}</MainCardInfoItem>
+                            <MainCardInfoItem>Role: {clientInfo.role}</MainCardInfoItem>
+                        </MainCardInfo>
+                    )
+                }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
+                            { label: "Get Client Info", value: "get_client_info", isLink: true, to: "get_client_info" },
                             { label: "Create Client", value: "create_client", isLink: true, to: "create_client" },
-                            // { label: "Change Email", value: "change_email", isLink: true, to: "change_email" },
-                            // { label: "Change Password", value: "change_password", isLink: true, to: "change_password" },
-                            // { label: "Change Credentials", value: "change_credentials", isLink: true, to: "change_credentials" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}

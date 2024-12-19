@@ -19,13 +19,13 @@ const Logout = () => {
                 logoutProp();
                 messageApi.destroy();
                 navigate("/", {
-                    state: { logoutMessage: data.status },
+                    state: { successMessage: data.status },
                 });
             } else if (error) {
                 logoutProp();
                 messageApi.destroy();
                 navigate("/", {
-                    state: { logoutMessageError: error },
+                    state: { errorMessage: error },
                 });
             }
         }

@@ -33,7 +33,11 @@ const DeleteRoom = () => {
             messageApi.loading({ key: key, content: 'Deleting room...' });
             try {
                 const response = await deleteRoom(values.room_uuid);
-                navigate("/admin/manage/room", { state: { deleteRoomMessage: response.data.status } });
+                navigate("/admin/manage/room", { state:
+                        {
+                            successMessage: response.data.status
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

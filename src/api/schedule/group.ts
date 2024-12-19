@@ -30,10 +30,6 @@ export const getGroupInfo = (groupUuid: string): Promise<ApiResponse<GroupWithHe
     return Http.get(`${BASE_URL}/${groupUuid}/info`);
 }
 
-export const getHeadmanInfo = (headmanEmail: string): Promise<ApiResponse<GroupWithHeadman>> => {
-    return Http.get(`${BASE_URL}/${headmanEmail}/headman_info`);
-}
-
 export const getHeadmanGroup = (): Promise<ApiResponse<Group>> => {
     return Http.get(`${BASE_URL}/headman_group`);
 }

@@ -4,14 +4,17 @@ import {Outlet, useLocation} from "react-router-dom";
 import {
     DoubleFormPage,
     MainCard,
-    MainCardButtons,
+    MainCardButtons, MainCardInfo, MainCardInfoItem,
     SecondaryCard
 } from "../../../Auth/Client/doubleFormStyled.ts";
 import Title from "../../../Title/Title.tsx";
 import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
+import {Room} from "../../../../models/room/Room.ts";
 
 const RoomCard: React.FC = () => {
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
+    const [roomInfo, setRoomInfo] = useState<Room | null>(null);
+
     const location = useLocation();
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -26,15 +29,14 @@ const RoomCard: React.FC = () => {
     };
 
     useEffect(() => {
-        const createRoomMessage = location.state?.createRoomMessage;
-        const updateRoomNumberMessage = location.state?.updateRoomNumberMessage;
-        const updateRoomDescriptionMessage = location.state?.updateRoomDescriptionMessage;
-        const deleteRoomMessage = location.state?.deleteRoomMessage;
-
-        const successMessage = createRoomMessage || updateRoomNumberMessage || updateRoomDescriptionMessage || deleteRoomMessage;
+        const successMessage = location.state?.successMessage;
+        const roomInfo = location.state?.roomInfo;
 
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });
+        }
+        if (roomInfo){
+            setRoomInfo(roomInfo);
         }
     }, [location.state, messageApi]);
 
@@ -43,6 +45,14 @@ const RoomCard: React.FC = () => {
             {contextHolder}
             <MainCard>
                 <Title text="Manage Rooms" />
+                {roomInfo &&
+                    (
+                        <MainCardInfo>
+                            <MainCardInfoItem>Number: {roomInfo.number}</MainCardInfoItem>
+                            <MainCardInfoItem>Description: {roomInfo.description}</MainCardInfoItem>
+                        </MainCardInfo>
+                    )
+                }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[

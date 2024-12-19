@@ -19,7 +19,7 @@ const UpdateLesson = () => {
     const updateLessonInGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
             navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                state: { incorrectUsageError: "Please update lesson only from management panel" },
+                state: { warningMessage: "Please update lesson only from management panel" },
             });
             return Promise.reject({message: "Please update lesson only from management panel"});
         }
@@ -38,12 +38,12 @@ const UpdateLesson = () => {
             if (data) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN ? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { updateLesson: data.status },
+                    state: { successMessage: data.status },
                 });
             } else if (error) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN ? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { updateLessonError: error },
+                    state: { errorMessage: error },
                 });
             }
         }

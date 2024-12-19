@@ -3,24 +3,22 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import {updateGroupHeadman} from "../../../../../api/schedule/group.ts";
+import {getGroupInfo} from "../../../../../api/schedule/group.ts";
 import {ApiCallError} from "../../../../../api/errors.ts";
 import {
     ErrorMessage,
     FormCard,
-    FormInput,
     FormInputGroup,
     FormLabel, SubmitButton
 } from "../../../../Auth/Client/Forms/formikFormStyled.ts";
 import {Group} from "../../../../../models/group/Group.ts";
 import GroupSearch from "../../../Group/GroupSearch.tsx";
 
-const UpdateGroupHeadmanValidationSchema = Yup.object().shape({
+const GetGroupInfoValidationSchema = Yup.object().shape({
     group_uuid: Yup.string().required("Group is required"),
-    headman_email: Yup.string().email('Invalid email format').required("New Headman email is required"),
 });
 
-const UpdateGroupHeadman = () => {
+const GetGroupInfo = () => {
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -29,19 +27,15 @@ const UpdateGroupHeadman = () => {
     const formik = useFormik({
         initialValues: {
             group_uuid: '',
-            headman_email: '',
         },
-        validationSchema: UpdateGroupHeadmanValidationSchema,
+        validationSchema: GetGroupInfoValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Updating group headman...' });
+            messageApi.loading({ key: key, content: 'Getting group info...' });
             try {
-                const response = await updateGroupHeadman(
-                    values.group_uuid,
-                    {headman_email: values.headman_email}
-                );
+                const response = await getGroupInfo(values.group_uuid);
                 navigate("/admin/manage/group", { state:
                         {
-                            successMessage: `Group headman updated successfully`,
+                            successMessage: `Group info received successfully`,
                             groupInfo: response.data,
                         }
                 });
@@ -79,25 +73,12 @@ const UpdateGroupHeadman = () => {
                 )}
             </FormInputGroup>
 
-            {/* Headman Email */}
-            <FormInputGroup>
-                <FormLabel htmlFor="headman_email">New Headman Email</FormLabel>
-                <FormInput
-                    id="headman_email"
-                    type="email"
-                    {...formik.getFieldProps('headman_email')}
-                />
-                {formik.touched.headman_email && formik.errors.headman_email && (
-                    <ErrorMessage>{formik.errors.headman_email}</ErrorMessage>
-                )}
-            </FormInputGroup>
-
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Updating Group Headman...' : 'Update Group Headman'}
+                {formik.isSubmitting ? 'Getting Group Info...' : 'Get Group Info'}
             </SubmitButton>
         </FormCard>
     );
 };
 
-export default UpdateGroupHeadman;
+export default GetGroupInfo;

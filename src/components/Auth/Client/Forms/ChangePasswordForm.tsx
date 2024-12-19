@@ -41,7 +41,7 @@ const ChangePasswordForm: React.FC = () => {
                     verify_password: values.verifyPassword,
                 });
                 navigate('/profile', {
-                    state: { changePassword: 'Password changed successfully!' },
+                    state: { successMessage: 'Password changed successfully' },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {

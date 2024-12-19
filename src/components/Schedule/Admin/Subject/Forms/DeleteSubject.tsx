@@ -33,7 +33,11 @@ const DeleteSubject = () => {
             messageApi.loading({ key: key, content: 'Deleting subject...' });
             try {
                 const response = await deleteSubject(values.subject_uuid);
-                navigate("/admin/manage/subject", { state: { deleteSubjectMessage: response.data.status } });
+                navigate("/admin/manage/subject", { state:
+                        {
+                            successMessage: response.data.status
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

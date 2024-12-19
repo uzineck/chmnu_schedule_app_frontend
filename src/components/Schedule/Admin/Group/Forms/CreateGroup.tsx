@@ -45,7 +45,12 @@ const CreateGroup = () => {
                     faculty_uuid: values.faculty_uuid,
                     has_subgroups: values.has_subgroups,
                 });
-                navigate("/admin/manage/group", { state: { createGroupMessage: `Group created successfully!(${response.data.number}(${response.data.faculty.code_name}))` } });
+                navigate("/admin/manage/group", { state:
+                        {
+                            successMessage: `Group created successfully`,
+                            groupInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });

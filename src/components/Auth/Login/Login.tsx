@@ -45,7 +45,7 @@ const Login = () => {
                 });
                 loginProp(response.data.access_token, response.data.refresh_token);
                 navigate("/", {
-                    state: { loginMessage: "Logged in successfully!" },
+                    state: { successMessage: "Logged in successfully!" },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {

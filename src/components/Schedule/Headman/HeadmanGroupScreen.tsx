@@ -54,17 +54,9 @@ const HeadmanGroupScreen = () => {
 
 
     useEffect(() => {
-        const deleteLesson = location.state?.deleteLesson;
-        const deleteLessonError = location.state?.deleteLessonError;
-        const addLesson = location.state?.addLesson;
-        const addLessonError = location.state?.addLessonError;
-        const editLesson = location.state?.updateLesson;
-        const editLessonError = location.state?.updateLessonError;
-        const incorrectUsageError = location.state?.incorrectUsageError;
-
-        const successMessage = deleteLesson || addLesson || editLesson;
-        const errorMessage = deleteLessonError || addLessonError || editLessonError;
-        const warningMessage = incorrectUsageError;
+        const successMessage = location.state?.successMessage;
+        const errorMessage = location.state?.errorMessage;
+        const warningMessage = location.state?.warningMessage;
 
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });

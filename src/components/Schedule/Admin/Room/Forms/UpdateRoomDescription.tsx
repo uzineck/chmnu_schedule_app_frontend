@@ -38,7 +38,12 @@ const UpdateRoomDescription = () => {
                     values.room_uuid,
                     {description: values.description},
                 );
-                navigate("/admin/manage/room", { state: { updateRoomDescriptionMessage: `Room description updated successfully (${response.data.number})` } });
+                navigate("/admin/manage/room", { state:
+                        {
+                            successMessage: `Room description updated successfully`,
+                            roomInfo: response.data,
+                        }
+                });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
