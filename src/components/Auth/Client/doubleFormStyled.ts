@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ProfilePage = styled.div`
+export const DoubleFormPage = styled.div`
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -9,7 +9,7 @@ export const ProfilePage = styled.div`
     padding: 2rem;
 `;
 
-export const ProfileCard = styled.div`
+export const MainCard = styled.div`
     width: 100%;
     max-width: 600px;
     padding: 2rem;
@@ -21,24 +21,15 @@ export const ProfileCard = styled.div`
     margin: 4.5rem auto;
 `;
 
-export const ProfileInfo = styled.div`
-    text-align: left;
-`;
 
-export const ProfileInfoItem = styled.div`
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 0.5rem;
-`;
-
-export const ProfileButtons = styled.div`
+export const MainCardButtons = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-top: auto;
 `;
 
-export const ProfileContent = styled.div`
+export const SecondaryCard = styled.div`
     flex: 1;
     max-width: 800px;
     padding: 2rem;
@@ -46,4 +37,14 @@ export const ProfileContent = styled.div`
     margin-top: revert;
     justify-content: center;
     align-items: center;
+`;
+
+export const MainCardInfo = styled.div`
+    text-align: left;
+`;
+
+export const MainCardInfoItem = styled.div`
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
 `;

@@ -3,7 +3,7 @@ import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 import DropdownMenu from "../Menus/DropdownMenu.tsx";
 import {message} from "antd";
 import {useLocation, useNavigate} from "react-router-dom";
-import {menuOptions} from "./HeaderMenuOptions.tsx";
+import {menuOptions} from "./MenuOptions/HeaderMenuOptions.tsx";
 import {useAuth} from "../Auth/Context/hooks/useAuth.ts";
 import {HeaderButtons, HeaderContainer} from "./headerStyled.ts";
 
@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
         if (currentPath.includes("/group") && !currentPath.includes("/manage")) {
             setSelectedPage('group');
             localStorage.setItem("lastPath", "/group");
-        } else if (currentPath.includes("/teacher")) {
+        } else if (currentPath.includes("/teacher") && !currentPath.includes("/manage")) {
             setSelectedPage('teacher');
             localStorage.setItem("lastPath", "/teacher");
         } else if (currentPath.includes("/login")) {

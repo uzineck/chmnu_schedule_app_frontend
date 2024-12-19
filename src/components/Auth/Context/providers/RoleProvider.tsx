@@ -8,10 +8,8 @@ export const RoleProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const matchesRole = (role: ClientRole) => client?.role === role;
 
-    const hasAnyRole = (roles: ClientRole[]) => roles.includes(client?.role || ClientRole.DEFAULT);
-
     return (
-        <RoleContext.Provider value={{ matchesRole, hasAnyRole }}>
+        <RoleContext.Provider value={{ matchesRole }}>
             {children}
         </RoleContext.Provider>
     );

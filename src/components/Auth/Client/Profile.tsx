@@ -4,7 +4,7 @@ import Title from "../../Title/Title.tsx";
 import {Outlet, useLocation} from "react-router-dom";
 import {useAuth} from "../Context/hooks/useAuth.ts";
 import {message} from "antd";
-import {ProfileButtons, ProfileCard, ProfileContent, ProfileInfo, ProfileInfoItem, ProfilePage} from "./profileStyled.ts";
+import {MainCardButtons, MainCard, SecondaryCard, MainCardInfo, MainCardInfoItem, DoubleFormPage} from "./doubleFormStyled.ts";
 
 const Profile: React.FC = () => {
     const { client } = useAuth();
@@ -36,19 +36,19 @@ const Profile: React.FC = () => {
     }, [location.state, messageApi]);
 
     return (
-        <ProfilePage>
+        <DoubleFormPage>
             {contextHolder}
-            <ProfileCard>
+            <MainCard>
                 <Title text="Profile" />
-                <ProfileInfo>
-                    <ProfileInfoItem>
+                <MainCardInfo>
+                    <MainCardInfoItem>
                         Name: {`${client?.last_name} ${client?.first_name} ${client?.middle_name}`}
-                    </ProfileInfoItem>
-                    <ProfileInfoItem>Email: {client?.email}</ProfileInfoItem>
-                    <ProfileInfoItem>Role: {client?.role.toUpperCase()}</ProfileInfoItem>
-                </ProfileInfo>
+                    </MainCardInfoItem>
+                    <MainCardInfoItem>Email: {client?.email}</MainCardInfoItem>
+                    <MainCardInfoItem>Role: {client?.role.toUpperCase()}</MainCardInfoItem>
+                </MainCardInfo>
 
-                <ProfileButtons>
+                <MainCardButtons>
                     <ButtonContainer
                         options={[
                             { label: "Change Email", value: "change_email", isLink: true, to: "change_email" },
@@ -58,14 +58,14 @@ const Profile: React.FC = () => {
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}
                     />
-                </ProfileButtons>
-            </ProfileCard>
+                </MainCardButtons>
+            </MainCard>
             {selectedPage && (
-                <ProfileContent>
+                <SecondaryCard>
                     <Outlet />
-                </ProfileContent>
+                </SecondaryCard>
             )}
-        </ProfilePage>
+        </DoubleFormPage>
     );
 };
 

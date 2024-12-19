@@ -2,6 +2,7 @@ import Http from "../index.ts";
 import {ApiResponse} from "../../models/ApiResponse.ts";
 import {Subject} from "../../models/subject/Subject.ts";
 import {SubjectSchema} from "../../models/subject/request/SubjectSchema.ts";
+import {StatusResponse} from "../../models/StatusResponse.ts";
 
 const BASE_URL = '/schedule/subject';
 
@@ -16,4 +17,8 @@ export const createSubject = (body: SubjectSchema): Promise<ApiResponse<Subject>
 
 export const updateSubject = (subjectUuid: string, body: SubjectSchema): Promise<ApiResponse<Subject>> => {
     return Http.patch<SubjectSchema>(`${BASE_URL}/${subjectUuid}/update`, body);
+}
+
+export const deleteSubject = (subjectUuid: string): Promise<ApiResponse<StatusResponse>> => {
+    return Http.delete(`${BASE_URL}/${subjectUuid}`, {});
 }

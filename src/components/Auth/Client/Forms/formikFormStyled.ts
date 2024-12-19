@@ -49,6 +49,24 @@ export const FormInput = styled.input`
     }
 `;
 
+export const SelectInput = styled.select`
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:focus {
+        outline: none;
+        border-color: #7f00ff;
+        box-shadow: 0 0 8px rgba(127, 0, 255, 0.3);
+    }
+`;
+
 export const ErrorMessage = styled.div`
     color: #ff4d4d;
     font-size: 0.875rem;

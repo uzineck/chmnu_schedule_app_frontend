@@ -26,7 +26,7 @@ const AdminGroupScreen = () => {
         (group: Group | null, subgroup: Subgroup | null, weekType: boolean) => {
             if (!group) return;
 
-            const basePath = `/admin/schedule/manage/group/${group.uuid}`;
+            const basePath = `/admin/manage/schedule/group/${group.uuid}`;
             const queryParams = new URLSearchParams({
                 weekType: weekType.toString(),
                 ...(group.has_subgroups && { subgroup: subgroup || "" }),

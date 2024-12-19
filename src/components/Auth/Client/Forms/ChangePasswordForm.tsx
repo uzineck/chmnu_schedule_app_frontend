@@ -11,9 +11,12 @@ const ChangePasswordSchema = Yup.object().shape({
     currentPassword: Yup.string().required('Current password is required'),
     newPassword: Yup.string()
         .min(8, 'Password must be at least 8 characters')
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!#%^:;.,`~'"*?&+=\-_()]{8,}$/g,
+        "Password must contain both uppercase and lowercase letters, at least one digit, and can contain only this" +
+        "symbols !@#$%^:;.,&*?`~\\'\"+=-_")
         .required('New password is required'),
     verifyPassword: Yup.string()
-        .oneOf([Yup.ref('newPassword'), undefined], 'Password must match new password')
+        .oneOf([Yup.ref('newPassword'), undefined], 'Verify password must match new password')
         .required('Please confirm your new password'),
 });
 
@@ -42,9 +45,9 @@ const ChangePasswordForm: React.FC = () => {
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
-                    messageApi.error({ key: key, content: error.message, duration: 2 });
+                    messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
+                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);

@@ -8,6 +8,7 @@ import {TeacherWithLessons} from "../../models/teacher/TeacherWithLessons.ts";
 import {CreateTeacherSchema} from "../../models/teacher/request/CreateTeacherSchema.ts";
 import {TeacherNameSchema} from "../../models/teacher/request/TeacherNameSchema.ts";
 import {TeacherRankSchema} from "../../models/teacher/request/TeacherRankSchema.ts";
+import {StatusResponse} from "../../models/StatusResponse.ts";
 
 const BASE_URL = '/schedule/teacher';
 
@@ -49,3 +50,7 @@ export const updateTeacherName = (teacherUuid: string, body: TeacherNameSchema):
 export const updateTeacherRank = (teacherUuid: string, body: TeacherRankSchema): Promise<ApiResponse<Teacher>> => {
     return Http.patch<TeacherRankSchema>(`${BASE_URL}/${teacherUuid}/update_rank`, body);
 };
+
+export const deactivateTeacher = (teacherUuid: string): Promise<ApiResponse<StatusResponse>> => {
+    return Http.delete(`${BASE_URL}/${teacherUuid}`, {});
+}

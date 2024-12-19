@@ -43,9 +43,9 @@ const ChangeEmailForm: React.FC = () => {
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
-                    messageApi.error({ key: key, content: error.message, duration: 2 });
+                    messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
+                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);

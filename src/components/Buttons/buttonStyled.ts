@@ -6,6 +6,7 @@ export const ButtonContainerWrapper = styled.div`
     justify-content: center;
     gap: 15px;
     align-items: center;
+    text-align: center;
 `;
 
 export const StyledToggleButton = styled.button`

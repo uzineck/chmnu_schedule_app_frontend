@@ -5,7 +5,6 @@ import {LoginSchema} from "../../models/client/request/LoginSchema.ts";
 import {Token} from "../../models/client/Token.ts";
 import {TokenSchema} from "../../models/client/request/TokenSchema.ts";
 import {StatusResponse} from "../../models/StatusResponse.ts";
-import {ClientPrivate} from "../../models/client/ClientPrivate.ts";
 import {SignUpSchema} from "../../models/client/request/SignUpSchema.ts";
 
 const BASE_URL = '/clients/client';
@@ -23,6 +22,6 @@ export const logout = (): Promise<ApiResponse<StatusResponse>> => {
 }
 
 
-export const signUp = (body: SignUpSchema) : Promise<ApiResponse<ClientPrivate>> => {
+export const signUp = (body: SignUpSchema) : Promise<ApiResponse<StatusResponse>> => {
     return Http.post<SignUpSchema>(`${BASE_URL}/sign-up`, body)
 }

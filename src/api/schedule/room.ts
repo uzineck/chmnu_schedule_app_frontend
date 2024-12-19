@@ -3,6 +3,7 @@ import {ApiResponse} from "../../models/ApiResponse.ts";
 import {Room} from "../../models/room/Room.ts";
 import {RoomNumberSchema} from "../../models/room/request/RoomNumberSchema.ts";
 import {RoomDescriptionSchema} from "../../models/room/request/RoomDescriptionSchema.ts";
+import {StatusResponse} from "../../models/StatusResponse.ts";
 
 
 const BASE_URL = '/schedule/room';
@@ -22,4 +23,8 @@ export const updateRoomNumber = (roomUuid: string, body: RoomNumberSchema): Prom
 
 export const updateRoomDescription = (roomUuid: string, body: RoomDescriptionSchema): Promise<ApiResponse<Room>> => {
     return Http.patch<RoomDescriptionSchema >(`${BASE_URL}/${roomUuid}/update_description`, body);
+}
+
+export const deleteRoom = (roomUuid: string): Promise<ApiResponse<StatusResponse>> => {
+    return Http.delete(`${BASE_URL}/${roomUuid}`, {});
 }

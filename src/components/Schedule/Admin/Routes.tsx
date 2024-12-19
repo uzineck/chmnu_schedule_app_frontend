@@ -1,18 +1,22 @@
 import ProtectedRoute from "../../Routers/ProtectedRouter.tsx";
 import {ClientRole} from "../../../models/enums/ClientRole.ts";
-import AdminPanel from "./AdminPanel.tsx";
 import AdminGroupScreen from "./AdminGroupScreen.tsx";
+import {roomFormRoutes} from "./Room/Routes.tsx";
+import {subjectFormRoutes} from "./Subject/Routes.tsx";
+import {teacherFormRoutes} from "./Teacher/Routes.tsx";
+import {clientFormRoutes} from "./Client/Routes.tsx";
+import {groupFormRoutes} from "./Group/Routes.tsx";
 
 export const adminRoutes = [
     {
         path: "admin",
         children: [
-            { index: true, element: <ProtectedRoute role={ClientRole.ADMIN}><AdminPanel/></ProtectedRoute> },
+            { index: true, element: <ProtectedRoute role={ClientRole.ADMIN}><></></ProtectedRoute> },
             {
-                path: "schedule",
+                path: "manage",
                 children: [
                     {
-                        path: "manage",
+                        path: "schedule",
                         children: [
                             {
                                 path: "group",
@@ -22,8 +26,14 @@ export const adminRoutes = [
                                 ]
                             },
                         ]
-                    }
-                ]}
+                    },
+                    ...clientFormRoutes,
+                    ...groupFormRoutes,
+                    ...teacherFormRoutes,
+                    ...subjectFormRoutes,
+                    ...roomFormRoutes,
+                ],
+            },
         ],
     },
 ];
