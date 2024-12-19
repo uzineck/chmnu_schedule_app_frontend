@@ -1,7 +1,7 @@
 import ClientCard from "../Client/ClientCard.tsx";
 import SignUp from "./Forms/SignUp.tsx";
 
-export const clientFormRoutes = [
+export const clientFormRoutes =[
     {
         path: "client",
         element: <ClientCard />,

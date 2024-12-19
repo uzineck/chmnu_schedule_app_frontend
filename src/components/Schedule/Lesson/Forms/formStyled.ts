@@ -62,6 +62,11 @@ export const FormSearchContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 1rem;
+    
+    > *{
+        flex-shrink: 0;
+        max-width: 80%;
+    }
 `;
 
 export const FormLessonTypeContainer = styled.div`

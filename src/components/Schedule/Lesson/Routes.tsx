@@ -4,26 +4,18 @@ import AddLesson from "./Actions/AddLesson.tsx";
 import EditLesson from "./Forms/EditLesson.tsx";
 import DeleteLesson from "./Actions/DeleteLesson.tsx";
 import UpdateLesson from "./Actions/UpdateLesson.tsx";
-
+import {Outlet} from "react-router-dom";
 
 export const lessonRoutes = [
-    { path: "lesson/create", element: <ProtectedRoute><CreateLesson /></ProtectedRoute> },
-    { path: "lesson/:lessonUuid/add", element: <ProtectedRoute><AddLesson /></ProtectedRoute> },
-    { path: "lesson/:lessonUuid/edit", element: <ProtectedRoute><EditLesson /></ProtectedRoute> },
-    { path: "lesson/:lessonUuid/delete", element: <ProtectedRoute><DeleteLesson /></ProtectedRoute> },
-    { path: "lesson/:oldLessonUuid/update/:newLessonUuid", element: <ProtectedRoute><UpdateLesson /></ProtectedRoute> },
+    {
+        path: "lesson",
+        element: <ProtectedRoute><Outlet /></ProtectedRoute>,
+        children: [
+            { path: "create", element: <CreateLesson /> },
+            { path: ":lessonUuid/add", element: <AddLesson /> },
+            { path: ":lessonUuid/edit", element: <EditLesson /> },
+            { path: ":lessonUuid/delete", element: <DeleteLesson /> },
+            { path: ":oldLessonUuid/update/:newLessonUuid", element: <UpdateLesson /> },
+        ],
+    },
 ];
-
-// export const lessonRoutes = [
-//     {
-//         path: "lesson",
-//         children: [
-//             { index: true, element:  <ProtectedRoute /> },
-//             { path: "create", element: <CreateLesson /> },
-//             { path: ":lessonUuid/add", element: <AddLesson /> },
-//             { path: ":lessonUuid/edit", element: <EditLesson /> },
-//             { path: ":lessonUuid/delete", element: <DeleteLesson /> },
-//             { path: ":oldLessonUuid/update/:newLessonUuid", element: <UpdateLesson /> },
-//         ],
-//     },
-// ];

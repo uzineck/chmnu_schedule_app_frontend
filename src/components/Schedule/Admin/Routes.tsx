@@ -6,12 +6,13 @@ import {subjectFormRoutes} from "./Subject/Routes.tsx";
 import {teacherFormRoutes} from "./Teacher/Routes.tsx";
 import {clientFormRoutes} from "./Client/Routes.tsx";
 import {groupFormRoutes} from "./Group/Routes.tsx";
+import {Outlet} from "react-router-dom";
 
 export const adminRoutes = [
     {
         path: "admin",
+        element: <ProtectedRoute role={ClientRole.ADMIN}><Outlet /></ProtectedRoute>,
         children: [
-            { index: true, element: <ProtectedRoute role={ClientRole.ADMIN}><></></ProtectedRoute> },
             {
                 path: "manage",
                 children: [
