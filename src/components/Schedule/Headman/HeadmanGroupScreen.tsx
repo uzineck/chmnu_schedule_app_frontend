@@ -100,9 +100,9 @@ const HeadmanGroupScreen = () => {
     return (
         <ScheduleScreen>
             {contextHolder}
+            <Title text={data ? data.number : ''} />
             <ScheduleScreenControls>
                 <ScheduleButtonContainer>
-                    <Title text={data ? data.number : ''} />
                     {data?.has_subgroups ? (
                         <ButtonContainer
                             options={[

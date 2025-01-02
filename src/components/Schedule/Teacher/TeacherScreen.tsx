@@ -6,7 +6,12 @@ import TeacherSchedule from "./TeacherSchedule.tsx";
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 import {useTime} from "../Context/hooks/useTime.ts";
 import {useSchedule} from "../Context/hooks/useSchedule.ts";
-import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
+import {
+    ScheduleButtonContainer,
+    ScheduleScreen,
+    ScheduleScreenControls,
+    ScheduleScreenSearchContainer
+} from "../scheduleScreenStyled.ts";
 
 const TeacherScreen = () => {
     const { teacherUuid } = useParams<{ teacherUuid: string }>();
@@ -86,11 +91,13 @@ const TeacherScreen = () => {
     return (
         <ScheduleScreen>
             <ScheduleScreenControls>
-                <TeacherSearch
-                    onTeacherSelect={handleTeacherSelect}
-                    onTeacherListFetched={handleTeacherListFetched}
-                    selectedTeacher={selectedTeacherOption}
-                />
+                <ScheduleScreenSearchContainer>
+                    <TeacherSearch
+                        onTeacherSelect={handleTeacherSelect}
+                        onTeacherListFetched={handleTeacherListFetched}
+                        selectedTeacher={selectedTeacherOption}
+                    />
+                </ScheduleScreenSearchContainer>
                 <ScheduleButtonContainer>
                     <ButtonContainer
                         options={[

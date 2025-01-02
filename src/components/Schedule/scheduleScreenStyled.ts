@@ -10,18 +10,26 @@ export const ScheduleScreen = styled.div`
 
 export const ScheduleScreenControls = styled.div`
     display: flex;
-    align-items: center; /* Vertically center Group/Teacher Search and buttons container */
-    gap: 16px; /* Space between Group/Teacher Search and the button containers */
-    justify-content: center; /* Center all items horizontally */
+    align-items: center; /* Align items to the start of the container */
+    justify-content: center; /* Distribute space between children */
+    width: 40%; /* Ensure it spans the full width */
 
-    > *{
-        flex-shrink: 0;
-        max-width: 66%;
+    > * {
+        flex-shrink: 0; /* Prevent items from shrinking */
     }
 `;
 
+export const ScheduleScreenSearchContainer = styled.div`
+    flex-basis: 40%; /* Take up 33% of the width */
+    max-width: 45%; /* Prevent it from growing larger than 33% */
+    flex-shrink: 0; /* Prevent it from shrinking */
+`;
+
 export const ScheduleButtonContainer = styled.div`
+    flex-basis: 33%; /* Take up the remaining 66% */
+    max-width: 100%; /* Allow it to grow as needed */
+    flex-grow: 1; /* Let it grow to fill available space */
     display: flex;
-    flex-direction: column; /* Stack the buttons vertically */
-    gap: 8px; /* Space between the two ButtonContainer components */
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 8px; /* Space between buttons */
 `;

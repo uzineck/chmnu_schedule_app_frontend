@@ -7,7 +7,12 @@ import { Group } from "../../../models/group/Group.ts";
 import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
 import {useTime} from "../Context/hooks/useTime.ts";
 import {useSchedule} from "../Context/hooks/useSchedule.ts";
-import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
+import {
+    ScheduleButtonContainer,
+    ScheduleScreen,
+    ScheduleScreenControls,
+    ScheduleScreenSearchContainer
+} from "../scheduleScreenStyled.ts";
 
 const GroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
@@ -118,11 +123,13 @@ const GroupScreen = () => {
     return (
         <ScheduleScreen>
             <ScheduleScreenControls>
+                <ScheduleScreenSearchContainer>
                     <GroupSearch
                         onGroupSelect={handleGroupSelect}
                         onGroupListFetched={handleGroupListFetched}
                         selectedGroup={selectedGroup}
                     />
+                </ScheduleScreenSearchContainer>
                     <ScheduleButtonContainer>
                         {selectedGroup?.has_subgroups ? (
                             <ButtonContainer

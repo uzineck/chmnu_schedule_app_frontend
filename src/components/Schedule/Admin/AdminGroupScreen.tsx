@@ -8,7 +8,12 @@ import GroupSearch from "../Group/GroupSearch.tsx";
 import GroupSchedule from "../Group/GroupSchedule.tsx";
 import { useSchedule } from "../Context/hooks/useSchedule.ts";
 import { message } from "antd";
-import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
+import {
+    ScheduleButtonContainer,
+    ScheduleScreen,
+    ScheduleScreenControls,
+    ScheduleScreenSearchContainer
+} from "../scheduleScreenStyled.ts";
 
 const AdminGroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
@@ -149,11 +154,13 @@ const AdminGroupScreen = () => {
         <ScheduleScreen>
             {contextHolder}
             <ScheduleScreenControls>
-                <GroupSearch
-                    onGroupSelect={handleGroupSelect}
-                    onGroupListFetched={handleGroupListFetched}
-                    selectedGroup={group}
-                />
+                <ScheduleScreenSearchContainer>
+                    <GroupSearch
+                        onGroupSelect={handleGroupSelect}
+                        onGroupListFetched={handleGroupListFetched}
+                        selectedGroup={group}
+                    />
+                </ScheduleScreenSearchContainer>
                 <ScheduleButtonContainer>
                     {group?.has_subgroups ? (
                         <ButtonContainer
