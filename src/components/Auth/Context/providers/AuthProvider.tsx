@@ -6,13 +6,12 @@ import {AuthContext} from "../AuthContext.ts";
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [client, setClient] = useState<ClientPrivate | null>(null);
-    const [loading, setLoading] = useState(true); // Add loading state
+    const [loading, setLoading] = useState(true);
 
     const logoutProp = useCallback(() => {
         setIsLoggedIn(false);
         setClient(null);
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
     }, []);
 
     const fetchClientInfo = useCallback(async () => {
@@ -37,11 +36,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, [fetchClientInfo]);
 
-    const loginProp = useCallback((accessToken: string, refreshToken: string) => {
+    const loginProp = useCallback((accessToken: string) => {
         setIsLoggedIn(true);
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-
         fetchClientInfo();
     }, [fetchClientInfo]);
 

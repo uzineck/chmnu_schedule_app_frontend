@@ -43,7 +43,7 @@ const Login = () => {
                     email: values.email,
                     password: values.password,
                 });
-                loginProp(response.data.access_token, response.data.refresh_token);
+                loginProp(response.data.access_token);
                 navigate("/", {
                     state: { successMessage: "Logged in successfully!" },
                 });

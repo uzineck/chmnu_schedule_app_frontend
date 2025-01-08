@@ -1,12 +1,12 @@
 import Http from "../index.ts";
 import {ApiResponse} from "../../models/ApiResponse.ts";
-import {ClientWithToken} from "../../models/client/ClientWithToken.ts";
 import {UpdatePasswordSchema} from "../../models/client/request/UpdatePasswordSchema.ts";
 import {UpdateCredentialsSchema} from "../../models/client/request/UpdateCredentialsSchema.ts";
 import {UpdateEmailSchema} from "../../models/client/request/UpdateEmailSchema.ts";
 import {StatusResponse} from "../../models/StatusResponse.ts";
 import {ClientPrivate} from "../../models/client/ClientPrivate.ts";
 import {UpdateClientRoleSchema} from "../../models/client/request/UpdateClientRoleSchema.ts";
+import {ClientWithToken} from "../../models/client/ClientWithToken.ts";
 
 const BASE_URL = '/clients/client';
 

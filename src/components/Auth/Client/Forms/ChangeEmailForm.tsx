@@ -37,7 +37,7 @@ const ChangeEmailForm: React.FC = () => {
                     new_email: values.email,
                     password: values.password,
                 });
-                loginProp(response.data.access_token, response.data.refresh_token)
+                loginProp(response.data.access_token)
                 navigate('/profile', {
                     state: { successMessage: 'Email changed successfully' },
                 });

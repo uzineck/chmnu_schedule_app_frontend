@@ -1,6 +1,5 @@
 import {ApiCallError, ApiLoginError} from "./errors.ts";
 import { updateAccessToken } from "./client/auth.ts";
-import { TokenSchema } from "../models/client/request/TokenSchema.ts";
 
 const DOMAIN = `${import.meta.env.VITE_API_DOMAIN}`;
 const API = `${DOMAIN}/api`;
@@ -37,22 +36,11 @@ let tokenRefreshPromise: Promise<void> | null = null;
 
 const refreshAccessToken = async (): Promise<void> => {
 	if (!tokenRefreshPromise) {
-		const refreshToken = localStorage.getItem("refreshToken");
-		if (!refreshToken) {
-
-			clearTokens();
-			throw new ApiLoginError("Please log in again.");
-		}
-
 		tokenRefreshPromise = (async () => {
 			try {
-				const data: TokenSchema = { token: refreshToken };
-				const newToken = await updateAccessToken(data);
-
-
+				const newToken = await updateAccessToken();
 				localStorage.setItem("accessToken", newToken.data.access_token);
 			} catch {
-
 				clearTokens();
 				throw new ApiLoginError("Please log in again.");
 			} finally {
@@ -70,7 +58,6 @@ const refreshAccessToken = async (): Promise<void> => {
 
 const clearTokens = () => {
 	localStorage.removeItem("accessToken");
-	localStorage.removeItem("refreshToken");
 };
 
 const handleResponse = async (
