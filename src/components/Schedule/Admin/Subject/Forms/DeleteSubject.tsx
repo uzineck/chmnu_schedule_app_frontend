@@ -15,7 +15,7 @@ import {deleteSubject} from "../../../../../api/schedule/subject.ts";
 import SubjectSearch from "../../../Subject/SubjectSearch.tsx";
 
 const DeleteSubjectValidationSchema = Yup.object().shape({
-    subject_uuid: Yup.string().required("Subject is required"),
+    subject_uuid: Yup.string().required("Дисципліна обов'язкова"),
 });
 
 const DeleteSubject = () => {
@@ -30,19 +30,19 @@ const DeleteSubject = () => {
         },
         validationSchema: DeleteSubjectValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Deleting subject...' });
+            messageApi.loading({ key: key, content: 'Завнтаження...' });
             try {
-                const response = await deleteSubject(values.subject_uuid);
+                await deleteSubject(values.subject_uuid);
                 navigate("/admin/manage/subject", { state:
                         {
-                            successMessage: response.data.status
+                            successMessage: "Дані успішно видалено"
                         }
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -61,7 +61,7 @@ const DeleteSubject = () => {
 
             {/* Subject Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="subject_uuid">Subject</FormLabel>
+                <FormLabel htmlFor="subject_uuid">Дисципліна</FormLabel>
                 <SubjectSearch
                     onSubjectSelect={handleSubjectSelect}
                     onSubjectListFetched={()=>{}}
@@ -74,7 +74,7 @@ const DeleteSubject = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Deleting Subject...' : 'Delete Subject'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Видалити дисципліну'}
             </SubmitButton>
         </FormCard>
     );

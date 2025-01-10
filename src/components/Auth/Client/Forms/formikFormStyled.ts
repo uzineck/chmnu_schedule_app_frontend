@@ -10,12 +10,29 @@ export const FormCard = styled.form`
     flex-direction: column;
     margin: 0 auto;
     background-color: #fff;
+
+    @media (max-width: 768px) {
+        max-width: 100%;
+        padding: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 1rem;
+    }
 `;
 
 export const FormSubmit = styled.form`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    @media (max-width: 768px) {
+        gap: 0.4rem;
+    }
+
+    @media (max-width: 480px) {
+        gap: 0.3rem;
+    }
 `;
 
 export const FormInputGroup = styled.div`
@@ -23,6 +40,16 @@ export const FormInputGroup = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     margin-bottom: 1rem;
+
+    @media (max-width: 768px) {
+        gap: 0.4rem;
+        margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+        gap: 0.3rem;
+        margin-bottom: 0.6rem;
+    }
 `;
 
 export const FormLabel = styled.label`
@@ -30,6 +57,14 @@ export const FormLabel = styled.label`
     color: #333;
     font-size: 0.9rem;
     text-align: left;
+
+    @media (max-width: 768px) {
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.8rem;
+    }
 `;
 
 export const FormInput = styled.input`
@@ -46,6 +81,16 @@ export const FormInput = styled.input`
         outline: none;
         border-color: #7f00ff;
         box-shadow: 0 0 8px rgba(127, 0, 255, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.9rem;
+        padding: 0.6rem;
     }
 `;
 
@@ -65,6 +110,16 @@ export const SelectInput = styled.select`
         border-color: #7f00ff;
         box-shadow: 0 0 8px rgba(127, 0, 255, 0.3);
     }
+
+    @media (max-width: 768px) {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+    }
 `;
 
 export const ErrorMessage = styled.div`
@@ -72,6 +127,14 @@ export const ErrorMessage = styled.div`
     font-size: 0.875rem;
     text-align: left;
     margin-bottom: 0;
+
+    @media (max-width: 768px) {
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.8rem;
+    }
 `;
 
 export const SubmitButton = styled.button`
@@ -93,5 +156,15 @@ export const SubmitButton = styled.button`
     &:disabled {
         background-color: #b19cd9;
         cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.9rem;
+        padding: 0.6rem;
     }
 `;

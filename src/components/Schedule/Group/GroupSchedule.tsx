@@ -26,7 +26,7 @@ const GroupSchedule = ({ groupUuid, subgroup, is_even, isEditable }: GroupSchedu
 
     useEffect(() => {
         if (isLoading) {
-            messageApi.loading({ key: 'loading', content: 'Loading...' });
+            messageApi.loading({ key: 'loading', content: 'Завантаження...' });
         }
         else {
             messageApi.destroy('loading')

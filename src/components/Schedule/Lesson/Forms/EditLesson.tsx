@@ -4,7 +4,7 @@ import { message } from "antd";
 import {Subject} from "../../../../models/subject/Subject.ts";
 import {Teacher} from "../../../../models/teacher/Teacher.ts";
 import {Room} from "../../../../models/room/Room.ts";
-import {LessonType} from "../../../../models/enums/LessonType.ts";
+import {LessonType, lessonTypeOptionsUa} from "../../../../models/enums/LessonType.ts";
 import {LessonSchema} from "../../../../models/lesson/request/LessonSchema.ts";
 import {ApiCallError} from "../../../../api/errors.ts";
 import SubjectSearch from "../../Subject/SubjectSearch.tsx";
@@ -52,15 +52,15 @@ const EditLesson = () => {
 
     const handleUpdateLesson = async () => {
         if (!selectedSubject || !selectedTeacher || !selectedRoom) {
-            messageApi.warning({key: key, content:"Please fill in all fields", duration: 3});
+            messageApi.warning({key: key, content:"Заповніть усі поля", duration: 3});
             return;
         }
         if (!lesson || !lesson.uuid) {
-            messageApi.error({key: key, content:"Lesson data is not available.", duration: 3});
+            messageApi.error({key: key, content:"Дані про пару відсутні", duration: 3});
             return;
         }
         if (!day || !ordinaryNumber){
-            messageApi.error({key: key, content:"Timeslot data is not available", duration: 3});
+            messageApi.error({key: key, content:"Дані про дату та час проведення відсутні", duration: 3});
             return;
         }
 
@@ -82,7 +82,7 @@ const EditLesson = () => {
 
         try {
             setIsUpdating(true);
-            messageApi.loading({ content: "Updating lesson...", key: key });
+            messageApi.loading({ content: "Завантаження...", key: key });
             const response = await updateLesson(lesson.uuid, lessonData);
 
             const oldLesson = response.data.old_lesson;
@@ -91,14 +91,14 @@ const EditLesson = () => {
             setLesson(oldLesson)
             setLessonUuid(newLessonUuid);
 
-            messageApi.success({ content: "Lesson updated successfully!", key: key });
+            messageApi.success({ content: "Пара успішно оновлена", key: key });
 
             navigate(`/lesson/${oldLesson.uuid}/update/${newLessonUuid}`);
         } catch (error) {
             if (error instanceof ApiCallError) {
                 messageApi.error({ key: key, content: error.message, duration: 3 });
             } else {
-                messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
             }
         } finally {
             setIsUpdating(false);
@@ -113,17 +113,20 @@ const EditLesson = () => {
         <FormPage>
             {contextHolder}
             <MediumFormDiv>
-                <FormTitle>Update Lesson</FormTitle>
+                <FormTitle>Оновити пару</FormTitle>
                 <FormContainer>
                     <FormSearchContainer>
                         <FormLessonTypeContainer>
-                            Lesson Type:
+                            Тип заняття:
                             <FormSelect
                                 value={selectedLessonType}
                                 onChange={(e) => setSelectedLessonType(e.target.value as LessonType)}
                             >
-                                <option value={LessonType.LECTURE}>Lecture</option>
-                                <option value={LessonType.PRACTICE}>Practice</option>
+                                {lessonTypeOptionsUa.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
                             </FormSelect>
                         </FormLessonTypeContainer>
                         <SubjectSearch
@@ -143,9 +146,9 @@ const EditLesson = () => {
                         />
                     </FormSearchContainer>
                     <ButtonsContainer>
-                        <GoBackButton onClick={handleGoBack}>Go Back</GoBackButton>
+                        <GoBackButton onClick={handleGoBack}>Повернутися</GoBackButton>
                         <FormButton onClick={handleUpdateLesson} disabled={isUpdating}>
-                            {isUpdating ? "Updating..." : "Update Lesson"}
+                            {isUpdating ? "Завантаження..." : "Оновити"}
                         </FormButton>
                     </ButtonsContainer>
                 </FormContainer>

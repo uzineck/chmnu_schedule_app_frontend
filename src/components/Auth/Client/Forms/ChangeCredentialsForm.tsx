@@ -10,9 +10,9 @@ import {useAuth} from "../../Context/hooks/useAuth.ts";
 import {ErrorMessage, FormCard, FormInputGroup, FormInput, FormLabel, SubmitButton} from "./formikFormStyled.ts";
 
 const ChangeCredentialsSchema = Yup.object().shape({
-    lastName: Yup.string().required('Last name is required'),
-    firstName: Yup.string().required('First name is required'),
-    middleName: Yup.string().required('Middle name is required'),
+    lastName: Yup.string().required('Прізвище обов\'язкове'),
+    firstName: Yup.string().required('Ім\'я обов\'зкове'),
+    middleName: Yup.string().required('Ім\'я по-батькові обов\'язкове'),
 });
 
 const ChangeCredentialsForm: React.FC = () => {
@@ -29,7 +29,7 @@ const ChangeCredentialsForm: React.FC = () => {
         },
         validationSchema: ChangeCredentialsSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Loading...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 await updateCredentials({
                     first_name: values.firstName,
@@ -38,13 +38,13 @@ const ChangeCredentialsForm: React.FC = () => {
                 });
                 updateClient();
                 navigate('/profile', {
-                    state: { successMessage: 'Credentials changed successfully' },
+                    state: { successMessage: 'Повне ім\'я змінено успішно' },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 2 });
                 }
             } finally {
                 setSubmitting(false);
@@ -56,7 +56,7 @@ const ChangeCredentialsForm: React.FC = () => {
         <FormCard onSubmit={formik.handleSubmit}>
             {contextHolder}
             <FormInputGroup>
-                <FormLabel htmlFor="lastName">Last Name</FormLabel>
+                <FormLabel htmlFor="lastName">Прізвище</FormLabel>
                 <FormInput
                     id="lastName"
                     type="text"
@@ -68,7 +68,7 @@ const ChangeCredentialsForm: React.FC = () => {
             </FormInputGroup>
 
             <FormInputGroup>
-                <FormLabel htmlFor="firstName">First Name</FormLabel>
+                <FormLabel htmlFor="firstName">Ім'я</FormLabel>
                 <FormInput
                     id="firstName"
                     type="text"
@@ -80,7 +80,7 @@ const ChangeCredentialsForm: React.FC = () => {
             </FormInputGroup>
 
             <FormInputGroup>
-                <FormLabel htmlFor="middleName">Middle Name</FormLabel>
+                <FormLabel htmlFor="middleName">Ім'я по-батькові</FormLabel>
                 <FormInput
                     id="middleName"
                     type="text"
@@ -89,7 +89,7 @@ const ChangeCredentialsForm: React.FC = () => {
             </FormInputGroup>
 
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Saving...' : 'Save'}
+                {formik.isSubmitting ? 'Збереження...' : 'Змінити'}
             </SubmitButton>
         </FormCard>
     );

@@ -11,11 +11,11 @@ import {ErrorMessage, FormCard, FormInputGroup, FormInput, FormLabel, SubmitButt
 
 const ChangeEmailSchema = Yup.object().shape({
     email: Yup.string()
-        .email('Invalid email format')
-        .matches(/^[a-zA-Z0-9_.+-]+@gmail\.com$/g, 'Invalid email domain, use @gmail.com')
-        .required('Email is required'),
+        .email('Невірний формат email')
+        .matches(/^[a-zA-Z0-9_.+-]+@gmail\.com$/g, 'Невірний домен email, використовуйте @gmail.com')
+        .required('Email обов\'язковий'),
     password: Yup.string()
-        .required('Password is required'),
+        .required('Паролько обов\'язковий'),
 });
 
 const ChangeEmailForm: React.FC = () => {
@@ -31,7 +31,7 @@ const ChangeEmailForm: React.FC = () => {
         },
         validationSchema: ChangeEmailSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Loading...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await updateEmail({
                     new_email: values.email,
@@ -39,13 +39,13 @@ const ChangeEmailForm: React.FC = () => {
                 });
                 loginProp(response.data.access_token)
                 navigate('/profile', {
-                    state: { successMessage: 'Email changed successfully' },
+                    state: { successMessage: 'Email змінено успішно' },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -57,7 +57,7 @@ const ChangeEmailForm: React.FC = () => {
         <FormCard onSubmit={formik.handleSubmit}>
             {contextHolder}
             <FormInputGroup>
-                <FormLabel htmlFor="email">New Email</FormLabel>
+                <FormLabel htmlFor="email">Новий email</FormLabel>
                 <FormInput
                     id="email"
                     type="email"
@@ -68,7 +68,7 @@ const ChangeEmailForm: React.FC = () => {
                 )}
             </FormInputGroup>
             <FormInputGroup>
-                <FormLabel htmlFor="password">Password</FormLabel>
+                <FormLabel htmlFor="password">Пароль</FormLabel>
                 <FormInput
                     id="password"
                     type="password"
@@ -80,7 +80,7 @@ const ChangeEmailForm: React.FC = () => {
             </FormInputGroup>
 
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Saving...' : 'Save'}
+                {formik.isSubmitting ? 'Збереження...' : 'Змінити'}
             </SubmitButton>
         </FormCard>
     );

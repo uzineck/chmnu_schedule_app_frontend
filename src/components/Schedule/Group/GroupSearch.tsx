@@ -23,8 +23,8 @@ const GroupSearch = ({ onGroupSelect, selectedGroup, onGroupListFetched }: Group
                 } : null}
             onDataFetched={onGroupListFetched}
             onEntitySelect={onGroupSelect}
-            placeholder="Select Group"
-            noOptionsMessage="Group not found"
+            placeholder="Виберіть групу"
+            noOptionsMessage="Жодної групи не знайдено"
         />
     );
 };

@@ -9,16 +9,17 @@ import {
 } from "../../../Auth/Client/doubleFormStyled.ts";
 import Title from "../../../Title/Title.tsx";
 import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
-import {Subject} from "../../../../models/subject/Subject.ts";
+import {Faculty} from "../../../../models/faculty/Faculty.ts";
 
-const SubjectCard: React.FC = () => {
+const FacultyCard: React.FC = () => {
     const [selectedPage, setSelectedPage] = useState<string | null>(null);
-    const [subjectInfo, setSubjectInfo] = useState<Subject | null>(null);
+    const [facultyInfo, setFacultyInfo] = useState<Faculty | null>(null);
+
     const location = useLocation();
     const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
-        if (location.pathname === "/admin/manage/subject") {
+        if (location.pathname === "/admin/manage/faculty") {
             setSelectedPage(null);
         }
     }, [location]);
@@ -29,14 +30,13 @@ const SubjectCard: React.FC = () => {
 
     useEffect(() => {
         const successMessage = location.state?.successMessage;
-        const subjectInfo = location.state?.subjectInfo;
+        const facultyInfo = location.state?.facultyInfo;
 
         if (successMessage) {
             messageApi.success({ content: successMessage, duration: 2 });
         }
-
-        if (subjectInfo){
-            setSubjectInfo(subjectInfo);
+        if (facultyInfo){
+            setFacultyInfo(facultyInfo);
         }
     }, [location.state, messageApi]);
 
@@ -44,21 +44,22 @@ const SubjectCard: React.FC = () => {
         <DoubleFormPage>
             {contextHolder}
             <MainCard>
-                <Title text="Панель дисциплін" />
-                {subjectInfo &&
+                <Title text="Панель факультетів" />
+                {facultyInfo &&
                     (
                         <MainCardInfo>
-                            <MainCardInfoItem>Назва: {subjectInfo.title}</MainCardInfoItem>
-                            <MainCardInfoItem>Слаг: {subjectInfo.slug}</MainCardInfoItem>
+                            <MainCardInfoItem>Назва: {facultyInfo.name}</MainCardInfoItem>
+                            <MainCardInfoItem>Абривіатура: {facultyInfo.code_name}</MainCardInfoItem>
                         </MainCardInfo>
                     )
                 }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Створити дисципліну", value: "create_subject", isLink: true, to: "create_subject" },
-                            { label: "Змінити назву дисципліни", value: "update_subject_title", isLink: true, to: "update_subject_title" },
-                            { label: "Видалити дисципліну", value: "delete_subject", isLink: true, to: "delete_subject" },
+                            { label: "Створити факультет", value: "create_faculty", isLink: true, to: "create_faculty" },
+                            { label: "Змінити назву факультету", value: "update_faculty_name", isLink: true, to: "update_faculty_name" },
+                            { label: "Змінити абривіатуру факультету", value: "update_faculty_code_name", isLink: true, to: "update_faculty_code_name" },
+                            { label: "Видалити факультет", value: "delete_faculty", isLink: true, to: "delete_faculty" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}
@@ -74,4 +75,4 @@ const SubjectCard: React.FC = () => {
     );
 };
 
-export default SubjectCard;
+export default FacultyCard;

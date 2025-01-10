@@ -7,7 +7,7 @@ import {managerMenuOptions} from "./managerMenuOptions.tsx";
 
 export const menuOptions = (client: ClientPrivate | null)=>  [
     {
-        label: "Profile",
+        label: "Профіль",
         key: "profile",
         to: "/profile",
         icon: <UserOutlined />,
@@ -16,7 +16,7 @@ export const menuOptions = (client: ClientPrivate | null)=>  [
     ...(client?.role === ClientRole.ADMIN ? adminMenuOptions : []),
     ...(client?.role === ClientRole.MANAGER ? managerMenuOptions : []),
     {
-        label: "Logout",
+        label: "Вийти",
         key: "logout",
         to: "/logout",
         icon: <LogoutOutlined />,

@@ -44,22 +44,22 @@ const RoomCard: React.FC = () => {
         <DoubleFormPage>
             {contextHolder}
             <MainCard>
-                <Title text="Manage Rooms" />
+                <Title text="Панель аудиторій" />
                 {roomInfo &&
                     (
                         <MainCardInfo>
-                            <MainCardInfoItem>Number: {roomInfo.number}</MainCardInfoItem>
-                            <MainCardInfoItem>Description: {roomInfo.description}</MainCardInfoItem>
+                            <MainCardInfoItem>Номер: {roomInfo.number}</MainCardInfoItem>
+                            <MainCardInfoItem>Опис: {roomInfo.description}</MainCardInfoItem>
                         </MainCardInfo>
                     )
                 }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Create Room", value: "create_room", isLink: true, to: "create_room" },
-                            { label: "Update Room Number", value: "update_room_number", isLink: true, to: "update_room_number" },
-                            { label: "Update Room Description", value: "update_room_description", isLink: true, to: "update_room_description" },
-                            { label: "Delete Room", value: "delete_room", isLink: true, to: "delete_room" },
+                            { label: "Створити аудиторію", value: "create_room", isLink: true, to: "create_room" },
+                            { label: "Змінити номер аудиторії", value: "update_room_number", isLink: true, to: "update_room_number" },
+                            // { label: "Змінити опис аудиторії", value: "update_room_description", isLink: true, to: "update_room_description" },
+                            { label: "Видалити аудиторію", value: "delete_room", isLink: true, to: "delete_room" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}

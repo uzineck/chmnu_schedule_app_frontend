@@ -1,5 +1,5 @@
 import {Lesson} from "../../models/lesson/Lesson";
-import {Day} from "../../models/enums/Day";
+import {Day, dayIndexMap, dayOptionsUa} from "../../models/enums/Day";
 import {OrdinaryNumber} from "../../models/enums/OrdinaryNumber";
 import {getLessonTime} from "../../models/enums/LessonTime";
 import LessonDetails from "./Lesson/LessonDetail";
@@ -41,40 +41,6 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
         }
     });
 
-    const dayNames = Object.values(Day).map((day) => {
-        switch (day) {
-            case Day.MONDAY:
-                return "Monday";
-            case Day.TUESDAY:
-                return "Tuesday";
-            case Day.WEDNESDAY:
-                return "Wednesday";
-            case Day.THURSDAY:
-                return "Thursday";
-            case Day.FRIDAY:
-                return "Friday";
-            default:
-                return "";
-        }
-    });
-
-    const dayIndexMap = ((dayIndex: number) => {
-        switch (dayIndex) {
-            case 1:
-                return Day.MONDAY;
-            case 2:
-                return Day.TUESDAY;
-            case 3:
-                return Day.WEDNESDAY;
-            case 4:
-                return Day.THURSDAY;
-            case 5:
-                return Day.FRIDAY;
-            default:
-                return Day.MONDAY;
-        }
-    });
-
     const handleAddLesson = (dayIndex: number, ordNumberIndex: number) => {
         setDay(dayIndexMap(dayIndex+1));
         setOrdinaryNumber(ordNumberIndex+1);
@@ -86,13 +52,13 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
             <MatrixTable>
                 <thead>
                 <tr>
-                    <TimeCell>Time</TimeCell>
-                    {dayNames.map((dayName, index) => (
+                    <TimeCell>Час</TimeCell>
+                    {dayOptionsUa.map((dayOption, index) => (
                         <DayCell
                             key={index}
                             isCurrentDay={currentTime?.day === index + 1}
                         >
-                            {dayName}
+                            {dayOption.label}
                         </DayCell>
                     ))}
                 </tr>

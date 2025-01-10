@@ -14,9 +14,9 @@ import {getClientInfoAdmin} from "../../../../../api/client/client.ts";
 
 const GetClientInfoValidationSchema = Yup.object().shape({
     email: Yup.string()
-        .email('Invalid email format')
-        .matches(/^.*@gmail\.com$/g, 'Invalid email domain, use @gmail.com')
-        .required('Email is required'),
+        .email('Невірний формат email')
+        .matches(/^[a-zA-Z0-9_.+-]+@gmail\.com$/g, 'Невірний домен email, використовуйте @gmail.com')
+        .required('Email обов\'язковий'),
 });
 
 const GetClientInfo = () => {
@@ -30,12 +30,12 @@ const GetClientInfo = () => {
         },
         validationSchema: GetClientInfoValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Getting client info...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await getClientInfoAdmin(values.email);
                 navigate("/admin/manage/client", {
                     state: {
-                        successMessage: `Client info received successfully`,
+                        successMessage: `Дані успішно отримано`,
                         clientInfo: response.data
                     },
                 });
@@ -43,7 +43,7 @@ const GetClientInfo = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -57,7 +57,7 @@ const GetClientInfo = () => {
 
             {/* Email */}
             <FormInputGroup>
-                <FormLabel htmlFor="email">Client Email</FormLabel>
+                <FormLabel htmlFor="email">Email клієнта</FormLabel>
                 <FormInput
                     id="email"
                     type="email"
@@ -70,7 +70,7 @@ const GetClientInfo = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Getting Client Info...' : 'Get Client Info'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Отримати дані про клієнта'}
             </SubmitButton>
         </FormCard>
     );

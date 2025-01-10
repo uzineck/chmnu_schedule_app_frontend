@@ -8,16 +8,16 @@ import {ApiCallError} from "../../../../api/errors.ts";
 import {ErrorMessage, FormCard, FormInputGroup, FormInput, FormLabel, SubmitButton} from "./formikFormStyled.ts";
 
 const ChangePasswordSchema = Yup.object().shape({
-    currentPassword: Yup.string().required('Current password is required'),
+    currentPassword: Yup.string().required('Поточний пароль обов\'язковий'),
     newPassword: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
+        .min(8, 'Пароль має містити не меньше 8 символів')
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!#%^:;.,`~'"*?&+=\-_()]{8,}$/g,
-        "Password must contain both uppercase and lowercase letters, at least one digit, and can contain only this" +
-        "symbols !@#$%^:;.,&*?`~\\'\"+=-_")
-        .required('New password is required'),
+        "Пароль повинен містити як великі, так і малі літери, принаймні одну цифру, і може містити тільки такі" +
+        "символи !@#$%^:;.,&*?`~\\'\"+=-_")
+        .required('Новий пароль обов\'язковий'),
     verifyPassword: Yup.string()
-        .oneOf([Yup.ref('newPassword'), undefined], 'Verify password must match new password')
-        .required('Please confirm your new password'),
+        .oneOf([Yup.ref('newPassword'), undefined], 'Підтвердження паролю має співпадати з новим паролем')
+        .required('Підтвердження нового паролю обов\'язкове'),
 });
 
 const ChangePasswordForm: React.FC = () => {
@@ -33,7 +33,7 @@ const ChangePasswordForm: React.FC = () => {
         },
         validationSchema: ChangePasswordSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Loading...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 await updatePassword({
                     old_password: values.currentPassword,
@@ -41,13 +41,13 @@ const ChangePasswordForm: React.FC = () => {
                     verify_password: values.verifyPassword,
                 });
                 navigate('/profile', {
-                    state: { successMessage: 'Password changed successfully' },
+                    state: { successMessage: 'Пароль змінено успішно' },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -59,7 +59,7 @@ const ChangePasswordForm: React.FC = () => {
         <FormCard onSubmit={formik.handleSubmit}>
             {contextHolder}
             <FormInputGroup>
-                <FormLabel htmlFor="currentPassword">Current Password</FormLabel>
+                <FormLabel htmlFor="currentPassword">Поточний пароль</FormLabel>
                 <FormInput
                     id="currentPassword"
                     type="password"
@@ -71,7 +71,7 @@ const ChangePasswordForm: React.FC = () => {
             </FormInputGroup>
 
             <FormInputGroup>
-                <FormLabel htmlFor="newPassword">New Password</FormLabel>
+                <FormLabel htmlFor="newPassword">Новий пароль</FormLabel>
                 <FormInput
                     id="newPassword"
                     type="password"
@@ -83,7 +83,7 @@ const ChangePasswordForm: React.FC = () => {
             </FormInputGroup>
 
             <FormInputGroup>
-                <FormLabel htmlFor="verifyPassword">Verify New Password</FormLabel>
+                <FormLabel htmlFor="verifyPassword">Підтвердження нового паролю</FormLabel>
                 <FormInput
                     id="verifyPassword"
                     type="password"
@@ -95,7 +95,7 @@ const ChangePasswordForm: React.FC = () => {
             </FormInputGroup>
 
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Saving...' : 'Save'}
+                {formik.isSubmitting ? 'Збереження...' : 'Змінити'}
             </SubmitButton>
         </FormCard>
     );

@@ -23,8 +23,8 @@ const RoomSearch = ({ onRoomSelect, selectedRoom, onRoomListFetched }: RoomSearc
                 } : null}
             onEntitySelect={onRoomSelect}
             onDataFetched={onRoomListFetched}
-            placeholder="Select Room"
-            noOptionsMessage="Room not found"
+            placeholder="Виберіть аудиторію"
+            noOptionsMessage="Жодної аудиторії не знайдено"
         />
     );
 };

@@ -23,8 +23,8 @@ const FacultySearch = ({ onFacultySelect, selectedFaculty, onFacultyListFetched 
                 } : null}
             onEntitySelect={onFacultySelect}
             onDataFetched={onFacultyListFetched}
-            placeholder="Select Faculty"
-            noOptionsMessage="Faculty not found"
+            placeholder="Виберіть факультет"
+            noOptionsMessage="Жодного факультета не знайдено"
         />
     );
 };

@@ -17,11 +17,11 @@ import {FormTitle, FormPage, SmallFormDiv} from "../../Schedule/Lesson/Forms/for
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
-        .email('Invalid email format')
-        .matches(/^.*@gmail\.com$/g, 'Invalid email domain, use @gmail.com')
-        .required('Email is required'),
+        .email('Невірний формат email')
+        .matches(/^[a-zA-Z0-9_.+-]+@gmail\.com$/g, 'Невірний домен email, використовуйте @gmail.com')
+        .required('Email обов\'язковий'),
     password: Yup.string()
-        .required('Password is required'),
+        .required('Паролько обов\'язковий'),
 });
 
 const Login = () => {
@@ -37,7 +37,7 @@ const Login = () => {
         },
         validationSchema: LoginSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Loading...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await login({
                     email: values.email,
@@ -45,13 +45,13 @@ const Login = () => {
                 });
                 loginProp(response.data.access_token);
                 navigate("/", {
-                    state: { successMessage: "Logged in successfully!" },
+                    state: { successMessage: "Ви успішно увійшли у систему" },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -63,7 +63,7 @@ const Login = () => {
         <FormPage>
             {contextHolder}
             <SmallFormDiv>
-                <FormTitle>Log in to your schedule account</FormTitle>
+                <FormTitle>Увійдіть у свій акаунт розкладу</FormTitle>
                 <FormSubmit onSubmit={formik.handleSubmit}>
                     <FormInputGroup>
                         <FormLabel htmlFor="email">Email</FormLabel>
@@ -78,7 +78,7 @@ const Login = () => {
                     </FormInputGroup>
 
                     <FormInputGroup>
-                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <FormLabel htmlFor="password">Пароль</FormLabel>
                         <FormInput
                             id="password"
                             type="password"
@@ -90,7 +90,7 @@ const Login = () => {
                     </FormInputGroup>
 
                     <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                        {formik.isSubmitting ? 'Logging in...' : 'Log In'}
+                        {formik.isSubmitting ? 'Завантаження...' : 'Увійти'}
                     </SubmitButton>
                 </FormSubmit>
             </SmallFormDiv>

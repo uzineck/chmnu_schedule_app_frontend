@@ -43,23 +43,23 @@ const GroupCard: React.FC = () => {
         <DoubleFormPage>
             {contextHolder}
             <MainCard>
-                <Title text="Manage Groups" />
+                <Title text="Панель груп" />
                 {groupInfo &&
                     (
                         <MainCardInfo>
-                        <MainCardInfoItem>Group: {groupInfo.number}</MainCardInfoItem>
-                        <MainCardInfoItem>Faculty: {groupInfo.faculty.code_name}</MainCardInfoItem>
-                        <MainCardInfoItem>Headman: {groupInfo.headman.email}</MainCardInfoItem>
-                        <MainCardInfoItem>Has subgroups: {groupInfo.has_subgroups.toString()}</MainCardInfoItem>
+                        <MainCardInfoItem>Група: {groupInfo.number}</MainCardInfoItem>
+                        <MainCardInfoItem>Факультет: {groupInfo.faculty.code_name}</MainCardInfoItem>
+                        <MainCardInfoItem>Староста: {groupInfo.headman.email}</MainCardInfoItem>
+                        <MainCardInfoItem>Чи має підгрупи: {groupInfo.has_subgroups ? 'Так' : 'Ні'}</MainCardInfoItem>
                         </MainCardInfo>
                     )
                 }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Get Group Info", value: "get_group_info", isLink: true, to: "get_group_info" },
-                            { label: "Create Group", value: "create_group", isLink: true, to: "create_group" },
-                            { label: "Update Group Headman", value: "update_headman", isLink: true, to: "update_headman" },
+                            { label: "Дані групи", value: "get_group_info", isLink: true, to: "get_group_info" },
+                            { label: "Створити групу", value: "create_group", isLink: true, to: "create_group" },
+                            { label: "Змінити старосту групи", value: "update_headman", isLink: true, to: "update_headman" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}

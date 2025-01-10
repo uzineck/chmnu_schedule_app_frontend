@@ -16,10 +16,10 @@ import {
 } from "../../../../Auth/Client/Forms/formikFormStyled.ts";
 
 const CreateGroupValidationSchema = Yup.object().shape({
-    number: Yup.string().required("Group number is required"),
-    faculty_uuid: Yup.string().required("Faculty is required"),
-    headman_email: Yup.string().email('Invalid email format').required("Headman email is required"),
-    has_subgroups: Yup.boolean().required("Please select if the group has subgroups"),
+    number: Yup.string().required("Номер групи обов'язковий"),
+    faculty_uuid: Yup.string().required("Факультет обов'язковий"),
+    headman_email: Yup.string().email('Невірний формат email').required("Еmail старости обов'язковий"),
+    has_subgroups: Yup.boolean().required(""),
 });
 
 const CreateGroup = () => {
@@ -37,7 +37,7 @@ const CreateGroup = () => {
         },
         validationSchema: CreateGroupValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Creating group...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await createGroup({
                     number: values.number,
@@ -47,7 +47,7 @@ const CreateGroup = () => {
                 });
                 navigate("/admin/manage/group", { state:
                         {
-                            successMessage: `Group created successfully`,
+                            successMessage: `Група успішно створена`,
                             groupInfo: response.data,
                         }
                 });
@@ -55,7 +55,7 @@ const CreateGroup = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -73,7 +73,7 @@ const CreateGroup = () => {
             {contextHolder}
             {/* Group Number */}
             <FormInputGroup>
-                <FormLabel htmlFor="number">Group Number</FormLabel>
+                <FormLabel htmlFor="number">Номер групи</FormLabel>
                 <FormInput
                     id="number"
                     type="text"
@@ -86,7 +86,7 @@ const CreateGroup = () => {
 
             {/* Headman Email */}
             <FormInputGroup>
-                <FormLabel htmlFor="headman_email">Headman Email</FormLabel>
+                <FormLabel htmlFor="headman_email">Email старости</FormLabel>
                 <FormInput
                     id="headman_email"
                     type="email"
@@ -99,7 +99,7 @@ const CreateGroup = () => {
 
             {/* Faculty Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="faculty_uuid">Faculty</FormLabel>
+                <FormLabel htmlFor="faculty_uuid">Факультет групи</FormLabel>
                 <FacultySearch
                     onFacultySelect={handleFacultySelect}
                     onFacultyListFetched={()=>{}}
@@ -112,7 +112,7 @@ const CreateGroup = () => {
 
             {/* Has Subgroups */}
             <FormInputGroup>
-                <FormLabel htmlFor="has_subgroups">Has Subgroups</FormLabel>
+                <FormLabel htmlFor="has_subgroups">Чи є підгрупи</FormLabel>
                 <FormInput
                     id="has_subgroups"
                     type="checkbox"
@@ -125,7 +125,7 @@ const CreateGroup = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Creating Group...' : 'Create Group'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Створити групу'}
             </SubmitButton>
         </FormCard>
     );

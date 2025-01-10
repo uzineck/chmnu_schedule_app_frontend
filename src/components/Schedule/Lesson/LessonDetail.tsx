@@ -5,6 +5,7 @@ import { LessonForTeacher } from "../../../models/lesson/LessonForTeacher";
 import { Link, useNavigate } from "react-router-dom";
 import { useSchedule } from "../Context/hooks/useSchedule.ts";
 import {DoorIcon, EditIcon, GroupIcon, TeacherIcon, TrashIcon} from "./lessonIcons.tsx";
+import {LessonType, lessonTypeOptionsUa} from "../../../models/enums/LessonType.ts";
 
 function isLessonForTeacher(lesson: Lesson | LessonForTeacher): lesson is LessonForTeacher {
     return (lesson as LessonForTeacher).groups !== undefined;
@@ -15,6 +16,10 @@ interface LessonDetailsProps {
     isEditable?: boolean;
 }
 
+const getLessonTypeLabel = (type: LessonType) => {
+    const option = lessonTypeOptionsUa.find(option => option.value === type);
+    return option ? option.label : type;
+};
 
 const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = false }) => {
     const { setLessonUuid, setLesson, setDay, setOrdinaryNumber } = useSchedule();
@@ -35,7 +40,7 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
 
     return (
         <LessonDetailsContainer>
-            <LessonTypeContainer type={lesson.type}>{lesson.type}</LessonTypeContainer>
+            <LessonTypeContainer type={lesson.type}>{getLessonTypeLabel(lesson.type)}</LessonTypeContainer>
             <LessonTitle>{lesson.subject.title}</LessonTitle>
             <LessonRoom><DoorIcon /> {lesson.room.number}</LessonRoom>
             {isLessonForTeacher(lesson) ? (

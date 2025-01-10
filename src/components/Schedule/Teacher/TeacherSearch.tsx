@@ -24,8 +24,8 @@ const TeacherSearch = ({ onTeacherSelect, onTeacherListFetched,  selectedTeacher
                     label: `${selectedTeacher.last_name} ${selectedTeacher.first_name} ${selectedTeacher.middle_name}`
                 } : null}
             onDataFetched={onTeacherListFetched}
-            placeholder="Select Teacher"
-            noOptionsMessage="No teachers found"
+            placeholder="Виберіть викладача"
+            noOptionsMessage="Жодного викладача не знайдено"
 
         />
     );

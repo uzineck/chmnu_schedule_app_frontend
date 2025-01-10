@@ -7,6 +7,7 @@ import {teacherFormRoutes} from "./Teacher/Routes.tsx";
 import {clientFormRoutes} from "./Client/Routes.tsx";
 import {groupFormRoutes} from "./Group/Routes.tsx";
 import {Outlet} from "react-router-dom";
+import {facultyFormRoutes} from "./Faculty/Routes.tsx";
 
 export const adminRoutes = [
     {
@@ -33,6 +34,7 @@ export const adminRoutes = [
                     ...teacherFormRoutes,
                     ...subjectFormRoutes,
                     ...roomFormRoutes,
+                    ...facultyFormRoutes,
                 ],
             },
         ],

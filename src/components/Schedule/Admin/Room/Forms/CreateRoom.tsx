@@ -13,7 +13,7 @@ import {
 import {createRoom} from "../../../../../api/schedule/room.ts";
 
 const CreateRoomValidationSchema = Yup.object().shape({
-    number: Yup.string().required("Room number is required"),
+    number: Yup.string().required("Номер аудиторії обов'язковий"),
 });
 
 const CreateRoom = () => {
@@ -27,14 +27,14 @@ const CreateRoom = () => {
         },
         validationSchema: CreateRoomValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Creating room...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await createRoom({
                     number: values.number,
                 });
                 navigate("/admin/manage/room", { state:
                         {
-                            successMessage: `Room created successfully`,
+                            successMessage: `Аудиторія створена успішно`,
                             roomInfo: response.data,
                         }
                 });
@@ -42,7 +42,7 @@ const CreateRoom = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -55,7 +55,7 @@ const CreateRoom = () => {
             {contextHolder}
             {/* Room Number */}
             <FormInputGroup>
-                <FormLabel htmlFor="number">Room Number</FormLabel>
+                <FormLabel htmlFor="number">Номер аудиторії</FormLabel>
                 <FormInput
                     id="number"
                     type="text"
@@ -68,7 +68,7 @@ const CreateRoom = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Creating Room...' : 'Create Room'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Створити аудиторію'}
             </SubmitButton>
         </FormCard>
     );

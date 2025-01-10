@@ -15,24 +15,25 @@ import {
 } from "../../../../Auth/Client/Forms/formikFormStyled.ts";
 
 const SignUpSchema = Yup.object().shape({
-    first_name: Yup.string().required("First name is required"),
-    last_name: Yup.string().required("Last name is required"),
-    middle_name: Yup.string().required("Middle name is required"),
+    first_name: Yup.string().required('Ім\'я обов\'зкове'),
+    last_name: Yup.string().required('Прізвище обов\'язкове'),
+    middle_name: Yup.string().required('Ім\'я по-батькові обов\'язкове'),
     role: Yup.string()
-        .oneOf(Object.values(ClientRole), 'Invalid role')
-        .required('Role is required'),
+        .oneOf(Object.values(ClientRole), 'Невірно вибрана роль')
+        .required('Роль обов\'язкова'),
     email: Yup.string()
-        .email('Invalid email format')
-        .matches(/^.*@gmail\.com$/g, 'Invalid email domain, use @gmail.com')
-        .required('Email is required'),
+        .email('Невірний формат email')
+        .matches(/^[a-zA-Z0-9_.+-]+@gmail\.com$/g, 'Невірний домен email, використовуйте @gmail.com')
+        .required('Email обов\'язковий'),
     password: Yup.string()
-        .min(8, "Password is too short - should be 8 chars minimum")
+        .min(8, 'Пароль має містити не меньше 8 символів')
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!#%^:;.,`~'"*?&+=\-_()]{8,}$/g,
-            "Password must contain both uppercase and lowercase letters, at least one digit, and can contain only these symbols !@#$%^:;.,&*?`~\\'\"+=-_")
-        .required('Password is required'),
+            "Пароль повинен містити як великі, так і малі літери, принаймні одну цифру, і може містити тільки такі" +
+            "символи !@#$%^:;.,&*?`~\\'\"+=-_")
+        .required('Пароль обов\'язковий'),
     verify_password: Yup.string()
-        .oneOf([Yup.ref('password'), undefined], 'Verify password must match password')
-        .required('Please confirm password'),
+        .oneOf([Yup.ref('password'), undefined], 'Підтвердження паролю має співпадати з паролем')
+        .required('Підтвердження паролю обов\'язкове'),
 });
 
 const SignUp = () => {
@@ -52,7 +53,7 @@ const SignUp = () => {
         },
         validationSchema: SignUpSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Loading...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await signUp({
                     first_name: values.first_name,
@@ -64,13 +65,16 @@ const SignUp = () => {
                     verify_password: values.verify_password,
                 });
                 navigate("/admin/manage/client", {
-                    state: { successMessage: response.data.status },
+                    state: {
+                        successMessage: `Дані успішно опрацьовано`,
+                        clientInfo: response.data
+                    },
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -83,7 +87,7 @@ const SignUp = () => {
             {contextHolder}
                     {/* First Name */}
                     <FormInputGroup>
-                        <FormLabel htmlFor="first_name">First Name</FormLabel>
+                        <FormLabel htmlFor="first_name">Ім'я</FormLabel>
                         <FormInput
                             id="first_name"
                             type="text"
@@ -96,7 +100,7 @@ const SignUp = () => {
 
                     {/* Last Name */}
                     <FormInputGroup>
-                        <FormLabel htmlFor="last_name">Last Name</FormLabel>
+                        <FormLabel htmlFor="last_name">Прізвище</FormLabel>
                         <FormInput
                             id="last_name"
                             type="text"
@@ -109,7 +113,7 @@ const SignUp = () => {
 
                     {/* Middle Name */}
                     <FormInputGroup>
-                        <FormLabel htmlFor="middle_name">Middle Name</FormLabel>
+                        <FormLabel htmlFor="middle_name">Ім'я по-батькові</FormLabel>
                         <FormInput
                             id="middle_name"
                             type="text"
@@ -122,14 +126,14 @@ const SignUp = () => {
 
                     {/* Role */}
                     <FormInputGroup>
-                        <FormLabel htmlFor="role">Role</FormLabel>
+                        <FormLabel htmlFor="role">Роль</FormLabel>
                         <SelectInput
                             id="role"
                             {...formik.getFieldProps('role')}
                         >
-                            <option value={ClientRole.ADMIN}>Admin</option>
-                            <option value={ClientRole.MANAGER}>Manager</option>
-                            <option value={ClientRole.HEADMAN}>Headman</option>
+                            <option value={ClientRole.ADMIN}>Адмін</option>
+                            <option value={ClientRole.MANAGER}>Менеджер</option>
+                            <option value={ClientRole.HEADMAN}>Староста</option>
                         </SelectInput>
                         {formik.touched.role && formik.errors.role && (
                             <ErrorMessage>{formik.errors.role}</ErrorMessage>
@@ -151,7 +155,7 @@ const SignUp = () => {
 
                     {/* Password */}
                     <FormInputGroup>
-                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <FormLabel htmlFor="password">Пароль</FormLabel>
                         <FormInput
                             id="password"
                             type="password"
@@ -164,7 +168,7 @@ const SignUp = () => {
 
                     {/* Confirm Password */}
                     <FormInputGroup>
-                        <FormLabel htmlFor="verify_password">Confirm Password</FormLabel>
+                        <FormLabel htmlFor="verify_password">Підтвердження паролю</FormLabel>
                         <FormInput
                             id="verify_password"
                             type="password"
@@ -177,7 +181,7 @@ const SignUp = () => {
 
                     {/* Submit Button */}
                     <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                        {formik.isSubmitting ? 'Signing up...' : 'Sign Up'}
+                        {formik.isSubmitting ? 'Завантаження...' : 'Зареєструвати'}
                     </SubmitButton>
         </FormCard>
     );

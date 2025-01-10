@@ -15,8 +15,8 @@ import {Room} from "../../../../../models/room/Room.ts";
 import {updateRoomDescription} from "../../../../../api/schedule/room.ts";
 
 const UpdateRoomDescriptionValidationSchema = Yup.object().shape({
-    room_uuid: Yup.string().required("Room is required"),
-    description: Yup.string().required("New room description is required"),
+    room_uuid: Yup.string().required("Аудиторія обов'язкова"),
+    description: Yup.string().required("Опис аудиторії обов'зковий"),
 });
 
 const UpdateRoomDescription = () => {
@@ -32,7 +32,7 @@ const UpdateRoomDescription = () => {
         },
         validationSchema: UpdateRoomDescriptionValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Updating room description...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await updateRoomDescription(
                     values.room_uuid,
@@ -40,7 +40,7 @@ const UpdateRoomDescription = () => {
                 );
                 navigate("/admin/manage/room", { state:
                         {
-                            successMessage: `Room description updated successfully`,
+                            successMessage: `Опис аудиторії змінено успішно`,
                             roomInfo: response.data,
                         }
                 });
@@ -48,7 +48,7 @@ const UpdateRoomDescription = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -69,7 +69,7 @@ const UpdateRoomDescription = () => {
 
             {/* Room Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="room_uuid">Room</FormLabel>
+                <FormLabel htmlFor="room_uuid">Аудиторія</FormLabel>
                 <RoomSearch
                     onRoomSelect={handleRoomSelect}
                     onRoomListFetched={()=>{}}
@@ -82,7 +82,7 @@ const UpdateRoomDescription = () => {
 
             {/* Room Description */}
             <FormInputGroup>
-                <FormLabel htmlFor="description">New Room Description</FormLabel>
+                <FormLabel htmlFor="description">Новий опис аудиторії</FormLabel>
                 <FormInput
                     id="description"
                     type="text"
@@ -95,7 +95,7 @@ const UpdateRoomDescription = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Updating Room Description...' : 'Update Room Description'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Змінити опис аудиторії'}
             </SubmitButton>
         </FormCard>
     );

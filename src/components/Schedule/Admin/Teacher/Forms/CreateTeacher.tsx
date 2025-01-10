@@ -11,15 +11,15 @@ import {
     FormLabel, SelectInput, SubmitButton
 } from "../../../../Auth/Client/Forms/formikFormStyled.ts";
 import {createTeacher} from "../../../../../api/schedule/teacher.ts";
-import {TeacherRanks} from "../../../../../models/enums/TeacherRanks.ts";
+import {rankOptionsUa, TeacherRanks} from "../../../../../models/enums/TeacherRanks.ts";
 
 const CreateTeacherValidationSchema = Yup.object().shape({
-    first_name: Yup.string().required("First name is required"),
-    last_name: Yup.string().required("Last name is required"),
-    middle_name: Yup.string().required("Middle name is required"),
+    first_name: Yup.string().required("Ім'я обов'язкове"),
+    last_name: Yup.string().required("Прізвище обов'язкове"),
+    middle_name: Yup.string().required("Ім'я по-батькові обов'язкове"),
     rank: Yup.string()
-        .oneOf(Object.values(TeacherRanks), 'Invalid rank')
-        .required('Rank is required'),
+        .oneOf(Object.values(TeacherRanks), 'Невірне звання')
+        .required("Звання обов'язкове"),
 });
 
 const CreateTeacher = () => {
@@ -36,7 +36,7 @@ const CreateTeacher = () => {
         },
         validationSchema: CreateTeacherValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Creating teacher...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await createTeacher({
                     first_name: values.first_name,
@@ -46,7 +46,7 @@ const CreateTeacher = () => {
                 });
                 navigate("/admin/manage/teacher", { state:
                         {
-                            successMessage: `Teacher created successfully`,
+                            successMessage: `Викладач створений успішно`,
                             teacherInfo: response.data,
                         }
                 });
@@ -54,7 +54,7 @@ const CreateTeacher = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -67,7 +67,7 @@ const CreateTeacher = () => {
             {contextHolder}
             {/* First Name */}
             <FormInputGroup>
-                <FormLabel htmlFor="first_name">First Name</FormLabel>
+                <FormLabel htmlFor="first_name">Ім'я</FormLabel>
                 <FormInput
                     id="first_name"
                     type="text"
@@ -80,7 +80,7 @@ const CreateTeacher = () => {
 
             {/* Last Name */}
             <FormInputGroup>
-                <FormLabel htmlFor="last_name">Last Name</FormLabel>
+                <FormLabel htmlFor="last_name">Прізвище</FormLabel>
                 <FormInput
                     id="last_name"
                     type="text"
@@ -93,7 +93,7 @@ const CreateTeacher = () => {
 
             {/* Middle Name */}
             <FormInputGroup>
-                <FormLabel htmlFor="middle_name">Middle Name</FormLabel>
+                <FormLabel htmlFor="middle_name">По-батькові</FormLabel>
                 <FormInput
                     id="middle_name"
                     type="text"
@@ -106,16 +106,16 @@ const CreateTeacher = () => {
 
             {/* Rank */}
             <FormInputGroup>
-                <FormLabel htmlFor="rank">Rank</FormLabel>
+                <FormLabel htmlFor="rank">Звання</FormLabel>
                 <SelectInput
                     id="rank"
                     {...formik.getFieldProps('rank')}
                 >
-                    <option value={TeacherRanks.LECTURER}>LECTURER</option>
-                    <option value={TeacherRanks.SENIOR_LECTURER}>SENIOR LECTURER</option>
-                    <option value={TeacherRanks.ASSOCIATE_PROFESSOR}>ASSOCIATE PROFESSOR</option>
-                    <option value={TeacherRanks.PROFESSOR}>PROFESSOR</option>
-                    <option value={TeacherRanks.GRADUATE_STUDENT}>GRADUATE STUDENT</option>
+                    {rankOptionsUa.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
                 </SelectInput>
                 {formik.touched.rank && formik.errors.rank && (
                     <ErrorMessage>{formik.errors.rank}</ErrorMessage>
@@ -124,7 +124,7 @@ const CreateTeacher = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Creating Teacher...' : 'Create Teacher'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Створити викладача'}
             </SubmitButton>
         </FormCard>
     );

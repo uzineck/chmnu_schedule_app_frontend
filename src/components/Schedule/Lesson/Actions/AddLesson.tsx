@@ -16,9 +16,9 @@ const AddLesson = () => {
     const addLessonToGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
             navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                state: { warningMessage: "Please add lesson only from management panel" },
+                state: { warningMessage: "Створюйте пару тільки з панелі розкладу" },
             });
-            return Promise.reject({message: "Please add lesson only from management panel"});
+            return Promise.reject({message: "Створюйте пару тільки з панелі розкладу"});
         }
 
         if (client?.role === ClientRole.HEADMAN) {
@@ -32,12 +32,12 @@ const AddLesson = () => {
     const { data, error, isLoading } = useFetchData(addLessonToGroup);
 
     useEffect(() => {
-        messageApi.loading({ content: 'Loading...' });
+        messageApi.loading({ content: 'Завантаження...' });
         if (!isLoading) {
             if (data) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { successMessage: data.status },
+                    state: { successMessage: "Пара успішно додана" },
                 });
             } else if (error) {
                 messageApi.destroy();

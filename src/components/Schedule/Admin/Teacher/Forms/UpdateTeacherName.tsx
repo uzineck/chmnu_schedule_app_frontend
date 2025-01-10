@@ -15,10 +15,10 @@ import {updateTeacherName} from "../../../../../api/schedule/teacher.ts";
 import TeacherSearch from "../../../Teacher/TeacherSearch.tsx";
 
 const UpdateTeacherNameValidationSchema = Yup.object().shape({
-    teacher_uuid: Yup.string().required("Teacher is required"),
-    first_name: Yup.string().required("First name is required"),
-    last_name: Yup.string().required("Last name is required"),
-    middle_name: Yup.string().required("Middle name is required"),
+    teacher_uuid: Yup.string().required("Викладач обов'язковий"),
+    first_name: Yup.string().required("Ім'я обов'язкове"),
+    last_name: Yup.string().required("Прізвище обов'язкове"),
+    middle_name: Yup.string().required("Ім'я по-батькові обов'язкове"),
 });
 
 const UpdateTeacherName = () => {
@@ -36,7 +36,7 @@ const UpdateTeacherName = () => {
         },
         validationSchema: UpdateTeacherNameValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Updating teacher name...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await updateTeacherName(
                     values.teacher_uuid,
@@ -48,7 +48,7 @@ const UpdateTeacherName = () => {
                 );
                 navigate("/admin/manage/teacher", { state:
                         {
-                            successMessage: `Teacher Name updated successfully`,
+                            successMessage: `Дані успішно оновлено`,
                             teacherInfo: response.data,
                         }
                 });
@@ -56,7 +56,7 @@ const UpdateTeacherName = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -78,7 +78,7 @@ const UpdateTeacherName = () => {
 
             {/* Teacher Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="teacher_uuid">Teacher</FormLabel>
+                <FormLabel htmlFor="teacher_uuid">Викладач</FormLabel>
                 <TeacherSearch
                     onTeacherSelect={handleTeacherSelect}
                     onTeacherListFetched={()=>{}}
@@ -91,7 +91,7 @@ const UpdateTeacherName = () => {
 
             {/* First Name */}
             <FormInputGroup>
-                <FormLabel htmlFor="first_name">First Name</FormLabel>
+                <FormLabel htmlFor="first_name">Ім'я</FormLabel>
                 <FormInput
                     id="first_name"
                     type="text"
@@ -104,7 +104,7 @@ const UpdateTeacherName = () => {
 
             {/* Last Name */}
             <FormInputGroup>
-                <FormLabel htmlFor="last_name">Last Name</FormLabel>
+                <FormLabel htmlFor="last_name">Прізвище</FormLabel>
                 <FormInput
                     id="last_name"
                     type="text"
@@ -117,7 +117,7 @@ const UpdateTeacherName = () => {
 
             {/* Middle Name */}
             <FormInputGroup>
-                <FormLabel htmlFor="middle_name">Middle Name</FormLabel>
+                <FormLabel htmlFor="middle_name">Ім'я по-батькові</FormLabel>
                 <FormInput
                     id="middle_name"
                     type="text"
@@ -130,7 +130,7 @@ const UpdateTeacherName = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Updating Teacher Name...' : 'Update Teacher Name'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Змінити ім\'я викладача'}
             </SubmitButton>
         </FormCard>
     );

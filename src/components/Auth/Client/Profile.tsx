@@ -5,6 +5,7 @@ import {Outlet, useLocation} from "react-router-dom";
 import {useAuth} from "../Context/hooks/useAuth.ts";
 import {message} from "antd";
 import {MainCardButtons, MainCard, SecondaryCard, MainCardInfo, MainCardInfoItem, DoubleFormPage} from "./doubleFormStyled.ts";
+import {getClientRoleLabel} from "../../../models/enums/ClientRole.ts";
 
 const Profile: React.FC = () => {
     const { client } = useAuth();
@@ -34,21 +35,21 @@ const Profile: React.FC = () => {
         <DoubleFormPage>
             {contextHolder}
             <MainCard>
-                <Title text="Profile" />
+                <Title text="Профіль" />
                 <MainCardInfo>
                     <MainCardInfoItem>
-                        Name: {`${client?.last_name} ${client?.first_name} ${client?.middle_name}`}
+                        Повне ім'я: {`${client?.last_name} ${client?.first_name} ${client?.middle_name}`}
                     </MainCardInfoItem>
                     <MainCardInfoItem>Email: {client?.email}</MainCardInfoItem>
-                    <MainCardInfoItem>Role: {client?.role.toUpperCase()}</MainCardInfoItem>
+                    <MainCardInfoItem>Роль: {getClientRoleLabel(client?.role)}</MainCardInfoItem>
                 </MainCardInfo>
 
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Change Email", value: "change_email", isLink: true, to: "change_email" },
-                            { label: "Change Password", value: "change_password", isLink: true, to: "change_password" },
-                            { label: "Change Credentials", value: "change_credentials", isLink: true, to: "change_credentials" },
+                            { label: "Змінити email", value: "change_email", isLink: true, to: "change_email" },
+                            { label: "Змінити пароль", value: "change_password", isLink: true, to: "change_password" },
+                            { label: "Змінити ім'я", value: "change_credentials", isLink: true, to: "change_credentials" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}

@@ -4,7 +4,7 @@ import { message } from "antd";
 import {Subject} from "../../../../models/subject/Subject.ts";
 import {Teacher} from "../../../../models/teacher/Teacher.ts";
 import {Room} from "../../../../models/room/Room.ts";
-import {LessonType} from "../../../../models/enums/LessonType.ts";
+import {LessonType, lessonTypeOptionsUa} from "../../../../models/enums/LessonType.ts";
 import {LessonSchema} from "../../../../models/lesson/request/LessonSchema.ts";
 import {createLesson} from "../../../../api/schedule/lesson.ts";
 import {ApiCallError} from "../../../../api/errors.ts";
@@ -43,11 +43,11 @@ const CreateLesson = () => {
 
     const handleCreateLesson = async () => {
         if (!selectedSubject || !selectedTeacher || !selectedRoom) {
-            messageApi.warning({key: key, content:"Please fill in all fields", duration: 3});
+            messageApi.warning({key: key, content:"Заповніть усі поля", duration: 3});
             return;
         }
         if (!day || !ordinaryNumber){
-            messageApi.error({key: key, content:"Timeslot data is not available", duration: 3});
+            messageApi.error({key: key, content:"Дані про дату та час проведення відсутні", duration: 3});
             return;
         }
 
@@ -69,21 +69,21 @@ const CreateLesson = () => {
 
         try {
             setIsCreating(true)
-            messageApi.loading({ content: "Creating lesson...", key: key });
+            messageApi.loading({ content: "Завантаження...", key: key });
 
             const response = await createLesson(lessonData);
 
             const lessonUuid = response.data.uuid;
             setLessonUuid(lessonUuid);
 
-            messageApi.success({ content: "Lesson created successfully!", key: key });
+            messageApi.success({ content: "Пару успішно створено", key: key });
 
             navigate(`/lesson/${lessonUuid}/add`);
         } catch (error) {
             if (error instanceof ApiCallError) {
                 messageApi.error({ key: key, content: error.message, duration: 2 });
             } else {
-                messageApi.error({ key: key, content: "Unknown error occurred.", duration: 2 });
+                messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 2 });
             }
         } finally {
             setIsCreating(false);
@@ -99,17 +99,20 @@ const CreateLesson = () => {
         <FormPage>
             {contextHolder}
             <MediumFormDiv>
-                <FormTitle>Create Lesson</FormTitle>
+                <FormTitle>Створити пару</FormTitle>
                 <FormContainer>
                     <FormSearchContainer>
                         <FormLessonTypeContainer>
-                            Lesson Type:
+                            Тип заняття:
                             <FormSelect
                                 value={selectedLessonType}
                                 onChange={(e) => setSelectedLessonType(e.target.value as LessonType)}
                             >
-                                <option value={LessonType.LECTURE}>Lecture</option>
-                                <option value={LessonType.PRACTICE}>Practice</option>
+                                {lessonTypeOptionsUa.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
                             </FormSelect>
                         </FormLessonTypeContainer>
                         <SubjectSearch
@@ -129,9 +132,9 @@ const CreateLesson = () => {
                         />
                     </FormSearchContainer>
                     <ButtonsContainer>
-                        <GoBackButton onClick={handleGoBack}>Go Back</GoBackButton>
+                        <GoBackButton onClick={handleGoBack}>Повернутися</GoBackButton>
                         <FormButton onClick={handleCreateLesson} disabled={isCreating}>
-                            {isCreating ? "Creating..." : "Create Lesson"}
+                            {isCreating ? "Завантаження..." : "Створити"}
                         </FormButton>
                     </ButtonsContainer>
                 </FormContainer>

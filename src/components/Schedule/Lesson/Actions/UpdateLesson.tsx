@@ -19,9 +19,9 @@ const UpdateLesson = () => {
     const updateLessonInGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
             navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
-                state: { warningMessage: "Please update lesson only from management panel" },
+                state: { warningMessage: "Оновлюйте пару тільки з панелі розкладу" },
             });
-            return Promise.reject({message: "Please update lesson only from management panel"});
+            return Promise.reject({message: "Оновлюйте пару тільки з панелі розкладу"});
         }
         if (client?.role === ClientRole.HEADMAN) {
             return updateLessonInGroupHeadman(lessonUuid, lesson ? lesson.uuid : lessonUuid, subgroup)
@@ -33,12 +33,12 @@ const UpdateLesson = () => {
     const { data, error, isLoading } = useFetchData(updateLessonInGroup);
 
     useEffect(() => {
-        messageApi.loading({ content: 'Loading...' });
+        messageApi.loading({ content: 'Завантаження...' });
         if (!isLoading) {
             if (data) {
                 messageApi.destroy();
                 navigate(client?.role === ClientRole.HEADMAN ? "/group/manage" : "/admin/manage/schedule/group", {
-                    state: { successMessage: data.status },
+                    state: { successMessage: "Пара успішно оновлена" },
                 });
             } else if (error) {
                 messageApi.destroy();

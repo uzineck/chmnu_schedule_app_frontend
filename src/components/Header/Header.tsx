@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 import DropdownMenu from "../Menus/DropdownMenu.tsx";
-import {message} from "antd";
-import {useLocation, useNavigate} from "react-router-dom";
-import {menuOptions} from "./MenuOptions/HeaderMenuOptions.tsx";
-import {useAuth} from "../Auth/Context/hooks/useAuth.ts";
-import {HeaderButtons, HeaderContainer} from "./headerStyled.ts";
+import { message } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
+import { menuOptions } from "./MenuOptions/HeaderMenuOptions.tsx";
+import { useAuth } from "../Auth/Context/hooks/useAuth.ts";
+import { HeaderButtons, HeaderContainer, HeaderTitle, HeaderTitleWrapper } from "./headerStyled.ts";
 
 export const Header: React.FC = () => {
     const { isLoggedIn, client } = useAuth();
@@ -18,13 +18,13 @@ export const Header: React.FC = () => {
         const currentPath = location.pathname;
 
         if (currentPath.includes("/group") && !currentPath.includes("/manage")) {
-            setSelectedPage('group');
+            setSelectedPage("group");
             localStorage.setItem("lastPath", "/group");
         } else if (currentPath.includes("/teacher") && !currentPath.includes("/manage")) {
-            setSelectedPage('teacher');
+            setSelectedPage("teacher");
             localStorage.setItem("lastPath", "/teacher");
         } else if (currentPath.includes("/login")) {
-            setSelectedPage('login');
+            setSelectedPage("login");
         } else {
             setSelectedPage(null);
         }
@@ -44,10 +44,10 @@ export const Header: React.FC = () => {
         const errorMessage = location.state?.errorMessage;
 
         if (successMessage) {
-            messageApi.success({content: successMessage, duration: 2});
+            messageApi.success({ content: successMessage, duration: 2 });
         }
         if (errorMessage) {
-            messageApi.error({content: errorMessage, duration: 2});
+            messageApi.error({ content: errorMessage, duration: 2 });
         }
     }, [location.state, messageApi]);
 
@@ -68,7 +68,7 @@ export const Header: React.FC = () => {
                     <ButtonContainer
                         options={[
                             {
-                                label: "Login",
+                                label: "Увійти",
                                 value: "login",
                                 isLink: true,
                                 to: "/login",
@@ -80,19 +80,21 @@ export const Header: React.FC = () => {
                 )}
             </HeaderButtons>
 
-            <h1>CHMNU Schedule</h1>
+            <HeaderTitleWrapper>
+                <HeaderTitle>Розклад ЧНУ</HeaderTitle>
+            </HeaderTitleWrapper>
 
             <HeaderButtons>
                 <ButtonContainer
                     options={[
                         {
-                            label: "Group",
+                            label: "Розклад для студентів",
                             value: "group",
                             isLink: true,
                             to: "/group",
                         },
                         {
-                            label: "Teacher",
+                            label: "Розклад для викладачів",
                             value: "teacher",
                             isLink: true,
                             to: "/teacher",

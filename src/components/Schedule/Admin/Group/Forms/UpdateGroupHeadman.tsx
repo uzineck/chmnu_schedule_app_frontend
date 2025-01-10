@@ -16,8 +16,8 @@ import {Group} from "../../../../../models/group/Group.ts";
 import GroupSearch from "../../../Group/GroupSearch.tsx";
 
 const UpdateGroupHeadmanValidationSchema = Yup.object().shape({
-    group_uuid: Yup.string().required("Group is required"),
-    headman_email: Yup.string().email('Invalid email format').required("New Headman email is required"),
+    group_uuid: Yup.string().required("Група обов'язкова"),
+    headman_email: Yup.string().email('Невірний формат email').required("Еmail старости обов'язковий"),
 });
 
 const UpdateGroupHeadman = () => {
@@ -33,7 +33,7 @@ const UpdateGroupHeadman = () => {
         },
         validationSchema: UpdateGroupHeadmanValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Updating group headman...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await updateGroupHeadman(
                     values.group_uuid,
@@ -41,7 +41,7 @@ const UpdateGroupHeadman = () => {
                 );
                 navigate("/admin/manage/group", { state:
                         {
-                            successMessage: `Group headman updated successfully`,
+                            successMessage: `Дані успішно оновлено`,
                             groupInfo: response.data,
                         }
                 });
@@ -49,7 +49,7 @@ const UpdateGroupHeadman = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -68,7 +68,7 @@ const UpdateGroupHeadman = () => {
 
             {/* Group Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="group_uuid">Group</FormLabel>
+                <FormLabel htmlFor="group_uuid">Група</FormLabel>
                 <GroupSearch
                     onGroupSelect={handleGroupSelect}
                     onGroupListFetched={()=>{}}
@@ -81,7 +81,7 @@ const UpdateGroupHeadman = () => {
 
             {/* Headman Email */}
             <FormInputGroup>
-                <FormLabel htmlFor="headman_email">New Headman Email</FormLabel>
+                <FormLabel htmlFor="headman_email">Email нового/ої старости</FormLabel>
                 <FormInput
                     id="headman_email"
                     type="email"
@@ -94,7 +94,7 @@ const UpdateGroupHeadman = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Updating Group Headman...' : 'Update Group Headman'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Змінити старосту'}
             </SubmitButton>
         </FormCard>
     );

@@ -13,13 +13,13 @@ import {
 import {Teacher} from "../../../../../models/teacher/Teacher.ts";
 import {updateTeacherRank} from "../../../../../api/schedule/teacher.ts";
 import TeacherSearch from "../../../Teacher/TeacherSearch.tsx";
-import {TeacherRanks} from "../../../../../models/enums/TeacherRanks.ts";
+import {rankOptionsUa, TeacherRanks} from "../../../../../models/enums/TeacherRanks.ts";
 
 const UpdateTeacherRankValidationSchema = Yup.object().shape({
-    teacher_uuid: Yup.string().required("Teacher is required"),
+    teacher_uuid: Yup.string().required("Викладач обов'язковий"),
     rank: Yup.string()
-        .oneOf(Object.values(TeacherRanks), 'Invalid rank')
-        .required('Rank is required'),
+        .oneOf(Object.values(TeacherRanks), 'Невірне звання')
+        .required('Звання обов\'язкове'),
 });
 
 const UpdateTeacherRank = () => {
@@ -35,7 +35,7 @@ const UpdateTeacherRank = () => {
         },
         validationSchema: UpdateTeacherRankValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Updating teacher rank...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await updateTeacherRank(
                     values.teacher_uuid,
@@ -45,7 +45,7 @@ const UpdateTeacherRank = () => {
                 );
                 navigate("/admin/manage/teacher", { state:
                         {
-                            successMessage: `Teacher Rank updated successfully`,
+                            successMessage: `Дані успішно оновлено`,
                             teacherInfo: response.data,
                         }
                 });
@@ -53,7 +53,7 @@ const UpdateTeacherRank = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -73,7 +73,7 @@ const UpdateTeacherRank = () => {
 
             {/* Teacher Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="teacher_uuid">Teacher</FormLabel>
+                <FormLabel htmlFor="teacher_uuid">Викладач</FormLabel>
                 <TeacherSearch
                     onTeacherSelect={handleTeacherSelect}
                     onTeacherListFetched={()=>{}}
@@ -86,16 +86,16 @@ const UpdateTeacherRank = () => {
 
             {/* Rank */}
             <FormInputGroup>
-                <FormLabel htmlFor="rank">Rank</FormLabel>
+                <FormLabel htmlFor="rank">Звання</FormLabel>
                 <SelectInput
                     id="rank"
                     {...formik.getFieldProps('rank')}
                 >
-                    <option value={TeacherRanks.LECTURER}>LECTURER</option>
-                    <option value={TeacherRanks.SENIOR_LECTURER}>SENIOR LECTURER</option>
-                    <option value={TeacherRanks.ASSOCIATE_PROFESSOR}>ASSOCIATE PROFESSOR</option>
-                    <option value={TeacherRanks.PROFESSOR}>PROFESSOR</option>
-                    <option value={TeacherRanks.GRADUATE_STUDENT}>GRADUATE STUDENT</option>
+                    {rankOptionsUa.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
                 </SelectInput>
                 {formik.touched.rank && formik.errors.rank && (
                     <ErrorMessage>{formik.errors.rank}</ErrorMessage>
@@ -104,7 +104,7 @@ const UpdateTeacherRank = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Updating Teacher Rank...' : 'Update Teacher Rank'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Змінити звання викладача'}
             </SubmitButton>
         </FormCard>
     );

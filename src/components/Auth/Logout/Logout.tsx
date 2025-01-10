@@ -13,13 +13,13 @@ const Logout = () => {
     const { data, error, isLoading } = useFetchData(logout);
 
     useEffect(() => {
-        messageApi.loading({ content: 'Loading...' });
+        messageApi.loading({ content: 'Завантаження...' });
         if (!isLoading) {
             if (data) {
                 logoutProp();
                 messageApi.destroy();
                 navigate("/", {
-                    state: { successMessage: data.status },
+                    state: { successMessage: "Вихід успішно виконано" },
                 });
             } else if (error) {
                 logoutProp();

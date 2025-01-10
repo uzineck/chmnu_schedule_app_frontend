@@ -1,20 +1,30 @@
 import styled from "styled-components";
 
+// Wrapper for the schedule matrix (with horizontal scrolling on smaller screens)
 export const ScheduleMatrixWrapper = styled.div`
     margin: 10px auto;
     width: 95%;
     max-width: 100%;
-    overflow-x: auto;
+    overflow-x: auto;  /* Enable horizontal scrolling */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
     font-family: "Arial", sans-serif;
+
+    /* Make sure the wrapper does not overflow */
+    @media (max-width: 768px) {
+        width: 100%;   /* Allow it to take the full width of smaller screens */
+    }
 `;
 
 export const MatrixTable = styled.table`
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
+
+    @media (max-width: 768px) {
+        table-layout: auto;  /* Allow the table to be flexible on smaller screens */
+    }
 `;
 
 export const DayCell = styled.th<{ isCurrentDay?: boolean }>`
@@ -28,6 +38,11 @@ export const DayCell = styled.th<{ isCurrentDay?: boolean }>`
     position: sticky;
     top: 0;
     z-index: 1;
+
+    @media (max-width: 768px) {
+        font-size: 14px;  /* Smaller font size on mobile */
+        padding: 8px;     /* Adjust padding for better readability */
+    }
 `;
 
 export const TimeCell = styled.th`
@@ -36,6 +51,11 @@ export const TimeCell = styled.th`
     text-align: center;
     font-size: 14px;
     font-weight: bold;
+
+    @media (max-width: 768px) {
+        font-size: 12px;  /* Reduce font size on mobile */
+        padding: 6px;     /* Adjust padding for smaller screens */
+    }
 `;
 
 export const BodyCell = styled.td<{ hasLesson: boolean; isCurrentLesson?: boolean }>`
@@ -51,11 +71,16 @@ export const BodyCell = styled.td<{ hasLesson: boolean; isCurrentLesson?: boolea
     position: relative;
 
     ${({ isCurrentLesson }) =>
-    isCurrentLesson &&
-    `
+            isCurrentLesson &&
+            `
         background-color: #fff;
         color: #2e7d32;
-    `}
+    `};
+
+    @media (max-width: 768px) {
+    font-size: 12px;  /* Smaller font size for mobile */
+    padding: 8px;     /* Reduced padding */
+}
 `;
 
 export const CurrentLessonIndicator = styled.div`
@@ -79,22 +104,8 @@ export const AddLessonIcon = styled.div`
     &:hover {
         color: #7f00ff;
     }
-`;
 
-export const MobileResponsiveStyles = styled.div`
     @media (max-width: 768px) {
-        font-size: 12px;
-
-        ${TimeCell} {
-            padding: 8px;
-        }
-
-        ${BodyCell} {
-            height: 100px;
-        }
-    }
-
-    @media (max-width: 1024px) {
-        font-size: 14px;
+        font-size: 1rem;  /* Slightly smaller icon size on mobile */
     }
 `;

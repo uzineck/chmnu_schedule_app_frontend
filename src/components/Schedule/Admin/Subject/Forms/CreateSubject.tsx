@@ -13,7 +13,7 @@ import {
 import {createSubject} from "../../../../../api/schedule/subject.ts";
 
 const CreateSubjectValidationSchema = Yup.object().shape({
-    title: Yup.string().required("Subject title is required"),
+    title: Yup.string().required("Назва дисципліни обов'язкова"),
 });
 
 const CreateSubject = () => {
@@ -27,14 +27,14 @@ const CreateSubject = () => {
         },
         validationSchema: CreateSubjectValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Creating subject...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await createSubject({
                     title: values.title,
                 });
                 navigate("/admin/manage/subject", { state:
                         {
-                            successMessage: `Subject created successfully`,
+                            successMessage: `Дисципліну успішно створено `,
                             subjectInfo: response.data,
                         }
                 });
@@ -55,7 +55,7 @@ const CreateSubject = () => {
             {contextHolder}
             {/* Subject Title */}
             <FormInputGroup>
-                <FormLabel htmlFor="title">Subject Title</FormLabel>
+                <FormLabel htmlFor="title">Назва дисципліни</FormLabel>
                 <FormInput
                     id="title"
                     type="text"
@@ -68,7 +68,7 @@ const CreateSubject = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Creating Subject...' : 'Create Subject'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Створити дисципліну'}
             </SubmitButton>
         </FormCard>
     );

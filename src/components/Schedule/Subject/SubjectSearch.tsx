@@ -23,8 +23,8 @@ const SubjectSearch = ({ onSubjectSelect, selectedSubject, onSubjectListFetched 
                 } : null}
             onEntitySelect={onSubjectSelect}
             onDataFetched={onSubjectListFetched}
-            placeholder="Select Subject"
-            noOptionsMessage="Subject not found"
+            placeholder="Виберіть дисципліну"
+            noOptionsMessage="Жодної дисципліни не знайдено"
         />
     );
 };

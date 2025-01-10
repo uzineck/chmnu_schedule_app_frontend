@@ -16,7 +16,7 @@ import {deactivateTeacher} from "../../../../../api/schedule/teacher.ts";
 import TeacherSearch from "../../../Teacher/TeacherSearch.tsx";
 
 const DeactivateTeacherValidationSchema = Yup.object().shape({
-    teacher_uuid: Yup.string().required("Teacher is required"),
+    teacher_uuid: Yup.string().required("Викладач обов'язковий"),
 });
 
 const DeactivateTeacher = () => {
@@ -31,19 +31,19 @@ const DeactivateTeacher = () => {
         },
         validationSchema: DeactivateTeacherValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Deactivating teacher...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
-                const response = await deactivateTeacher(values.teacher_uuid);
+                await deactivateTeacher(values.teacher_uuid);
                 navigate("/admin/manage/teacher", { state:
                         {
-                            successMessage: response.data.status
+                            successMessage: "Дані успішно видалено"
                         }
                 });
             } catch (error) {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -62,7 +62,7 @@ const DeactivateTeacher = () => {
 
             {/* Teacher Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="teacher_uuid">Teacher</FormLabel>
+                <FormLabel htmlFor="teacher_uuid">Викладач</FormLabel>
                 <TeacherSearch
                     onTeacherSelect={handleTeacherSelect}
                     onTeacherListFetched={()=>{}}
@@ -75,7 +75,7 @@ const DeactivateTeacher = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Deactivating Teacher...' : 'Deactivate Teacher'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Деактивувати викладача'}
             </SubmitButton>
         </FormCard>
     );

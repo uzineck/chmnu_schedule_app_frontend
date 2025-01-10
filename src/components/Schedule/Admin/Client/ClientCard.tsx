@@ -43,21 +43,21 @@ const ClientCard: React.FC = () => {
         <DoubleFormPage>
                 {contextHolder}
             <MainCard>
-                <Title text="Manage Clients" />
+                <Title text="Панель клієнтів" />
                 {clientInfo &&
                     (
                         <MainCardInfo>
-                            <MainCardInfoItem>Full name: {clientInfo.last_name} {clientInfo.first_name} {clientInfo.middle_name}</MainCardInfoItem>
+                            <MainCardInfoItem>Повне ім'я: {clientInfo.last_name} {clientInfo.first_name} {clientInfo.middle_name}</MainCardInfoItem>
                             <MainCardInfoItem>Email: {clientInfo.email}</MainCardInfoItem>
-                            <MainCardInfoItem>Role: {clientInfo.role}</MainCardInfoItem>
+                            <MainCardInfoItem>Роль: {clientInfo.role}</MainCardInfoItem>
                         </MainCardInfo>
                     )
                 }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Get Client Info", value: "get_client_info", isLink: true, to: "get_client_info" },
-                            { label: "Create Client", value: "create_client", isLink: true, to: "create_client" },
+                            { label: "Дані про клієнта", value: "get_client_info", isLink: true, to: "get_client_info" },
+                            { label: "Зареєструвати клієнта", value: "create_client", isLink: true, to: "create_client" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}

@@ -20,10 +20,10 @@ const BaseDropDownSearch: React.FC<BaseDropDownSearchProps> =
     ({
          options,
          onChange,
-         placeholder = 'Select...',
+         placeholder = 'Виберіть...',
          value,
          isLoading=false,
-         noOptionsMessage='No options'
+         noOptionsMessage='Немає даних'
     }) => {
         return (
         <BaseDropdown>
@@ -34,7 +34,7 @@ const BaseDropDownSearch: React.FC<BaseDropDownSearchProps> =
                 placeholder={placeholder}
                 value={value}
                 isLoading={isLoading}
-                noOptionsMessage={() => isLoading ? "Loading..." : noOptionsMessage}
+                noOptionsMessage={() => isLoading ? "Завантаження..." : noOptionsMessage}
                 menuPortalTarget={document.body}
                 styles={{
                     ...customStyles,

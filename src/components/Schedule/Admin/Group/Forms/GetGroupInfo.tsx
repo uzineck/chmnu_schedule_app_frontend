@@ -15,7 +15,7 @@ import {Group} from "../../../../../models/group/Group.ts";
 import GroupSearch from "../../../Group/GroupSearch.tsx";
 
 const GetGroupInfoValidationSchema = Yup.object().shape({
-    group_uuid: Yup.string().required("Group is required"),
+    group_uuid: Yup.string().required("Група обов'язкова"),
 });
 
 const GetGroupInfo = () => {
@@ -30,12 +30,12 @@ const GetGroupInfo = () => {
         },
         validationSchema: GetGroupInfoValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Getting group info...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 const response = await getGroupInfo(values.group_uuid);
                 navigate("/admin/manage/group", { state:
                         {
-                            successMessage: `Group info received successfully`,
+                            successMessage: `Дані успішно отримано`,
                             groupInfo: response.data,
                         }
                 });
@@ -43,7 +43,7 @@ const GetGroupInfo = () => {
                 if (error instanceof ApiCallError) {
                     messageApi.error({ key: key, content: error.message, duration: 3 });
                 } else {
-                    messageApi.error({ key: key, content: "Unknown error occurred.", duration: 3 });
+                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
                 }
             } finally {
                 setSubmitting(false);
@@ -62,7 +62,7 @@ const GetGroupInfo = () => {
 
             {/* Group Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="group_uuid">Group</FormLabel>
+                <FormLabel htmlFor="group_uuid">Група</FormLabel>
                 <GroupSearch
                     onGroupSelect={handleGroupSelect}
                     onGroupListFetched={()=>{}}
@@ -75,7 +75,7 @@ const GetGroupInfo = () => {
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Getting Group Info...' : 'Get Group Info'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Отримати дані про групу'}
             </SubmitButton>
         </FormCard>
     );

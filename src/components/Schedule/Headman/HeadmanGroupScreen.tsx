@@ -73,7 +73,7 @@ const HeadmanGroupScreen = () => {
 
     useEffect(() => {
         if (isLoading) {
-            messageApi.loading({ key: 'loading', content: 'Loading...' });
+            messageApi.loading({ key: 'loading', content: 'Завантаження...' });
         }
         else {
             messageApi.destroy('loading')

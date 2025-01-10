@@ -10,30 +10,30 @@ import {
     FormInputGroup,
     FormLabel, SubmitButton
 } from "../../../../Auth/Client/Forms/formikFormStyled.ts";
-import RoomSearch from "../../../Room/RoomSearch.tsx";
-import {Room} from "../../../../../models/room/Room.ts";
-import {deleteRoom} from "../../../../../api/schedule/room.ts";
+import FacultySearch from "../../../Faculty/FacultySearch.tsx";
+import {Faculty} from "../../../../../models/faculty/Faculty.ts";
+import {deleteFaculty} from "../../../../../api/schedule/faculty.ts";
 
-const DeleteRoomValidationSchema = Yup.object().shape({
-    room_uuid: Yup.string().required("Аудиторія обов'язкова"),
+const DeleteFacultyValidationSchema = Yup.object().shape({
+    faculty_uuid: Yup.string().required("Аудиторія обов'язкова"),
 });
 
-const DeleteRoom = () => {
-    const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+const DeleteFaculty = () => {
+    const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const key = 'updatable';
 
     const formik = useFormik({
         initialValues: {
-            room_uuid: '',
+            faculty_uuid: '',
         },
-        validationSchema: DeleteRoomValidationSchema,
+        validationSchema: DeleteFacultyValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
             messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
-                await deleteRoom(values.room_uuid);
-                navigate("/admin/manage/room", { state:
+                await deleteFaculty(values.faculty_uuid);
+                navigate("/admin/manage/faculty", { state:
                         {
                             successMessage: "Дані успішно видалено"
                         }
@@ -50,34 +50,34 @@ const DeleteRoom = () => {
         },
     });
 
-    const handleRoomSelect = (room: Room | null) => {
-        setSelectedRoom(room);
-        formik.setFieldValue('room_uuid', room ? room.uuid : '');
+    const handleFacultySelect = (faculty: Faculty | null) => {
+        setSelectedFaculty(faculty);
+        formik.setFieldValue('faculty_uuid', faculty ? faculty.uuid : '');
     };
 
     return (
         <FormCard onSubmit={formik.handleSubmit}>
             {contextHolder}
 
-            {/* Room Selection */}
+            {/* faculty Selection */}
             <FormInputGroup>
-                <FormLabel htmlFor="room_uuid">Аудиторія</FormLabel>
-                <RoomSearch
-                    onRoomSelect={handleRoomSelect}
-                    onRoomListFetched={()=>{}}
-                    selectedRoom={selectedRoom}
+                <FormLabel htmlFor="faculty_uuid">Факультет</FormLabel>
+                <FacultySearch
+                    onFacultySelect={handleFacultySelect}
+                    onFacultyListFetched={()=>{}}
+                    selectedFaculty={selectedFaculty}
                 />
-                {formik.touched.room_uuid && formik.errors.room_uuid && (
-                    <ErrorMessage>{formik.errors.room_uuid}</ErrorMessage>
+                {formik.touched.faculty_uuid && formik.errors.faculty_uuid && (
+                    <ErrorMessage>{formik.errors.faculty_uuid}</ErrorMessage>
                 )}
             </FormInputGroup>
 
             {/* Submit Button */}
             <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Завантаження...' : 'Видалити аудиторію'}
+                {formik.isSubmitting ? 'Завантаження...' : 'Видалити факультет'}
             </SubmitButton>
         </FormCard>
     );
 };
 
-export default DeleteRoom;
+export default DeleteFaculty;

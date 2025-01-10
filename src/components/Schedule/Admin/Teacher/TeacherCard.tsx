@@ -43,22 +43,22 @@ const TeacherCard: React.FC = () => {
         <DoubleFormPage>
             {contextHolder}
             <MainCard>
-                <Title text="Manage Teachers" />
+                <Title text="Панель викладачів" />
                 {teacherInfo &&
                     (
                         <MainCardInfo>
-                            <MainCardInfoItem>Full name: {teacherInfo.last_name} {teacherInfo.first_name} {teacherInfo.middle_name}</MainCardInfoItem>
-                            <MainCardInfoItem>Rank: {teacherInfo.rank}</MainCardInfoItem>
+                            <MainCardInfoItem>Повне ім'я: {teacherInfo.last_name} {teacherInfo.first_name} {teacherInfo.middle_name}</MainCardInfoItem>
+                            <MainCardInfoItem>Звання: {teacherInfo.rank}</MainCardInfoItem>
                         </MainCardInfo>
                     )
                 }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Create Teacher", value: "create_teacher", isLink: true, to: "create_teacher" },
-                            { label: "Update Teacher Name", value: "update_teacher_name", isLink: true, to: "update_teacher_name" },
-                            { label: "Update Teacher Rank", value: "update_teacher_rank", isLink: true, to: "update_teacher_rank" },
-                            { label: "Deactivate Teacher", value: "deactivate_teacher", isLink: true, to: "deactivate_teacher" },
+                            { label: "Створити викладача", value: "create_teacher", isLink: true, to: "create_teacher" },
+                            { label: "Змінити ім'я викладача", value: "update_teacher_name", isLink: true, to: "update_teacher_name" },
+                            { label: "Змінити звання викладача", value: "update_teacher_rank", isLink: true, to: "update_teacher_rank" },
+                            { label: "Деактивувати викладача", value: "deactivate_teacher", isLink: true, to: "deactivate_teacher" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}
