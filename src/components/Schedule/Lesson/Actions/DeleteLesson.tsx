@@ -16,12 +16,12 @@ const DeleteLesson = () => {
 
     const deleteLessonFromGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
-            navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
+            navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                 state: { warningMessage: "Видаляйте пару тільки з панелі розкладу" },
             });
             return Promise.reject({message: "Видаляйте пару тільки з панелі розкладу"});
         }
-        if (client?.role === ClientRole.HEADMAN) {
+        if (client?.roles.includes(ClientRole.HEADMAN)) {
             return removeLessonToGroupHeadman(lessonUuid, subgroup);
         }
         else {
@@ -36,12 +36,12 @@ const DeleteLesson = () => {
         if (!isLoading) {
             if (data) {
                 messageApi.destroy();
-                navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
+                navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                     state: { successMessage: "Пара успішно видалена" },
                 });
             } else if (error) {
                 messageApi.destroy();
-                navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
+                navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                     state: { errorMessage: error },
                 });
             }

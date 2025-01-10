@@ -6,7 +6,8 @@ import {RoleContext} from "../RoleContext.ts";
 export const RoleProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { client } = useAuth();
 
-    const matchesRole = (role: ClientRole) => client?.role === role;
+    const matchesRole = (roles: ClientRole[]) =>
+        roles.some(role => client?.roles.includes(role));
 
     return (
         <RoleContext.Provider value={{ matchesRole }}>

@@ -5,7 +5,6 @@ import {UpdateCredentialsSchema} from "../../models/client/request/UpdateCredent
 import {UpdateEmailSchema} from "../../models/client/request/UpdateEmailSchema.ts";
 import {StatusResponse} from "../../models/StatusResponse.ts";
 import {ClientPrivate} from "../../models/client/ClientPrivate.ts";
-import {UpdateClientRoleSchema} from "../../models/client/request/UpdateClientRoleSchema.ts";
 import {ClientWithToken} from "../../models/client/ClientWithToken.ts";
 
 const BASE_URL = '/clients/client';
@@ -13,11 +12,6 @@ const BASE_URL = '/clients/client';
 export const getClientInfo = (): Promise<ApiResponse<ClientPrivate>> => {
     return Http.get(`${BASE_URL}/info`);
 };
-
-export const getClientInfoAdmin = (clientEmail: string): Promise<ApiResponse<ClientPrivate>> => {
-    return Http.get(`${BASE_URL}/${clientEmail}/info`);
-};
-
 
 export const updatePassword = (body: UpdatePasswordSchema): Promise<ApiResponse<StatusResponse>> => {
     return Http.patch<UpdatePasswordSchema>(`${BASE_URL}/update_password`, body);
@@ -31,6 +25,3 @@ export const updateCredentials = (body: UpdateCredentialsSchema): Promise<ApiRes
     return Http.patch<UpdateCredentialsSchema>(`${BASE_URL}/update_credentials`, body);
 };
 
-export const updateClietRole = (clientEmail: string, body: UpdateClientRoleSchema): Promise<ApiResponse<ClientPrivate>> => {
-    return Http.patch<UpdateClientRoleSchema>(`${BASE_URL}/${clientEmail}/update_role`, body);
-}

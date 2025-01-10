@@ -12,7 +12,7 @@ import {facultyFormRoutes} from "./Faculty/Routes.tsx";
 export const adminRoutes = [
     {
         path: "admin",
-        element: <ProtectedRoute role={ClientRole.ADMIN}><Outlet /></ProtectedRoute>,
+        element: <Outlet />,
         children: [
             {
                 path: "manage",
@@ -23,8 +23,8 @@ export const adminRoutes = [
                             {
                                 path: "group",
                                 children: [
-                                    { index: true, element: <AdminGroupScreen /> },
-                                    { path: ":groupUuid/lessons", element: <AdminGroupScreen />},
+                                    { index: true, element: <ProtectedRoute roles={[ClientRole.ADMIN, ClientRole.SCHEDULE_MANAGER]}><AdminGroupScreen /></ProtectedRoute>},
+                                    { path: ":groupUuid/lessons", element:<ProtectedRoute roles={[ClientRole.ADMIN, ClientRole.SCHEDULE_MANAGER]}><AdminGroupScreen /></ProtectedRoute>},
                                 ]
                             },
                         ]

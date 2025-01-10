@@ -10,6 +10,7 @@ import {
 import Title from "../../../Title/Title.tsx";
 import ButtonContainer from "../../../Buttons/ButtonContainer.tsx";
 import {ClientPrivate} from "../../../../models/client/ClientPrivate.ts";
+import {getClientRoleLabels} from "../../../../models/enums/ClientRole.ts";
 
 const ClientCard: React.FC = () => {
     const [clientInfo, setClientInfo] = useState<ClientPrivate | null>(null);
@@ -49,15 +50,16 @@ const ClientCard: React.FC = () => {
                         <MainCardInfo>
                             <MainCardInfoItem>Повне ім'я: {clientInfo.last_name} {clientInfo.first_name} {clientInfo.middle_name}</MainCardInfoItem>
                             <MainCardInfoItem>Email: {clientInfo.email}</MainCardInfoItem>
-                            <MainCardInfoItem>Роль: {clientInfo.role}</MainCardInfoItem>
+                            <MainCardInfoItem>Ролі: {getClientRoleLabels(clientInfo?.roles)}</MainCardInfoItem>
                         </MainCardInfo>
                     )
                 }
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Дані про клієнта", value: "get_client_info", isLink: true, to: "get_client_info" },
                             { label: "Зареєструвати клієнта", value: "create_client", isLink: true, to: "create_client" },
+                            { label: "Дані про клієнта", value: "get_client_info", isLink: true, to: "get_client_info" },
+                            { label: "Змінити ролі клієнта", value: "update_client_roles", isLink: true, to: "update_client_roles" },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}

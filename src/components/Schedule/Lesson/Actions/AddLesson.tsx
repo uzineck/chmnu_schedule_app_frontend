@@ -15,13 +15,13 @@ const AddLesson = () => {
 
     const addLessonToGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
-            navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
+            navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                 state: { warningMessage: "Створюйте пару тільки з панелі розкладу" },
             });
             return Promise.reject({message: "Створюйте пару тільки з панелі розкладу"});
         }
 
-        if (client?.role === ClientRole.HEADMAN) {
+        if (client?.roles.includes(ClientRole.HEADMAN)) {
             return addLessonToGroupHeadman(lessonUuid, subgroup)
         }
         else {
@@ -36,12 +36,12 @@ const AddLesson = () => {
         if (!isLoading) {
             if (data) {
                 messageApi.destroy();
-                navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
+                navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                     state: { successMessage: "Пара успішно додана" },
                 });
             } else if (error) {
                 messageApi.destroy();
-                navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
+                navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                     state: { errorMessage: error },
                 });
             }

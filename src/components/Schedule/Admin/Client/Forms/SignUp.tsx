@@ -2,8 +2,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { message } from "antd";
-import {ClientRole} from "../../../../../models/enums/ClientRole.ts";
-import {signUp} from "../../../../../api/client/auth.ts";
+import {ClientRole, clientRoleOptionsUa} from "../../../../../models/enums/ClientRole.ts";
 import {ApiCallError} from "../../../../../api/errors.ts";
 import {
     ErrorMessage, FormCard,
@@ -13,13 +12,15 @@ import {
     SelectInput,
     SubmitButton
 } from "../../../../Auth/Client/Forms/formikFormStyled.ts";
+import {signUp} from "../../../../../api/client/admin.ts";
 
 const SignUpSchema = Yup.object().shape({
     first_name: Yup.string().required('Ім\'я обов\'зкове'),
     last_name: Yup.string().required('Прізвище обов\'язкове'),
     middle_name: Yup.string().required('Ім\'я по-батькові обов\'язкове'),
-    role: Yup.string()
-        .oneOf(Object.values(ClientRole), 'Невірно вибрана роль')
+    roles: Yup.array()
+        .of(Yup.string().oneOf(Object.values(ClientRole), 'Невірно вибрана роль'))
+        .min(1, 'Має бути обрана принаймні одна роль')
         .required('Роль обов\'язкова'),
     email: Yup.string()
         .email('Невірний формат email')
@@ -49,7 +50,7 @@ const SignUp = () => {
             email: '',
             password: '',
             verify_password: '',
-            role: ClientRole.HEADMAN, // Default role
+            roles: [],
         },
         validationSchema: SignUpSchema,
         onSubmit: async (values, { setSubmitting }) => {
@@ -59,7 +60,7 @@ const SignUp = () => {
                     first_name: values.first_name,
                     last_name: values.last_name,
                     middle_name: values.middle_name,
-                    role: values.role,
+                    roles: values.roles,
                     email: values.email,
                     password: values.password,
                     verify_password: values.verify_password,
@@ -124,23 +125,32 @@ const SignUp = () => {
                         )}
                     </FormInputGroup>
 
-                    {/* Role */}
-                    <FormInputGroup>
-                        <FormLabel htmlFor="role">Роль</FormLabel>
-                        <SelectInput
-                            id="role"
-                            {...formik.getFieldProps('role')}
-                        >
-                            <option value={ClientRole.ADMIN}>Адмін</option>
-                            <option value={ClientRole.MANAGER}>Менеджер</option>
-                            <option value={ClientRole.HEADMAN}>Староста</option>
-                        </SelectInput>
-                        {formik.touched.role && formik.errors.role && (
-                            <ErrorMessage>{formik.errors.role}</ErrorMessage>
-                        )}
-                    </FormInputGroup>
+            {/* Roles */}
+            <FormInputGroup>
+                <FormLabel htmlFor="roles">Ролі</FormLabel>
+                <SelectInput
+                    id="roles"
+                    multiple
+                    value={formik.values.roles}
+                    onChange={(e) =>
+                        formik.setFieldValue(
+                            "roles",
+                            Array.from(e.target.selectedOptions, (option) => option.value)
+                        )
+                    }
+                >
+                    {clientRoleOptionsUa.map(({ value, label }) => (
+                        <option key={value} value={value}>
+                            {label}
+                        </option>
+                    ))}
+                </SelectInput>
+                {formik.touched.roles && formik.errors.roles && (
+                    <ErrorMessage>{formik.errors.roles}</ErrorMessage>
+                )}
+            </FormInputGroup>
 
-                    {/* Email */}
+            {/* Email */}
                     <FormInputGroup>
                         <FormLabel htmlFor="email">Email</FormLabel>
                         <FormInput

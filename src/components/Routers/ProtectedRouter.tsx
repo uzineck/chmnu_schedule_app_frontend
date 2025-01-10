@@ -5,11 +5,11 @@ import {useAuth} from "../Auth/Context/hooks/useAuth.ts";
 import {useRole} from "../Auth/Context/hooks/useRole.ts";
 
 interface ProtectedRouteProps {
-    role?: ClientRole;
+    roles?: ClientRole[];
     children: React.ReactElement;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ role, children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
     const { isLoggedIn } = useAuth();
     const { matchesRole } = useRole();
 
@@ -17,7 +17,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ role, children }) => {
         return <Navigate to="/login" replace />;
     }
 
-    if (role && !matchesRole(role)) {
+    if (roles && !matchesRole(roles)) {
         return <Navigate to="/unauthorized" replace />;
     }
 

@@ -18,12 +18,12 @@ const UpdateLesson = () => {
 
     const updateLessonInGroup = useCallback(() => {
         if (groupUuid==='' || lessonUuid===''){
-            navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group", {
+            navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                 state: { warningMessage: "Оновлюйте пару тільки з панелі розкладу" },
             });
             return Promise.reject({message: "Оновлюйте пару тільки з панелі розкладу"});
         }
-        if (client?.role === ClientRole.HEADMAN) {
+        if (client?.roles.includes(ClientRole.HEADMAN)) {
             return updateLessonInGroupHeadman(lessonUuid, lesson ? lesson.uuid : lessonUuid, subgroup)
         } else {
             return updateLessonInGroupAdmin(groupUuid, lessonUuid, lesson ? lesson.uuid : lessonUuid, subgroup)
@@ -37,12 +37,12 @@ const UpdateLesson = () => {
         if (!isLoading) {
             if (data) {
                 messageApi.destroy();
-                navigate(client?.role === ClientRole.HEADMAN ? "/group/manage" : "/admin/manage/schedule/group", {
+                navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                     state: { successMessage: "Пара успішно оновлена" },
                 });
             } else if (error) {
                 messageApi.destroy();
-                navigate(client?.role === ClientRole.HEADMAN ? "/group/manage" : "/admin/manage/schedule/group", {
+                navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group", {
                     state: { errorMessage: error },
                 });
             }

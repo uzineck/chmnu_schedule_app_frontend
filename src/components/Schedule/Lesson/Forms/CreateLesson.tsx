@@ -91,7 +91,7 @@ const CreateLesson = () => {
     };
 
     const handleGoBack = () => {
-        navigate(client?.role === ClientRole.HEADMAN? "/group/manage" : "/admin/manage/schedule/group");
+        navigate(client?.roles.includes(ClientRole.HEADMAN) ? "/group/manage" : "/admin/manage/schedule/group");
     };
 
 

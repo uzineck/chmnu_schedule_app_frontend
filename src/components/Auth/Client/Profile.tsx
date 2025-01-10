@@ -5,7 +5,7 @@ import {Outlet, useLocation} from "react-router-dom";
 import {useAuth} from "../Context/hooks/useAuth.ts";
 import {message} from "antd";
 import {MainCardButtons, MainCard, SecondaryCard, MainCardInfo, MainCardInfoItem, DoubleFormPage} from "./doubleFormStyled.ts";
-import {getClientRoleLabel} from "../../../models/enums/ClientRole.ts";
+import {getClientRoleLabels} from "../../../models/enums/ClientRole.ts";
 
 const Profile: React.FC = () => {
     const { client } = useAuth();
@@ -41,7 +41,7 @@ const Profile: React.FC = () => {
                         Повне ім'я: {`${client?.last_name} ${client?.first_name} ${client?.middle_name}`}
                     </MainCardInfoItem>
                     <MainCardInfoItem>Email: {client?.email}</MainCardInfoItem>
-                    <MainCardInfoItem>Роль: {getClientRoleLabel(client?.role)}</MainCardInfoItem>
+                    <MainCardInfoItem>Ролі: {getClientRoleLabels(client?.roles)}</MainCardInfoItem>
                 </MainCardInfo>
 
                 <MainCardButtons>

@@ -5,6 +5,6 @@ import HeadmanGroupScreen from "./HeadmanGroupScreen.tsx";
 export const headmanRoutes = [
     {
         path: "manage",
-        element: <ProtectedRoute role={ClientRole.HEADMAN}><HeadmanGroupScreen /></ProtectedRoute>
+        element: <ProtectedRoute roles={[ClientRole.HEADMAN]}><HeadmanGroupScreen /></ProtectedRoute>
     }
 ];

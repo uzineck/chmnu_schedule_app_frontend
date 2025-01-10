@@ -57,8 +57,8 @@ const GroupCard: React.FC = () => {
                 <MainCardButtons>
                     <ButtonContainer
                         options={[
-                            { label: "Дані групи", value: "get_group_info", isLink: true, to: "get_group_info" },
                             { label: "Створити групу", value: "create_group", isLink: true, to: "create_group" },
+                            { label: "Дані групи", value: "get_group_info", isLink: true, to: "get_group_info" },
                             { label: "Змінити старосту групи", value: "update_headman", isLink: true, to: "update_headman" },
                         ]}
                         selectedValue={selectedPage}
