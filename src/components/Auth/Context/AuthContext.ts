@@ -4,7 +4,7 @@ import {createContext} from "react";
 interface AuthContextProps {
     isLoggedIn: boolean;
     client: ClientPrivate | null;
-    loginProp: (accessToken: string) => void;
+    loginProp: (accessToken: string) => Promise<void>;
     logoutProp: () => void;
     updateClient: () => void;
 }

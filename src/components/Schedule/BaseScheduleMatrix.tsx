@@ -28,7 +28,7 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false}: BaseScheduleMatrixPr
     const { isEvenWeek, setOrdinaryNumber, setDay } = useSchedule();
     const navigate = useNavigate();
 
-    const matrix: (Lesson | LessonForTeacher)[][][] = Array.from({ length: 6 }, () => Array(5).fill(null));
+    const matrix: (Lesson | LessonForTeacher)[][][] = Array.from({ length: 7 }, () => Array(5).fill(null));
 
     lessons?.forEach((lesson) => {
         const dayIndex = Object.values(Day).indexOf(lesson.timeslot.day);

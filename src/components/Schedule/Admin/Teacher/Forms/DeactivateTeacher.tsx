@@ -36,7 +36,7 @@ const DeactivateTeacher = () => {
                 await deactivateTeacher(values.teacher_uuid);
                 navigate("/admin/manage/teacher", { state:
                         {
-                            successMessage: "Дані успішно видалено"
+                            successMessage: "Викладача успішно деактивовано"
                         }
                 });
             } catch (error) {

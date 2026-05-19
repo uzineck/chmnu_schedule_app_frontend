@@ -43,7 +43,7 @@ const Login = () => {
                     email: values.email,
                     password: values.password,
                 });
-                loginProp(response.data.access_token);
+                await loginProp(response.data.access_token);
                 navigate("/", {
                     state: { successMessage: "Ви успішно увійшли у систему" },
                 });

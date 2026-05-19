@@ -35,24 +35,20 @@ const getAuthorizationHeaders = (): Record<string, string> => {
 let tokenRefreshPromise: Promise<void> | null = null;
 
 const refreshAccessToken = async (): Promise<void> => {
-	if (!tokenRefreshPromise) {
-		tokenRefreshPromise = (async () => {
-			try {
-				const newToken = await updateAccessToken();
-				localStorage.setItem("accessToken", newToken.data.access_token);
-			} catch {
-				clearTokens();
-				throw new ApiLoginError("Please log in again.");
-			} finally {
-
-				tokenRefreshPromise = null;
-			}
-		})();
+	if (tokenRefreshPromise) {
+		return tokenRefreshPromise;
 	}
-	else {
-		throw new ApiLoginError("Please log in again.");
-	}
-
+	tokenRefreshPromise = (async () => {
+		try {
+			const newToken = await updateAccessToken();
+			localStorage.setItem("accessToken", newToken.data.access_token);
+		} catch {
+			clearTokens();
+			throw new ApiLoginError("Please log in again.");
+		} finally {
+			tokenRefreshPromise = null;
+		}
+	})();
 	return tokenRefreshPromise;
 };
 

@@ -12,6 +12,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoggedIn(false);
         setClient(null);
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("lastPath");
+        localStorage.removeItem("lastGroupUuid");
+        localStorage.removeItem("lastSubgroup");
+        localStorage.removeItem("lastTeacherUuid");
+        localStorage.removeItem("lastWeekType");
     }, []);
 
     const fetchClientInfo = useCallback(async () => {
@@ -36,10 +41,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, [fetchClientInfo]);
 
-    const loginProp = useCallback((accessToken: string) => {
-        setIsLoggedIn(true);
+    const loginProp = useCallback(async (accessToken: string) => {
         localStorage.setItem("accessToken", accessToken);
-        fetchClientInfo();
+        await fetchClientInfo();
     }, [fetchClientInfo]);
 
     const updateClient = useCallback(() => {

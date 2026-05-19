@@ -30,7 +30,7 @@ const DeleteSubject = () => {
         },
         validationSchema: DeleteSubjectValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Завнтаження...' });
+            messageApi.loading({ key: key, content: 'Завантаження...' });
             try {
                 await deleteSubject(values.subject_uuid);
                 navigate("/admin/manage/subject", { state:
