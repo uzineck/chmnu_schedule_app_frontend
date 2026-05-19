@@ -24,7 +24,7 @@ export const MainCard = styled.div`
     max-width: 600px;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px ${({theme}) => theme.colors.shadow};
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -94,7 +94,7 @@ export const MainCardInfo = styled.div`
 
 export const MainCardInfoItem = styled.div`
     font-size: 1rem;
-    color: #555;
+    color: ${({theme}) => theme.colors.textSecondary};
     margin-bottom: 0.5rem;
 
     @media (max-width: 768px) {

@@ -3,12 +3,12 @@ import {LessonType} from "../../../models/enums/LessonType.ts";
 
 // Main lesson container
 export const LessonDetailsContainer = styled.div`
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    background-color: ${({theme}) => theme.colors.surfaceAlt};
+    border: 1px solid ${({theme}) => theme.colors.border};
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px ${({theme}) => theme.colors.shadow};
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@ export const LessonDetailsContainer = styled.div`
 
     &:hover {
         transform: translateY(-1px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 12px ${({theme}) => theme.colors.shadowStrong};
     }
 
     @media (max-width: 768px) {
@@ -34,15 +34,15 @@ export const LessonDetailsContainer = styled.div`
 export const LessonTypeContainer = styled.div<{ type: string }>`
     font-size: 0.75rem;
     padding: 4px 8px;
-    color: white;
+    color: ${({theme}) => theme.colors.textInverse};
     border-radius: 12px;
     text-transform: uppercase;
     font-weight: bold;
     text-align: center;
-    background-color: ${(props) => {
-        if (props.type === LessonType.LECTURE) return "#5c6bc0";
-        if (props.type === LessonType.PRACTICE) return "#800080";
-        return "#ccc";
+    background-color: ${({type, theme}) => {
+        if (type === LessonType.LECTURE) return theme.colors.accentBlueViolet;
+        if (type === LessonType.PRACTICE) return theme.colors.accentDeepPurple;
+        return theme.colors.borderInput;
     }};
 
     @media (max-width: 768px) {
@@ -60,7 +60,7 @@ export const LessonTypeContainer = styled.div<{ type: string }>`
 export const LessonTitle = styled.div`
     font-size: 0.91rem;
     font-weight: bold;
-    color: #333;
+    color: ${({theme}) => theme.colors.textPrimary};
     text-align: center;
 
     @media (max-width: 768px) {
@@ -79,7 +79,7 @@ export const LessonRoom = styled.div`
     justify-content: center;
     gap: 6px;
     font-size: 0.95rem;
-    color: #444;
+    color: ${({theme}) => theme.colors.textTertiary};
 
     @media (max-width: 768px) {
         font-size: 0.9rem;
@@ -99,7 +99,7 @@ export const LessonTeacher = styled.div`
     justify-content: center;
     gap: 6px;
     font-size: 0.95rem;
-    color: #444;
+    color: ${({theme}) => theme.colors.textTertiary};
 
     a {
         color: inherit;
@@ -107,7 +107,7 @@ export const LessonTeacher = styled.div`
     }
 
     a:hover {
-        color: #7f00ff;
+        color: ${({theme}) => theme.colors.primaryFocusRing};
         text-decoration: none;
     }
 
@@ -130,7 +130,7 @@ export const LessonGroups = styled.div`
     flex-wrap: wrap;
     gap: 6px;
     font-size: 0.95rem;
-    color: #666;
+    color: ${({theme}) => theme.colors.textSubtle};
 
     a {
         color: inherit;
@@ -138,7 +138,7 @@ export const LessonGroups = styled.div`
     }
 
     a:hover {
-        color: #7f00ff;
+        color: ${({theme}) => theme.colors.primaryFocusRing};
         text-decoration: none;
     }
 
@@ -175,11 +175,11 @@ export const Icon = styled.svg<{ size?: string, color?: string }>`
     font-size: ${(props) => props.size || '1.1rem'};
     margin-right: 0;
     vertical-align: center;
-    color: ${(props) => props.color || '#888'};
+    color: ${({color, theme}) => color || theme.colors.textDim};
     flex-shrink: 0;
 
     &:hover {
-        color: #7f00ff;
+        color: ${({theme}) => theme.colors.primaryFocusRing};
     }
 
     @media (max-width: 768px) {

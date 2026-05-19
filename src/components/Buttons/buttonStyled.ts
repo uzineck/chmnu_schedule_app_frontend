@@ -11,8 +11,8 @@ export const ButtonContainerWrapper = styled.div`
 
 export const StyledToggleButton = styled.button`
     padding: 10px 20px;
-    background-color: mediumpurple;
-    color: white;
+    background-color: ${({theme}) => theme.colors.primary};
+    color: ${({theme}) => theme.colors.textInverse};
     text-decoration: none;
     border: none;
     border-radius: 5px;
@@ -21,21 +21,21 @@ export const StyledToggleButton = styled.button`
     transition: background-color 0.3s ease, transform 0.2s ease;
 
     &:hover {
-        background-color: darkviolet;
+        background-color: ${({theme}) => theme.colors.primaryHover};
         transform: scale(1.05);
     }
 
     &.selected {
-        background-color: white;
-        color: #800080;
-        border: 2px solid #800080;
+        background-color: ${({theme}) => theme.colors.surface};
+        color: ${({theme}) => theme.colors.accentDeepPurple};
+        border: 2px solid ${({theme}) => theme.colors.accentDeepPurple};
     }
 `;
 
 export const StyledLinkButton = styled(Link)`
     padding: 10px 20px;
-    background-color: mediumpurple;
-    color: white;
+    background-color: ${({theme}) => theme.colors.primary};
+    color: ${({theme}) => theme.colors.textInverse};
     text-decoration: none;
     border-radius: 5px;
     font-size: 16px;
@@ -43,13 +43,13 @@ export const StyledLinkButton = styled(Link)`
     cursor: pointer;
 
     &:hover {
-        background-color: darkviolet;
+        background-color: ${({theme}) => theme.colors.primaryHover};
         transform: scale(1.05);
     }
 
     &.selected {
-        background-color: white;
-        color: #800080;
-        border: 2px solid #800080;
+        background-color: ${({theme}) => theme.colors.surface};
+        color: ${({theme}) => theme.colors.accentDeepPurple};
+        border: 2px solid ${({theme}) => theme.colors.accentDeepPurple};
     }
 `;

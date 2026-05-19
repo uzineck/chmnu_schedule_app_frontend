@@ -7,8 +7,8 @@ export const ScheduleMatrixWrapper = styled.div`
     max-width: 100%;
     overflow-x: auto;  /* Enable horizontal scrolling */
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px ${({theme}) => theme.colors.shadow};
+    background-color: ${({theme}) => theme.colors.surfaceAlt};
     font-family: "Arial", sans-serif;
 
     /* Make sure the wrapper does not overflow */
@@ -28,8 +28,8 @@ export const MatrixTable = styled.table`
 `;
 
 export const DayCell = styled.th<{ isCurrentDay?: boolean }>`
-    background-color: ${({ isCurrentDay }) => (isCurrentDay ? "#e3f2fd" : "#f0f4f8")};
-    color: ${({ isCurrentDay }) => (isCurrentDay ? "#1565c0" : "#333")};
+    background-color: ${({ isCurrentDay, theme }) => (isCurrentDay ? theme.colors.infoBackground : theme.colors.surfaceSubtle)};
+    color: ${({ isCurrentDay, theme }) => (isCurrentDay ? theme.colors.info : theme.colors.textPrimary)};
     padding: 10px;
     text-align: center;
     font-size: 16px;
@@ -46,8 +46,8 @@ export const DayCell = styled.th<{ isCurrentDay?: boolean }>`
 `;
 
 export const TimeCell = styled.th`
-    background-color: #f0f4f8;
-    color: #333;
+    background-color: ${({theme}) => theme.colors.surfaceSubtle};
+    color: ${({theme}) => theme.colors.textPrimary};
     text-align: center;
     font-size: 14px;
     font-weight: bold;
@@ -63,18 +63,18 @@ export const BodyCell = styled.td<{ hasLesson: boolean; isCurrentLesson?: boolea
     text-align: center;
     vertical-align: top;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid ${({theme}) => theme.colors.border};
     transition: background-color 0.3s ease;
     font-size: 14px;
-    background-color: ${({ hasLesson }) => (hasLesson ? "#fff" : "#f9f9f9")};
-    color: ${({ hasLesson }) => (hasLesson ? "#333" : "#999")};
+    background-color: ${({ hasLesson, theme }) => (hasLesson ? theme.colors.surface : theme.colors.surfaceAlt)};
+    color: ${({ hasLesson, theme }) => (hasLesson ? theme.colors.textPrimary : theme.colors.textMuted)};
     position: relative;
 
-    ${({ isCurrentLesson }) =>
+    ${({ isCurrentLesson, theme }) =>
             isCurrentLesson &&
             `
-        background-color: #fff;
-        color: #2e7d32;
+        background-color: ${theme.colors.surface};
+        color: ${theme.colors.success};
     `};
 
     @media (max-width: 768px) {
@@ -89,7 +89,7 @@ export const CurrentLessonIndicator = styled.div`
     right: 2px;
     width: 10px;
     height: 10px;
-    background-color: #2e7d32;
+    background-color: ${({theme}) => theme.colors.success};
     border-radius: 50%;
     pointer-events: none;
 `;
@@ -98,11 +98,11 @@ export const AddLessonIcon = styled.div`
     font-size: 1.1rem;
     margin-right: 0;
     vertical-align: middle;
-    color: #888;
+    color: ${({theme}) => theme.colors.textDim};
     cursor: pointer;
 
     &:hover {
-        color: #7f00ff;
+        color: ${({theme}) => theme.colors.primaryFocusRing};
     }
 
     @media (max-width: 768px) {

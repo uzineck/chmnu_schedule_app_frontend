@@ -7,6 +7,7 @@ import {Faculty} from "../../../../../models/faculty/Faculty.ts";
 import FacultySearch from "../../../Faculty/FacultySearch.tsx";
 import {createGroup} from "../../../../../api/schedule/group.ts";
 import {ApiCallError} from "../../../../../api/errors.ts";
+import styled from "styled-components";
 import {
     ErrorMessage,
     FormCard,
@@ -14,6 +15,23 @@ import {
     FormInputGroup,
     FormLabel, SubmitButton
 } from "../../../../Auth/Client/Forms/formikFormStyled.ts";
+
+const CheckboxRow = styled.label`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: ${({theme}) => theme.colors.textPrimary};
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    input[type='checkbox'] {
+        width: 1.1rem;
+        height: 1.1rem;
+        cursor: pointer;
+        accent-color: ${({theme}) => theme.colors.primaryFocusRing};
+    }
+`;
 
 const CreateGroupValidationSchema = Yup.object().shape({
     number: Yup.string().required("Номер групи обов'язковий"),
@@ -112,12 +130,17 @@ const CreateGroup = () => {
 
             {/* Has Subgroups */}
             <FormInputGroup>
-                <FormLabel htmlFor="has_subgroups">Чи є підгрупи</FormLabel>
-                <FormInput
-                    id="has_subgroups"
-                    type="checkbox"
-                    {...formik.getFieldProps('has_subgroups')}
-                />
+                <CheckboxRow>
+                    <input
+                        id="has_subgroups"
+                        type="checkbox"
+                        name="has_subgroups"
+                        checked={formik.values.has_subgroups}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    Чи є підгрупи
+                </CheckboxRow>
                 {formik.touched.has_subgroups && formik.errors.has_subgroups && (
                     <ErrorMessage>{formik.errors.has_subgroups}</ErrorMessage>
                 )}

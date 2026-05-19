@@ -1,23 +1,36 @@
 import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
-    display: flex;
-    flex-wrap: wrap; /* Забезпечує адаптацію для вузьких екранів */
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    background-color: mediumpurple;
-    color: white;
-    padding: clamp(8px, 2vw, 10px) clamp(10px, 4vw, 20px);
-    box-shadow: 0 4px 6px rgba(250, 50, 200, 0.3);
+    background-color: ${({theme}) => theme.colors.primary};
+    color: ${({theme}) => theme.colors.textInverse};
+    padding-top: calc(clamp(8px, 2vw, 10px) + env(safe-area-inset-top));
+    padding-right: calc(clamp(10px, 4vw, 20px) + env(safe-area-inset-right));
+    padding-bottom: clamp(8px, 2vw, 10px);
+    padding-left: calc(clamp(10px, 4vw, 20px) + env(safe-area-inset-left));
+    box-shadow: 0 4px 6px ${({theme}) => theme.colors.shadowAccent};
     transition: background-color 0.3s, padding 0.3s;
 
+    & > *:nth-child(1) {
+        justify-self: start;
+    }
+    & > *:nth-child(3) {
+        justify-self: end;
+    }
+
     @media (max-width: 768px) {
+        display: flex;
         flex-direction: column;
         align-items: center;
     }
 
     @media (max-width: 480px) {
-        padding: 8px 15px;
+        padding-top: calc(8px + env(safe-area-inset-top));
+        padding-right: calc(15px + env(safe-area-inset-right));
+        padding-bottom: 8px;
+        padding-left: calc(15px + env(safe-area-inset-left));
     }
 `;
 
@@ -61,7 +74,7 @@ export const HeaderTitleWrapper = styled.div`
 
 export const HeaderTitle = styled.h1`
     font-size: clamp(2rem, 5vw, 3rem);
-    color: white;
+    color: ${({theme}) => theme.colors.textInverse};
     margin: 0;
     padding: 0.5rem 0;
 

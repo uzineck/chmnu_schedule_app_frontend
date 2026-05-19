@@ -56,54 +56,56 @@ export const Header: React.FC = () => {
     };
 
     return (
-        <HeaderContainer>
+        <>
             {contextHolder}
-            <HeaderButtons>
-                {isLoggedIn ? (
-                    <DropdownMenu
-                        menuName={`${client?.last_name} ${client?.first_name.charAt(0)}. ${client?.middle_name.charAt(0)}.`}
-                        options={menuOptions(client)}
-                    />
-                ) : (
+            <HeaderContainer>
+                <HeaderButtons>
+                    {isLoggedIn ? (
+                        <DropdownMenu
+                            menuName={`${client?.last_name} ${client?.first_name.charAt(0)}. ${client?.middle_name.charAt(0)}.`}
+                            options={menuOptions(client)}
+                        />
+                    ) : (
+                        <ButtonContainer
+                            options={[
+                                {
+                                    label: "Увійти",
+                                    value: "login",
+                                    isLink: true,
+                                    to: "/login",
+                                },
+                            ]}
+                            selectedValue={selectedPage}
+                            onChange={handleButtonClick}
+                        />
+                    )}
+                </HeaderButtons>
+
+                <HeaderTitleWrapper>
+                    <HeaderTitle>Розклад ЧНУ</HeaderTitle>
+                </HeaderTitleWrapper>
+
+                <HeaderButtons>
                     <ButtonContainer
                         options={[
                             {
-                                label: "Увійти",
-                                value: "login",
+                                label: "Розклад для студентів",
+                                value: "group",
                                 isLink: true,
-                                to: "/login",
+                                to: "/group",
+                            },
+                            {
+                                label: "Розклад для викладачів",
+                                value: "teacher",
+                                isLink: true,
+                                to: "/teacher",
                             },
                         ]}
                         selectedValue={selectedPage}
                         onChange={handleButtonClick}
                     />
-                )}
-            </HeaderButtons>
-
-            <HeaderTitleWrapper>
-                <HeaderTitle>Розклад ЧНУ</HeaderTitle>
-            </HeaderTitleWrapper>
-
-            <HeaderButtons>
-                <ButtonContainer
-                    options={[
-                        {
-                            label: "Розклад для студентів",
-                            value: "group",
-                            isLink: true,
-                            to: "/group",
-                        },
-                        {
-                            label: "Розклад для викладачів",
-                            value: "teacher",
-                            isLink: true,
-                            to: "/teacher",
-                        },
-                    ]}
-                    selectedValue={selectedPage}
-                    onChange={handleButtonClick}
-                />
-            </HeaderButtons>
-        </HeaderContainer>
+                </HeaderButtons>
+            </HeaderContainer>
+        </>
     );
 };

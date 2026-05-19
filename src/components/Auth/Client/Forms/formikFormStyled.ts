@@ -5,11 +5,11 @@ export const FormCard = styled.form`
     max-width: 400px;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px ${({theme}) => theme.colors.shadow};
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: ${({theme}) => theme.colors.surface};
 
     @media (max-width: 768px) {
         max-width: 100%;
@@ -54,7 +54,7 @@ export const FormInputGroup = styled.div`
 
 export const FormLabel = styled.label`
     font-weight: 500;
-    color: #333;
+    color: ${({theme}) => theme.colors.textPrimary};
     font-size: 0.9rem;
     text-align: left;
 
@@ -71,16 +71,16 @@ export const FormInput = styled.input`
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 0;
-    border: 1px solid #ddd;
+    border: 1px solid ${({theme}) => theme.colors.border};
     border-radius: 5px;
     font-size: 1rem;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 3px ${({theme}) => theme.colors.shadow};
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
     &:focus {
         outline: none;
-        border-color: #7f00ff;
-        box-shadow: 0 0 8px rgba(127, 0, 255, 0.3);
+        border-color: ${({theme}) => theme.colors.primaryFocusRing};
+        box-shadow: 0 0 8px ${({theme}) => theme.colors.primaryFocusShadow};
     }
 
     @media (max-width: 768px) {
@@ -98,17 +98,17 @@ export const SelectInput = styled.select`
     width: 100%;
     padding: 0.75rem;
     margin-bottom: 0;
-    border: 1px solid #ddd;
+    border: 1px solid ${({theme}) => theme.colors.border};
     border-radius: 5px;
     font-size: 1rem;
-    background-color: #fff;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: ${({theme}) => theme.colors.surface};
+    box-shadow: inset 0 1px 3px ${({theme}) => theme.colors.shadow};
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
     &:focus {
         outline: none;
-        border-color: #7f00ff;
-        box-shadow: 0 0 8px rgba(127, 0, 255, 0.3);
+        border-color: ${({theme}) => theme.colors.primaryFocusRing};
+        box-shadow: 0 0 8px ${({theme}) => theme.colors.primaryFocusShadow};
     }
 
     @media (max-width: 768px) {
@@ -123,7 +123,7 @@ export const SelectInput = styled.select`
 `;
 
 export const ErrorMessage = styled.div`
-    color: #ff4d4d;
+    color: ${({theme}) => theme.colors.error};
     font-size: 0.875rem;
     text-align: left;
     margin-bottom: 0;
@@ -140,8 +140,8 @@ export const ErrorMessage = styled.div`
 export const SubmitButton = styled.button`
     width: 100%;
     padding: 0.75rem;
-    background-color: mediumpurple;
-    color: white;
+    background-color: ${({theme}) => theme.colors.primary};
+    color: ${({theme}) => theme.colors.textInverse};
     border: none;
     border-radius: 5px;
     font-size: 1rem;
@@ -149,12 +149,12 @@ export const SubmitButton = styled.button`
     transition: background-color 0.3s ease-in-out, transform 0.2s ease;
 
     &:hover {
-        background-color: darkviolet;
+        background-color: ${({theme}) => theme.colors.primaryHover};
         transform: scale(1.05);
     }
 
     &:disabled {
-        background-color: #b19cd9;
+        background-color: ${({theme}) => theme.colors.primaryDisabled};
         cursor: not-allowed;
     }
 

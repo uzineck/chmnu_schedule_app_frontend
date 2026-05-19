@@ -22,12 +22,12 @@ export const MediumFormDiv = styled.div`
     max-width: 600px;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px ${({theme}) => theme.colors.shadow};
     display: flex;
     flex-direction: column;
     gap: 2rem;
     margin: 4.5rem auto;
-    background-color: #fff;
+    background-color: ${({theme}) => theme.colors.surface};
 
     @media (max-width: 768px) {
         max-width: 500px;
@@ -46,12 +46,12 @@ export const SmallFormDiv = styled.div`
     max-width: 400px;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px ${({theme}) => theme.colors.shadow};
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin: 2rem auto;
-    background-color: #fff;
+    background-color: ${({theme}) => theme.colors.surface};
 
     @media (max-width: 768px) {
         max-width: 350px;
@@ -68,7 +68,7 @@ export const SmallFormDiv = styled.div`
 export const FormTitle = styled.h2`
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333;
+    color: ${({theme}) => theme.colors.textPrimary};
     text-align: center;
 
     @media (max-width: 768px) {
@@ -97,9 +97,9 @@ export const FormContainer = styled.div`
 export const FormSelect = styled.select`
     padding: 0.5rem;
     font-size: 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid ${({theme}) => theme.colors.borderInput};
     border-radius: 5px;
-    background-color: #fff;
+    background-color: ${({theme}) => theme.colors.surface};
 
     @media (max-width: 768px) {
         font-size: 0.9rem;
@@ -153,20 +153,20 @@ export const FormLessonTypeContainer = styled.div`
 export const FormButton = styled.button`
     padding: 0.75rem;
     font-size: 1rem;
-    background-color: mediumpurple;
-    color: white;
+    background-color: ${({theme}) => theme.colors.primary};
+    color: ${({theme}) => theme.colors.textInverse};
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 
     &:disabled {
-        background-color: #b19cd9;
+        background-color: ${({theme}) => theme.colors.primaryDisabled};
         cursor: not-allowed;
     }
 
     &:hover {
-        background-color: darkviolet;
+        background-color: ${({theme}) => theme.colors.primaryHover};
         transform: scale(1.05);
     }
 
@@ -197,12 +197,12 @@ export const ButtonsContainer = styled.div`
 `;
 
 export const GoBackButton = styled(FormButton)`
-    background-color: #f5f5f5;
-    color: #333;
-    border: 1px solid #ccc;
+    background-color: ${({theme}) => theme.colors.surfaceMuted};
+    color: ${({theme}) => theme.colors.textPrimary};
+    border: 1px solid ${({theme}) => theme.colors.borderInput};
 
     &:hover {
-        background-color: #e0e0e0;
+        background-color: ${({theme}) => theme.colors.surfaceMutedHover};
     }
 
     @media (max-width: 768px) {
