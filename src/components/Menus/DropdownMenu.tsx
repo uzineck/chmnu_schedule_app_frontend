@@ -35,7 +35,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ menuName, options }) => {
     return (
         <ConfigProvider theme={theme}>
             <Space wrap>
-                <Dropdown menu={menuProps} trigger={['click']}>
+                <Dropdown
+                    menu={menuProps}
+                    trigger={['click']}
+                    placement="bottomRight"
+                    arrow
+                >
                     <Button>
                         <Space>
                             {menuName}

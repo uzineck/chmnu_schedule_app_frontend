@@ -7,16 +7,16 @@ export const ScheduleScreen = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    padding: 8px;
+    padding: 6px 8px 8px;
 
     ${media.up('phone')} {
         gap: 16px;
-        padding: 12px;
+        padding: 8px 12px 12px;
     }
 
     ${media.up('tablet')} {
         gap: 24px;
-        padding: 16px;
+        padding: 8px 16px 16px;
     }
 `;
 

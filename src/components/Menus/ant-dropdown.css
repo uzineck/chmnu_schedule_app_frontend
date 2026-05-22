@@ -1,16 +1,62 @@
-/* Remove underline from dropdown menu items */
+/* Dropdown popup — clearly reads as a card */
+.ant-dropdown .ant-dropdown-menu {
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    min-width: 240px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 16px 40px rgba(0, 0, 0, 0.16);
+}
+
+/* Individual dropdown items — full-width rows, slight rounding only */
 .ant-dropdown-menu-item {
-    text-decoration: none; /* Remove underline */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+    text-decoration: none;
+    padding: 12px 18px !important;
+    margin: 0 !important;
+    border-radius: 4px !important;
+    font-weight: 500;
+    line-height: 1.4;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* Optional: Remove underline from link items inside dropdown */
-.ant-dropdown-menu-item a {
-    text-decoration: none !important; /* Remove underline from links */
-    color: inherit; /* Inherit the color of the parent item */
+/* Item icon — bigger, more visible */
+.ant-dropdown-menu-item .ant-dropdown-menu-item-icon,
+.ant-dropdown-menu-item .anticon {
+    margin-right: 12px;
+    font-size: 20px;
+    transition: color 0.15s ease;
+    vertical-align: middle;
 }
 
-/* Hover styles for dropdown links */
+.ant-dropdown-menu-item svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Links inside items inherit colour so hover state propagates */
+.ant-dropdown-menu-item a,
+.ant-dropdown-menu-item .dropdown-item-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+}
+
 .ant-dropdown-menu-item a:hover {
-    text-decoration: none; /* Ensure no underline appears */
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Hover: full-row fill, white text + icons */
+.ant-dropdown-menu-item:hover,
+.ant-dropdown-menu-item:hover .anticon,
+.ant-dropdown-menu-item:hover a,
+.ant-dropdown-menu-item:hover .dropdown-item-link {
+    color: #fff !important;
+}
+
+/* Arrow connector colour — match popup bg */
+.ant-dropdown .ant-dropdown-arrow::before {
+    background: #fff;
 }

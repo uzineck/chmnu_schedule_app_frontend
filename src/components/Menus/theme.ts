@@ -2,22 +2,46 @@ import {theme as appTheme} from "../../styles/theme.ts";
 
 export const theme = {
     token: {
-        colorText: appTheme.colors.textInverse, // Text color of dropdown button
-        colorPrimary: appTheme.colors.primary, // Hover background color of dropdown button
+        colorText: appTheme.colors.textPrimary,
+        colorPrimary: appTheme.colors.primary,
+        fontFamily: "'Manrope', system-ui, sans-serif",
     },
     components: {
         Dropdown: {
-            colorText: appTheme.colors.primary, // Text color of dropdown menu items.
-            colorTextHover: appTheme.colors.textInverse, // Text color of dropdown menu items on hover
-            borderRadius: 5, // Border radius of dropdown menu items
-            colorBgElevated: appTheme.colors.surface, // Background color of dropdown menu
-            borderRadiusLG: 5, // Border radius of dropdown button
-            borderRadiusSM: 5, // Border radius of dropdown menu items
-
+            colorText: appTheme.colors.textPrimary,
+            colorTextHover: appTheme.colors.textInverse,
+            colorBgElevated: appTheme.colors.surface,
+            controlItemBgHover: appTheme.colors.primary,
+            controlItemBgActive: appTheme.colors.primary,
+            controlItemBgActiveHover: appTheme.colors.primaryHover,
+            borderRadius: 12,
+            borderRadiusLG: 12,
+            borderRadiusSM: 8,
+            boxShadowSecondary: `0 8px 24px ${appTheme.colors.shadowStrong}`,
+            paddingBlock: 10,
+            controlPaddingHorizontal: 16,
+            fontSize: 15,
+            lineHeight: 1.4,
         },
         Button: {
-            borderRadius: 5, // Border radius of the dropdown button
-            colorBgContainer: appTheme.colors.primary, // Background color of dropdown button
+            borderRadius: 999,
+            colorBgContainer: 'transparent',
+            colorBorder: 'transparent',
+            colorText: appTheme.colors.textPrimary,
+            defaultColor: appTheme.colors.textPrimary,
+            defaultBg: 'transparent',
+            defaultBorderColor: 'transparent',
+            defaultHoverBg: appTheme.colors.surfaceMutedHover,
+            defaultHoverColor: appTheme.colors.primary,
+            defaultHoverBorderColor: 'transparent',
+            defaultActiveBg: appTheme.colors.surfaceMutedHover,
+            defaultActiveColor: appTheme.colors.primary,
+            defaultActiveBorderColor: 'transparent',
+            paddingInline: 22,
+            paddingBlock: 10,
+            fontSize: 16,
+            fontWeight: 600,
+            controlHeight: 44,
         },
     },
 };

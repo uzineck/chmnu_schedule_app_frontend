@@ -6,30 +6,27 @@ export const HeaderContainer = styled.header`
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    background-color: ${({theme}) => theme.colors.primary};
-    color: ${({theme}) => theme.colors.textInverse};
+    background-color: transparent;
+    color: ${({theme}) => theme.colors.textPrimary};
     padding-top: calc(8px + env(safe-area-inset-top));
     padding-right: calc(12px + env(safe-area-inset-right));
-    padding-bottom: 8px;
+    padding-bottom: 4px;
     padding-left: calc(12px + env(safe-area-inset-left));
-    box-shadow: 0 4px 6px ${({theme}) => theme.colors.shadowAccent};
     column-gap: 12px;
-    transition: background-color 0.3s, padding 0.3s;
+
+    & > *:nth-child(1) {
+        justify-self: start;
+    }
+    & > *:nth-child(2) {
+        justify-self: end;
+    }
 
     ${media.up('desktop')} {
-        grid-template-columns: 1fr auto 1fr;
         column-gap: clamp(1rem, 3vw, 2.5rem);
-        padding-top: calc(clamp(8px, 2vw, 10px) + env(safe-area-inset-top));
+        padding-top: calc(clamp(8px, 2vw, 12px) + env(safe-area-inset-top));
         padding-right: calc(clamp(10px, 4vw, 20px) + env(safe-area-inset-right));
-        padding-bottom: clamp(8px, 2vw, 10px);
+        padding-bottom: clamp(4px, 1vw, 6px);
         padding-left: calc(clamp(10px, 4vw, 20px) + env(safe-area-inset-left));
-
-        & > *:nth-child(1) {
-            justify-self: start;
-        }
-        & > *:nth-child(3) {
-            justify-self: end;
-        }
     }
 `;
 
@@ -73,39 +70,90 @@ export const HeaderTitleLink = styled(Link)`
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    gap: 8px;
     max-width: 100%;
     border-radius: 6px;
     padding: 2px 6px;
     transition: background-color 0.15s ease;
 
     &:hover, &:focus-visible {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: ${({theme}) => theme.colors.surfaceMutedHover};
         outline: none;
         color: inherit;
         text-decoration: none;
     }
+
+    ${media.up('tablet')} {
+        gap: 12px;
+    }
+`;
+
+export const HeaderLogo = styled.div`
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    background-color: ${({theme}) => theme.colors.primary};
+    -webkit-mask-image: url('/chmnu_logo.png');
+    mask-image: url('/chmnu_logo.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    transition: background-color 0.15s ease;
+
+    ${media.up('tablet')} {
+        width: 72px;
+        height: 72px;
+    }
+
+    ${media.up('desktop')} {
+        width: 80px;
+        height: 80px;
+    }
 `;
 
 export const HeaderTitle = styled.h1`
-    font-size: 1.15rem;
-    color: ${({theme}) => theme.colors.textInverse};
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 1.5rem;
+    color: ${({theme}) => theme.colors.textPrimary};
     margin: 0;
     padding: 0.5rem 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35em;
 
     ${media.up('phone')} {
-        font-size: 1.25rem;
+        font-size: 1.65rem;
     }
 
     ${media.up('tablet')} {
-        font-size: 1.5rem;
+        font-size: 1.85rem;
     }
 
     ${media.up('desktop')} {
-        font-size: clamp(2rem, 5vw, 3rem);
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
     }
+`;
+
+export const HeaderTitleAccent = styled.span`
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    background: linear-gradient(
+        90deg,
+        ${({theme}) => theme.colors.primary} 0%,
+        ${({theme}) => theme.colors.accentBlueViolet} 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 `;
 
 export const HamburgerButton = styled.button`
@@ -118,12 +166,13 @@ export const HamburgerButton = styled.button`
     background: transparent;
     border: none;
     border-radius: 8px;
-    color: ${({theme}) => theme.colors.textInverse};
+    color: ${({theme}) => theme.colors.textPrimary};
     cursor: pointer;
-    transition: background-color 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
 
     &:hover, &:focus-visible {
-        background-color: ${({theme}) => theme.colors.primaryHover};
+        background-color: ${({theme}) => theme.colors.surfaceMutedHover};
+        color: ${({theme}) => theme.colors.primary};
         outline: none;
     }
 

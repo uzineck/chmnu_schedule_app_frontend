@@ -17,8 +17,9 @@ import {
     HamburgerButton,
     HeaderButtons,
     HeaderContainer,
-    HeaderRightSlot,
+    HeaderLogo,
     HeaderTitle,
+    HeaderTitleAccent,
     HeaderTitleLink,
     HeaderTitleWrapper,
 } from "./headerStyled.ts";
@@ -113,6 +114,15 @@ export const Header: React.FC = () => {
         <>
             {contextHolder}
             <HeaderContainer>
+                <HeaderTitleWrapper>
+                    <HeaderTitleLink to="/" aria-label="Розклад ЧНУ — на головну">
+                        <HeaderLogo aria-hidden="true" />
+                        <HeaderTitle>
+                            Розклад <HeaderTitleAccent>ЧНУ</HeaderTitleAccent>
+                        </HeaderTitle>
+                    </HeaderTitleLink>
+                </HeaderTitleWrapper>
+
                 {isDesktop ? (
                     <HeaderButtons>
                         {isLoggedIn ? (
@@ -140,14 +150,6 @@ export const Header: React.FC = () => {
                         <AiOutlineMenu size={24} />
                     </HamburgerButton>
                 )}
-
-                <HeaderTitleWrapper>
-                    <HeaderTitleLink to="/">
-                        <HeaderTitle>Розклад ЧНУ</HeaderTitle>
-                    </HeaderTitleLink>
-                </HeaderTitleWrapper>
-
-                <HeaderRightSlot />
             </HeaderContainer>
 
             {!isDesktop && drawerOpen && (
