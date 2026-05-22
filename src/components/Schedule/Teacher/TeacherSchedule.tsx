@@ -3,6 +3,7 @@ import { getTeacherLessons } from "../../../api/schedule/teacher.ts";
 import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
 import {message} from "antd";
 import BaseScheduleMatrix from "../BaseScheduleMatrix.tsx";
+import ScheduleEmptyState from "../ScheduleEmptyState.tsx";
 
 interface TeacherScheduleProps {
     teacherUuid: string;
@@ -34,10 +35,19 @@ const TeacherSchedule = ({ teacherUuid, is_even }: TeacherScheduleProps) => {
         }
     }, [error, messageApi]);
 
+    const isEmpty = !!data && !data.lessons?.length;
+
     return (
         <>
             {contextHolder}
-            <BaseScheduleMatrix lessons={data ? data.lessons : null} />
+            {isEmpty ? (
+                <ScheduleEmptyState
+                    message="У цього викладача немає пар на цьому тижні"
+                    hint="Спробуйте змінити тиждень — Над або Під."
+                />
+            ) : (
+                <BaseScheduleMatrix lessons={data ? data.lessons : null} />
+            )}
         </>
     );
 };

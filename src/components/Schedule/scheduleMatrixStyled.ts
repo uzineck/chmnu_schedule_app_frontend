@@ -172,6 +172,54 @@ export const AddLessonIcon = styled.button`
     }
 `;
 
+export const AddMoreLessonIcon = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px auto 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px dashed ${({theme}) => theme.colors.borderInput};
+    background-color: transparent;
+    color: ${({theme}) => theme.colors.textDim};
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover, &:focus-visible {
+        opacity: 1;
+        color: ${({theme}) => theme.colors.primary};
+        border-color: ${({theme}) => theme.colors.primary};
+        background-color: ${({theme}) => theme.colors.surface};
+        outline: none;
+    }
+`;
+
+export const AddMoreLessonButton = styled.button`
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px dashed ${({theme}) => theme.colors.borderInput};
+    background-color: transparent;
+    color: ${({theme}) => theme.colors.textDim};
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+    &:hover, &:focus-visible {
+        color: ${({theme}) => theme.colors.primary};
+        border-color: ${({theme}) => theme.colors.primary};
+        background-color: ${({theme}) => theme.colors.surface};
+        outline: none;
+    }
+`;
+
 export const PagerTabsRow = styled.div`
     display: flex;
     gap: 8px;

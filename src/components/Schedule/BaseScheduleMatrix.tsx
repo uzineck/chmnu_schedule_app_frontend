@@ -4,6 +4,7 @@ import {Day, dayIndexMap, dayOptionsUa} from "../../models/enums/Day";
 import {OrdinaryNumber} from "../../models/enums/OrdinaryNumber";
 import {getLessonTime} from "../../models/enums/LessonTime";
 import LessonDetails from "./Lesson/LessonDetail";
+import MultiLessonCard from "./Lesson/MultiLessonCard.tsx";
 import {LessonForTeacher} from "../../models/lesson/LessonForTeacher";
 import {useNavigate} from "react-router-dom";
 import {AiOutlinePlus} from "react-icons/ai";
@@ -12,9 +13,12 @@ import {useTime} from "./Context/hooks/useTime.ts";
 import {useMediaQuery} from "../../hooks/useMediaQuery.ts";
 import {mq} from "../../styles/media.ts";
 import {readExpiringEntry, todayEpoch, writeExpiringEntry} from "../../utils/expiringStorage.ts";
+import ScheduleEmptyState from "./ScheduleEmptyState.tsx";
 import {
     AddLessonButton,
     AddLessonIcon,
+    AddMoreLessonButton,
+    AddMoreLessonIcon,
     BodyCell,
     CurrentLessonIndicator,
     DayCell,
@@ -151,6 +155,7 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixP
     if (isPhone) {
         const dayIndex = phoneDayIndex;
         const dayLessons = matrix.map((row) => row[dayIndex]);
+        const dayIsEmpty = dayLessons.every((cell) => !cell);
 
         return (
             <PhoneScheduleContainer>
@@ -169,6 +174,12 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixP
                         </DayTab>
                     ))}
                 </DayTabsRow>
+                {dayIsEmpty && !isEditable ? (
+                    <ScheduleEmptyState
+                        message="У цей день пар немає"
+                        hint="Спробуйте інший день тижня."
+                    />
+                ) : (
                 <TimeslotList>
                     {dayLessons.map((cell, rowIndex) => {
                         const ordinaryNumber = (rowIndex + 1) as OrdinaryNumber;
@@ -184,13 +195,27 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixP
                                     </TimeslotTimeText>
                                 </TimeslotTimeRow>
                                 {cell ? (
-                                    cell.map((lesson, idx) => (
-                                        <LessonDetails
-                                            key={idx}
-                                            lesson={lesson}
-                                            isEditable={isEditable}
-                                        />
-                                    ))
+                                    <>
+                                        {!isEditable && cell.length > 1 ? (
+                                            <MultiLessonCard lessons={cell} />
+                                        ) : (
+                                            cell.map((lesson, idx) => (
+                                                <LessonDetails
+                                                    key={idx}
+                                                    lesson={lesson}
+                                                    isEditable={isEditable}
+                                                />
+                                            ))
+                                        )}
+                                        {isEditable && (
+                                            <AddMoreLessonButton
+                                                type="button"
+                                                onClick={() => handleAddLesson(dayIndex, rowIndex)}
+                                            >
+                                                <AiOutlinePlus size={18} /> Додати ще
+                                            </AddMoreLessonButton>
+                                        )}
+                                    </>
                                 ) : isEditable ? (
                                     <AddLessonButton
                                         type="button"
@@ -206,6 +231,7 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixP
                         );
                     })}
                 </TimeslotList>
+                )}
             </PhoneScheduleContainer>
         );
     }
@@ -275,13 +301,26 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixP
                                         >
                                             {lessonCell && (
                                                 <div>
-                                                    {lessonCell.map((lesson, idx) => (
-                                                        <LessonDetails
-                                                            key={idx}
-                                                            lesson={lesson}
-                                                            isEditable={isEditable}
-                                                        />
-                                                    ))}
+                                                    {!isEditable && lessonCell.length > 1 ? (
+                                                        <MultiLessonCard lessons={lessonCell} />
+                                                    ) : (
+                                                        lessonCell.map((lesson, idx) => (
+                                                            <LessonDetails
+                                                                key={idx}
+                                                                lesson={lesson}
+                                                                isEditable={isEditable}
+                                                            />
+                                                        ))
+                                                    )}
+                                                    {isEditable && (
+                                                        <AddMoreLessonIcon
+                                                            type="button"
+                                                            aria-label="Додати ще одне заняття"
+                                                            onClick={() => handleAddLesson(dayIndex, rowIndex)}
+                                                        >
+                                                            <AiOutlinePlus size={16} />
+                                                        </AddMoreLessonIcon>
+                                                    )}
                                                 </div>
                                             )}
                                             {isEditable && !lessonCell && (
