@@ -1,7 +1,7 @@
 import React from "react";
 import ToggleButton from "./ToggleButton.tsx";
 import ButtonLink from "./ButtonLink.tsx";
-import {ButtonContainerWrapper} from "./buttonStyled.ts";
+import {ButtonContainerWrapper, ButtonPrefixLabel} from "./buttonStyled.ts";
 
 interface ButtonContainerProps {
     options: {
@@ -12,15 +12,17 @@ interface ButtonContainerProps {
     }[];
     selectedValue: any;
     onChange: (newValue: any) => void;
+    prefix?: string | null;
 }
 
-const ButtonContainer: React.FC<ButtonContainerProps> = ({ options, selectedValue, onChange }) => {
+const ButtonContainer: React.FC<ButtonContainerProps> = ({ options, selectedValue, onChange, prefix }) => {
     const handleLinkClick = (value: any) => {
         onChange(value);
     };
 
     return (
         <ButtonContainerWrapper>
+            {prefix && <ButtonPrefixLabel>{prefix}</ButtonPrefixLabel>}
             {options.map((option) => (
                 option.isLink ? (
                     <ButtonLink

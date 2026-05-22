@@ -13,10 +13,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setClient(null);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("lastPath");
-        localStorage.removeItem("lastGroupUuid");
-        localStorage.removeItem("lastSubgroup");
-        localStorage.removeItem("lastTeacherUuid");
         localStorage.removeItem("lastWeekType");
+        localStorage.removeItem("weekTypeMemo");
+        localStorage.removeItem("phoneDayMemo");
+        localStorage.removeItem("tabletPageMemo");
+        // Intentionally kept across logout so the next visitor lands back on
+        // their last group/teacher: lastGroupUuid, lastSubgroup, lastTeacherUuid.
     }, []);
 
     const fetchClientInfo = useCallback(async () => {

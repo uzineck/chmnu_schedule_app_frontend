@@ -1,75 +1,37 @@
 import { useEffect, useCallback } from "react";
-import {Subgroup} from "../../../models/enums/Subgroup.ts";
-import {getHeadmanGroup} from "../../../api/schedule/group.ts";
-import ButtonContainer from "../../Buttons/ButtonContainer.tsx";
+import { getHeadmanGroup } from "../../../api/schedule/group.ts";
 import GroupSchedule from "../Group/GroupSchedule.tsx";
-import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
-import {message} from "antd";
-import {useLocation} from "react-router-dom";
-import {useSchedule} from "../Context/hooks/useSchedule.ts";
-import {useTime} from "../Context/hooks/useTime.ts";
+import { useFetchData } from "../../../api/hooks/useFetchData.tsx";
+import { message } from "antd";
+import { useSearchParams } from "react-router-dom";
+import { useSchedule } from "../Context/hooks/useSchedule.ts";
+import { useScheduleSelection } from "../hooks/useScheduleSelection.ts";
+import { useTime } from "../Context/hooks/useTime.ts";
 import Title from "../../Title/Title.tsx";
-import {Group} from "../../../models/group/Group.ts";
-import {ScheduleButtonContainer, ScheduleScreen, ScheduleScreenControls} from "../scheduleScreenStyled.ts";
+import { ScheduleScreen } from "../scheduleScreenStyled.ts";
+import ScheduleControlPanel from "../ScheduleControlPanel.tsx";
+import ViewPublicScheduleLink from "../ViewPublicScheduleLink.tsx";
 
 const HeadmanGroupScreen = () => {
-    const { currentTime } = useTime();
-    const { subgroup, isEvenWeek, setSubgroup, setIsEvenWeek, setGroupUuid, groupUuid } = useSchedule();
+    const { setGroupUuid, groupUuid } = useSchedule();
     const [messageApi, contextHolder] = message.useMessage();
-    const location = useLocation();
+    const [searchParams] = useSearchParams();
+    const { currentTime } = useTime();
 
     const fetchGroup = useCallback(() => getHeadmanGroup(), []);
 
     const { data, error, isLoading } = useFetchData(fetchGroup);
 
-    const resolveSubgroup = useCallback(
-        (group: Group | null) => {
-            const storedSubgroup = localStorage.getItem("lastSubgroup");
-            if (group?.has_subgroups) {
-                setSubgroup(storedSubgroup === Subgroup.B ? Subgroup.B : Subgroup.A);
-            } else {
-                setSubgroup(null);
-            }
-        },
-        [setSubgroup]
-    );
-    const resolveWeekType = useCallback(() => {
-        const storedWeekType = localStorage.getItem("lastWeekType");
-        if (storedWeekType) {
-            setIsEvenWeek(storedWeekType === "true");
-        } else if (currentTime) {
-            const currentTimeWeekType =  currentTime.is_even;
-            setIsEvenWeek(currentTimeWeekType);
-            localStorage.setItem("lastWeekType", currentTimeWeekType.toString());
-        }
-    }, [setIsEvenWeek, currentTime]);
+    const { subgroup, weekType, handleSubgroupChange, handleWeekTypeChange } = useScheduleSelection({
+        hasSubgroups: data?.has_subgroups ?? false,
+        searchParams,
+    });
 
     useEffect(() => {
         if (data) {
             setGroupUuid(data.uuid);
-            resolveSubgroup(data || null);
-            resolveWeekType();
         }
-    }, [data, setGroupUuid, resolveSubgroup, resolveWeekType]);
-
-
-    useEffect(() => {
-        const successMessage = location.state?.successMessage;
-        const errorMessage = location.state?.errorMessage;
-        const warningMessage = location.state?.warningMessage;
-
-        if (successMessage) {
-            messageApi.success({ content: successMessage, duration: 2 });
-        }
-
-        if (errorMessage) {
-            messageApi.error({ content: errorMessage, duration: 3 });
-        }
-
-        if (warningMessage) {
-            messageApi.warning({ content: warningMessage, duration: 3 });
-        }
-    }, [location.state, messageApi]);
+    }, [data, setGroupUuid]);
 
     useEffect(() => {
         if (isLoading) {
@@ -86,50 +48,34 @@ const HeadmanGroupScreen = () => {
         }
     }, [error, messageApi]);
 
-
-    const handleSubgroupChange = (selectedSubgroup: Subgroup) => {
-        setSubgroup(selectedSubgroup);
-        localStorage.setItem("lastSubgroup", selectedSubgroup);
-    };
-
-    const handleWeekTypeChange = (weekType: boolean) => {
-        setIsEvenWeek(weekType);
-        localStorage.setItem("lastWeekType", weekType.toString());
-    };
-
     return (
         <ScheduleScreen>
             {contextHolder}
             <Title text={data ? data.number : ''} />
-            <ScheduleScreenControls>
-                <ScheduleButtonContainer>
-                    {data?.has_subgroups ? (
-                        <ButtonContainer
-                            options={[
-                                { label: "Підгрупа A", value: Subgroup.A },
-                                { label: "Підгрупа B", value: Subgroup.B },
-                            ]}
-                            selectedValue={subgroup}
-                            onChange={handleSubgroupChange}
+            <ScheduleControlPanel
+                topSlot={
+                    data ? (
+                        <ViewPublicScheduleLink
+                            groupUuid={data.uuid}
+                            subgroup={subgroup}
+                            weekType={weekType}
                         />
-                    ) : null}
-                    <ButtonContainer
-                        options={[
-                            { label: 'Тиждень над', value: true },
-                            { label: 'Тиждень під', value: false },
-                        ]}
-                        selectedValue={isEvenWeek}
-                        onChange={handleWeekTypeChange}
-                    />
-                </ScheduleButtonContainer>
-            </ScheduleScreenControls>
+                    ) : undefined
+                }
+                hasSubgroups={data?.has_subgroups ?? false}
+                subgroup={subgroup}
+                onSubgroupChange={handleSubgroupChange}
+                weekType={weekType}
+                currentWeekType={currentTime?.is_even}
+                onWeekTypeChange={handleWeekTypeChange}
+            />
 
             {groupUuid && (
                 <GroupSchedule
-                    key={`${groupUuid}-${subgroup}-${isEvenWeek}`}
+                    key={`${groupUuid}-${subgroup}-${weekType}`}
                     groupUuid={groupUuid}
                     subgroup={subgroup}
-                    is_even={isEvenWeek}
+                    is_even={weekType}
                     isEditable={true}
                 />
             )}

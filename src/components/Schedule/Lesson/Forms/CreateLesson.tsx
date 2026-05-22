@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 import {Subject} from "../../../../models/subject/Subject.ts";
@@ -29,7 +29,7 @@ import {
 
 const CreateLesson = () => {
     const { client } = useAuth()
-    const { day, ordinaryNumber, isEvenWeek, setLessonUuid } = useSchedule();
+    const { day, ordinaryNumber, isEvenWeek, groupUuid, setLessonUuid } = useSchedule();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -40,6 +40,18 @@ const CreateLesson = () => {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const key = "create";
+
+    useEffect(() => {
+        if (!day || !ordinaryNumber || !groupUuid) {
+            const fallback = client?.roles.includes(ClientRole.HEADMAN)
+                ? "/group/manage"
+                : "/admin/manage/schedule/group";
+            navigate(fallback, {
+                replace: true,
+                state: { warningMessage: "Створюйте пару тільки з панелі розкладу" },
+            });
+        }
+    }, [day, ordinaryNumber, groupUuid, client, navigate]);
 
     const handleCreateLesson = async () => {
         if (!selectedSubject || !selectedTeacher || !selectedRoom) {

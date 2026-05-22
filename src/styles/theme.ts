@@ -45,7 +45,7 @@ export const theme = {
         phoneSmall: 360,
         phone: 390,
         tablet: 768,
-        desktop: 1024,
+        desktop: 1200,
     },
 } as const;
 

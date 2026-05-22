@@ -35,6 +35,8 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
 
     const handleDeleteLesson = () => {
         setLessonUuid(lesson.uuid);
+        setDay(lesson.timeslot.day);
+        setOrdinaryNumber(lesson.timeslot.ord_number);
         navigate(`/lesson/${lesson.uuid}/delete`);
     };
 

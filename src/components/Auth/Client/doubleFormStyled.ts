@@ -1,107 +1,112 @@
 import styled from "styled-components";
+import {media} from "../../../styles/media.ts";
 
 export const DoubleFormPage = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     min-height: 100vh;
     font-family: Arial, sans-serif;
-    padding: 2rem;
+    padding: 1rem;
+    gap: 1.5rem;
 
-    @media (max-width: 768px) {
-        align-items: center;
-        padding: 1.5rem;
+    ${media.up('tablet')} {
+        padding: 2rem;
     }
 
-    @media (max-width: 480px) {
-        flex-direction: column;
-        padding: 1rem;
+    ${media.up('desktop')} {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 2rem;
     }
 `;
 
 export const MainCard = styled.div`
     width: 100%;
     max-width: 600px;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 20px ${({theme}) => theme.colors.shadow};
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    margin: 4.5rem auto;
+    margin: 1.5rem auto 0;
 
-    @media (max-width: 768px) {
-        max-width: 500px;
+    ${media.up('tablet')} {
         padding: 1.5rem;
     }
 
-    @media (max-width: 480px) {
-        max-width: 100%;
-        padding: 1rem;
-        margin: 3rem auto;
+    ${media.up('desktop')} {
+        max-width: 480px;
+        padding: 2rem;
+        margin: 0;
+        flex: 0 0 auto;
     }
 `;
 
 export const MainCardButtons = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-top: auto;
 
-    @media (max-width: 768px) {
+    > * {
+        flex-direction: column;
+    }
+
+    ${media.up('tablet')} {
         gap: 0.8rem;
     }
 
-    @media (max-width: 480px) {
-        gap: 0.5rem;
+    ${media.up('desktop')} {
+        gap: 1rem;
+
         > * {
-            flex-direction: column;
-        };
+            flex-direction: row;
+        }
     }
 `;
 
 export const SecondaryCard = styled.div`
-    flex: 1;
-    max-width: 800px;
-    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+    padding: 1rem;
     display: flex;
-    margin-top: revert;
+    margin: 0 auto;
     justify-content: center;
     align-items: center;
 
-    @media (max-width: 768px) {
-        max-width: 100%;
+    ${media.up('tablet')} {
         padding: 1.5rem;
     }
 
-    @media (max-width: 480px) {
-        padding: 1rem;
-        
+    ${media.up('desktop')} {
+        flex: 1 1 auto;
+        max-width: 800px;
+        padding: 2rem;
+        margin: 0;
     }
 `;
 
 export const MainCardInfo = styled.div`
-    text-align: left;
+    text-align: center;
 
-    @media (max-width: 768px) {
-        text-align: center;
-    }
-
-    @media (max-width: 480px) {
-        text-align: center;
+    ${media.up('tablet')} {
+        text-align: left;
     }
 `;
 
 export const MainCardInfoItem = styled.div`
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: ${({theme}) => theme.colors.textSecondary};
     margin-bottom: 0.5rem;
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         font-size: 0.95rem;
     }
 
-    @media (max-width: 480px) {
-        font-size: 0.9rem;
+    ${media.up('tablet')} {
+        font-size: 1rem;
     }
 `;

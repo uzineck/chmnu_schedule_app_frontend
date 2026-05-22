@@ -5,11 +5,14 @@ import EditLesson from "./Forms/EditLesson.tsx";
 import DeleteLesson from "./Actions/DeleteLesson.tsx";
 import UpdateLesson from "./Actions/UpdateLesson.tsx";
 import {Outlet} from "react-router-dom";
+import {ClientRole} from "../../../models/enums/ClientRole.ts";
+
+const LESSON_EDIT_ROLES = [ClientRole.ADMIN, ClientRole.HEADMAN, ClientRole.SCHEDULE_MANAGER];
 
 export const lessonRoutes = [
     {
         path: "lesson",
-        element: <ProtectedRoute><Outlet /></ProtectedRoute>,
+        element: <ProtectedRoute roles={LESSON_EDIT_ROLES}><Outlet /></ProtectedRoute>,
         children: [
             { path: "create", element: <CreateLesson /> },
             { path: ":lessonUuid/add", element: <AddLesson /> },

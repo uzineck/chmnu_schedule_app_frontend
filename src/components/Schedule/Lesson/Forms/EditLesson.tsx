@@ -29,7 +29,7 @@ import {
 
 const EditLesson = () => {
     const { client } = useAuth()
-    const { day, ordinaryNumber, isEvenWeek, setLessonUuid, lesson, setLesson } = useSchedule();
+    const { day, ordinaryNumber, isEvenWeek, groupUuid, setLessonUuid, lesson, setLesson } = useSchedule();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -42,13 +42,21 @@ const EditLesson = () => {
     const key = "update";
 
     useEffect(() => {
-        if (lesson) {
-            setSelectedSubject(lesson.subject);
-            setSelectedTeacher('teacher' in lesson ? lesson.teacher : null);
-            setSelectedRoom(lesson.room);
-            setSelectedLessonType(lesson.type);
+        if (!lesson || !day || !ordinaryNumber || !groupUuid) {
+            const fallback = client?.roles.includes(ClientRole.HEADMAN)
+                ? "/group/manage"
+                : "/admin/manage/schedule/group";
+            navigate(fallback, {
+                replace: true,
+                state: { warningMessage: "Редагуйте пару тільки з панелі розкладу" },
+            });
+            return;
         }
-    }, [lesson]);
+        setSelectedSubject(lesson.subject);
+        setSelectedTeacher('teacher' in lesson ? lesson.teacher : null);
+        setSelectedRoom(lesson.room);
+        setSelectedLessonType(lesson.type);
+    }, [lesson, day, ordinaryNumber, groupUuid, client, navigate]);
 
     const handleUpdateLesson = async () => {
         if (!selectedSubject || !selectedTeacher || !selectedRoom) {

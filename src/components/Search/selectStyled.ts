@@ -7,7 +7,7 @@ export const BaseDropdown = styled.div`
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
-    padding: 10px;
+    padding: 4px;
     flex-shrink: 1;
 `;
 
@@ -17,9 +17,10 @@ export const customStyles: StylesConfig<OptionType, false> = {
         ...provided,
         borderColor: state.isFocused ? theme.colors.accentDarkestPurple : theme.colors.accentPlum,
         boxShadow: state.isFocused ? `0 0 0 1px ${theme.colors.accentPlum}` : 'none',
-        borderRadius: '8px',
-        padding: '5px',
+        borderRadius: '6px',
+        padding: '2px',
         fontSize: '16px',
+        minHeight: '34px',
         transition: 'border-color 0.3s ease',
         '&:hover': {
             borderColor: theme.colors.accentMagenta,
@@ -51,7 +52,7 @@ export const customStyles: StylesConfig<OptionType, false> = {
         backgroundColor: state.isFocused ? theme.colors.accentLavender : state.isSelected ? theme.colors.accentIndigo : null,
         color: state.isFocused ? theme.colors.textBlack : state.isSelected ? theme.colors.textInverse : theme.colors.textBlack,
         cursor: 'pointer',
-        padding: '10px',
+        padding: '6px 10px',
         fontSize: state.isSelected ? '14px' : '16px',
         fontWeight: state.isSelected ? 'bold' : 'normal',
         '&:hover': {

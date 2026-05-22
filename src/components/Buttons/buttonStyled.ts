@@ -9,6 +9,13 @@ export const ButtonContainerWrapper = styled.div`
     text-align: center;
 `;
 
+export const ButtonPrefixLabel = styled.span`
+    font-size: 16px;
+    font-weight: 500;
+    color: inherit;
+    white-space: nowrap;
+`;
+
 export const StyledToggleButton = styled.button`
     padding: 10px 20px;
     background-color: ${({theme}) => theme.colors.primary};

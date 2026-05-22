@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {media} from "../../../../styles/media.ts";
 
 export const FormPage = styled.div`
     display: flex;
@@ -6,109 +7,109 @@ export const FormPage = styled.div`
     align-items: flex-start;
     min-height: 100vh;
     font-family: Arial, sans-serif;
-    padding: 2rem;
+    padding: 0.5rem;
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         padding: 1rem;
     }
 
-    @media (max-width: 480px) {
-        padding: 0.5rem;
+    ${media.up('tablet')} {
+        padding: 2rem;
     }
 `;
 
 export const MediumFormDiv = styled.div`
     width: 100%;
-    max-width: 600px;
-    padding: 2rem;
+    max-width: 100%;
+    padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 20px ${({theme}) => theme.colors.shadow};
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    margin: 4.5rem auto;
+    margin: 2rem auto;
     background-color: ${({theme}) => theme.colors.surface};
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         max-width: 500px;
         padding: 1.5rem;
+        margin: 4.5rem auto;
     }
 
-    @media (max-width: 480px) {
-        max-width: 100%;
-        padding: 1rem;
-        margin: 2rem auto;
+    ${media.up('tablet')} {
+        max-width: 600px;
+        padding: 2rem;
     }
 `;
 
 export const SmallFormDiv = styled.div`
     width: 100%;
-    max-width: 400px;
-    padding: 2rem;
+    max-width: 100%;
+    padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 20px ${({theme}) => theme.colors.shadow};
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin: 2rem auto;
+    margin: 1.5rem auto;
     background-color: ${({theme}) => theme.colors.surface};
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         max-width: 350px;
         padding: 1.5rem;
+        margin: 2rem auto;
     }
 
-    @media (max-width: 480px) {
-        max-width: 100%;
-        padding: 1rem;
-        margin: 1.5rem auto;
+    ${media.up('tablet')} {
+        max-width: 400px;
+        padding: 2rem;
     }
 `;
 
 export const FormTitle = styled.h2`
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     color: ${({theme}) => theme.colors.textPrimary};
     text-align: center;
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         font-size: 1.25rem;
     }
 
-    @media (max-width: 480px) {
-        font-size: 1rem;
+    ${media.up('tablet')} {
+        font-size: 1.5rem;
     }
 `;
 
 export const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         gap: 1rem;
     }
 
-    @media (max-width: 480px) {
-        gap: 0.75rem;
+    ${media.up('tablet')} {
+        gap: 1.5rem;
     }
 `;
 
 export const FormSelect = styled.select`
-    padding: 0.5rem;
-    font-size: 1rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
     border: 1px solid ${({theme}) => theme.colors.borderInput};
     border-radius: 5px;
     background-color: ${({theme}) => theme.colors.surface};
 
-    @media (max-width: 768px) {
-        font-size: 0.9rem;
+    ${media.up('phone')} {
         padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
     }
 
-    @media (max-width: 480px) {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.6rem;
+    ${media.up('tablet')} {
+        padding: 0.5rem;
+        font-size: 1rem;
     }
 `;
 
@@ -117,42 +118,42 @@ export const FormSearchContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
 
     > * {
         flex-shrink: 0;
         max-width: 80%;
     }
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         gap: 0.75rem;
     }
 
-    @media (max-width: 480px) {
-        gap: 0.5rem;
+    ${media.up('tablet')} {
+        gap: 1rem;
     }
 `;
 
 export const FormLessonTypeContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
+        flex-direction: row;
         gap: 0.75rem;
     }
 
-    @media (max-width: 480px) {
-        gap: 0.5rem;
-        flex-direction: column;
+    ${media.up('tablet')} {
+        gap: 1rem;
     }
 `;
 
 export const FormButton = styled.button`
-    padding: 0.75rem;
-    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
     background-color: ${({theme}) => theme.colors.primary};
     color: ${({theme}) => theme.colors.textInverse};
     border: none;
@@ -170,29 +171,30 @@ export const FormButton = styled.button`
         transform: scale(1.05);
     }
 
-    @media (max-width: 768px) {
+    ${media.up('phone')} {
         padding: 0.6rem 1rem;
         font-size: 0.9rem;
     }
 
-    @media (max-width: 480px) {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
+    ${media.up('tablet')} {
+        padding: 0.75rem;
+        font-size: 1rem;
     }
 `;
 
 export const ButtonsContainer = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.5rem;
 
-    @media (max-width: 768px) {
-        flex-direction: column;
+    ${media.up('phone')} {
         gap: 0.75rem;
     }
 
-    @media (max-width: 480px) {
-        gap: 0.5rem;
+    ${media.up('tablet')} {
+        flex-direction: row;
+        gap: 1rem;
     }
 `;
 
@@ -203,15 +205,5 @@ export const GoBackButton = styled(FormButton)`
 
     &:hover {
         background-color: ${({theme}) => theme.colors.surfaceMutedHover};
-    }
-
-    @media (max-width: 768px) {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    @media (max-width: 480px) {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
     }
 `;

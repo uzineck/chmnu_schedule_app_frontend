@@ -9,6 +9,10 @@ export const GlobalStyle = createGlobalStyle`
         overflow-x: hidden;
     }
 
+    body {
+        min-width: 360px;
+    }
+
     #root {
         max-width: 100vw;
     }
