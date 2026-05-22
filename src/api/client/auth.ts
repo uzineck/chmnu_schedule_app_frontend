@@ -7,13 +7,13 @@ import {StatusResponse} from "../../models/StatusResponse.ts";
 const BASE_URL = '/clients/client';
 
 export const login = (body: LoginSchema): Promise<ApiResponse<Token>> => {
-    return Http.post<LoginSchema>(`${BASE_URL}/log-in`, body);
+    return Http.post<LoginSchema>(`${BASE_URL}/log-in`, body, { authFlow: true });
 };
 
 export const updateAccessToken = (): Promise<ApiResponse<Token>> => {
-    return Http.post(`${BASE_URL}/update_access_token`, {});
+    return Http.post(`${BASE_URL}/update_access_token`, {}, { authFlow: true });
 };
 
 export const logout = (): Promise<ApiResponse<StatusResponse>> => {
-    return Http.post(`${BASE_URL}/log-out`, {})
-}
+    return Http.post(`${BASE_URL}/log-out`, {}, { authFlow: true });
+};

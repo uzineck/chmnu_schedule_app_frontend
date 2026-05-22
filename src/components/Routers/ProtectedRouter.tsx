@@ -10,8 +10,16 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ roles, children }) => {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, loading } = useAuth();
     const { matchesRole } = useRole();
+
+    if (loading) {
+        // Avoid bouncing to /login before the initial client-info hydration
+        // settles. Returning null is fine — the rest of the app (Header,
+        // public routes, etc.) is already visible because AuthProvider no
+        // longer gates its children.
+        return null;
+    }
 
     if (!isLoggedIn) {
         return <Navigate to="/login" replace />;

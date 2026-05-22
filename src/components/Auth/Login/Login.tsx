@@ -2,7 +2,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { login } from '../../../api/client/auth.ts';
 import { useNavigate } from 'react-router-dom';
-import { ApiCallError } from "../../../api/errors.ts";
+import {
+    ApiCallError,
+    AuthError,
+    BadRequestError,
+    NetworkError,
+    RateLimitError,
+    ServerError,
+} from "../../../api/errors.ts";
 import {message} from "antd";
 import {useAuth} from "../Context/hooks/useAuth.ts";
 import {
@@ -24,11 +31,30 @@ const LoginSchema = Yup.object().shape({
         .required('Паролько обов\'язковий'),
 });
 
+const messageForError = (error: unknown): string => {
+    if (error instanceof AuthError || error instanceof BadRequestError) {
+        return error.message || "Невірний email або пароль";
+    }
+    if (error instanceof RateLimitError) {
+        return error.message;
+    }
+    if (error instanceof NetworkError) {
+        return "Не вдалось зв'язатись із сервером. Перевірте інтернет.";
+    }
+    if (error instanceof ServerError) {
+        return "Помилка на сервері. Спробуйте пізніше.";
+    }
+    if (error instanceof ApiCallError) {
+        return error.message || "Виникла невідома помилка";
+    }
+    return "Виникла невідома помилка";
+};
+
 const Login = () => {
     const { loginProp } = useAuth();
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
-    const key = 'updatable';
+    const key = 'login';
 
     const formik = useFormik({
         initialValues: {
@@ -37,22 +63,19 @@ const Login = () => {
         },
         validationSchema: LoginSchema,
         onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Завантаження...' });
+            messageApi.loading({ key, content: 'Завантаження...' });
             try {
                 const response = await login({
                     email: values.email,
                     password: values.password,
                 });
                 await loginProp(response.data.access_token);
+                messageApi.destroy(key);
                 navigate("/", {
                     state: { successMessage: "Ви успішно увійшли у систему" },
                 });
             } catch (error) {
-                if (error instanceof ApiCallError) {
-                    messageApi.error({ key: key, content: error.message, duration: 3 });
-                } else {
-                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
-                }
+                messageApi.error({ key, content: messageForError(error), duration: 3 });
             } finally {
                 setSubmitting(false);
             }

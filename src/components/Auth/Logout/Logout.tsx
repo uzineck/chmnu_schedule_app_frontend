@@ -1,35 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../../api/client/auth.ts";
-import {useFetchData} from "../../../api/hooks/useFetchData.tsx";
-import {message} from "antd";
-import {useAuth} from "../Context/hooks/useAuth.ts";
+import { message } from "antd";
+import { useAuth } from "../Context/hooks/useAuth.ts";
 
 const Logout = () => {
     const { logoutProp } = useAuth();
-    const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
-
-    const { data, error, isLoading } = useFetchData(logout);
+    const [messageApi, contextHolder] = message.useMessage();
+    const didRunRef = useRef(false);
 
     useEffect(() => {
-        messageApi.loading({ content: 'Завантаження...' });
-        if (!isLoading) {
-            if (data) {
-                logoutProp();
-                messageApi.destroy();
-                navigate("/", {
-                    state: { successMessage: "Вихід успішно виконано" },
-                });
-            } else if (error) {
-                logoutProp();
-                messageApi.destroy();
-                navigate("/", {
-                    state: { errorMessage: error },
-                });
-            }
-        }
-    }, [data, error, isLoading, logoutProp, navigate, messageApi]);
+        if (didRunRef.current) return;
+        didRunRef.current = true;
+
+        let cancelled = false;
+        messageApi.loading({ key: "logout", content: "Завантаження..." });
+
+        (async () => {
+            await logoutProp();
+            if (cancelled) return;
+            messageApi.destroy("logout");
+            navigate("/", {
+                state: { successMessage: "Вихід успішно виконано" },
+                replace: true,
+            });
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [logoutProp, navigate, messageApi]);
 
     return <>{contextHolder}</>;
 };
