@@ -1,28 +1,21 @@
-import EntitySearch from "../../Search/EntitySearch.tsx";
-import {Room} from "../../../models/room/Room.ts";
-import {getAllRooms} from "../../../api/schedule/room.ts";
+import AsyncEntitySearch from "../../Search/AsyncEntitySearch.tsx";
+import { getListOfRooms } from "../../../api/schedule/room.ts";
+import { Room } from "../../../models/room/Room.ts";
 
 interface RoomSearchProps {
     onRoomSelect: (room: Room | null) => void;
-    onRoomListFetched: (rooms: Room[]) => void;
     selectedRoom: Room | null;
 }
 
-const RoomSearch = ({ onRoomSelect, selectedRoom, onRoomListFetched }: RoomSearchProps) => {
+const RoomSearch = ({ onRoomSelect, selectedRoom }: RoomSearchProps) => {
     return (
-        <EntitySearch<Room>
-            fetchData={getAllRooms}
-            mapToOptions={(room: Room) => ({
-                value: room.uuid,
-                label: `${room.number}`,
-            })}
-            selectedOption={selectedRoom ?
-                {
-                    value: selectedRoom.uuid,
-                    label: `${selectedRoom.number}`,
-                } : null}
-            onEntitySelect={onRoomSelect}
-            onDataFetched={onRoomListFetched}
+        <AsyncEntitySearch<Room>
+            fetchPage={getListOfRooms}
+            mapToOption={(room) => ({ value: room.uuid, label: room.number })}
+            selected={
+                selectedRoom ? { value: selectedRoom.uuid, label: selectedRoom.number } : null
+            }
+            onSelect={onRoomSelect}
             placeholder="Виберіть аудиторію"
             noOptionsMessage="Жодної аудиторії не знайдено"
         />

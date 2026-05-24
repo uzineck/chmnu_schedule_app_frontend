@@ -1,16 +1,15 @@
-export interface PaginationIn{
+export interface PaginationIn {
     offset: number;
     limit: number;
 }
 
-interface PaginationOut{
+interface PaginationOut {
     offset: number;
     limit: number;
     total: number;
 }
 
-
-export interface ListPaginatedResponse<T>{
-    data: T[];
+export interface ListPaginatedResponse<T> {
+    items: T[];
     pagination: PaginationOut;
 }

@@ -17,15 +17,15 @@ export const getAllTeachers = (): Promise<ApiResponse<Teacher[]>> => {
 };
 
 
-export const getListOfTeachers = (filter: TeacherFilter, pagination: PaginationIn): Promise<ApiResponse<ListPaginatedResponse<Teacher[]>>> => {
+export const getListOfTeachers = (
+    filter: TeacherFilter,
+    pagination: PaginationIn,
+): Promise<ApiResponse<ListPaginatedResponse<Teacher>>> => {
     const queryParams = qs.stringify(
-        {
-            ...filter,
-            ...pagination,
-        },
-        { skipNulls: true }
+        { ...filter, ...pagination },
+        { skipNulls: true },
     );
-    return Http.get(`${BASE_URL}?${queryParams}`);
+    return Http.get(`${BASE_URL}/?${queryParams}`);
 };
 
 

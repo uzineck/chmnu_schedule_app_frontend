@@ -43,6 +43,11 @@ import {
 interface BaseScheduleMatrixProps {
     lessons: Lesson[] | LessonForTeacher[] | null;
     isEditable?: boolean;
+    /** Phone view: message shown when the selected day has no lessons but
+     *  other days do. Defaults to a group-flavoured wording. */
+    emptyDayMessage?: string;
+    /** Phone view: hint under the empty-day message. */
+    emptyDayHint?: string;
 }
 
 const DAY_SHORT_LABELS = ["Пн", "Вт", "Ср", "Чт", "Пт"];
@@ -66,7 +71,12 @@ const readStoredIndex = (key: string, max: number): number => {
     return Number.isInteger(n) && n >= 0 && n <= max ? n : -1;
 };
 
-const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixProps) => {
+const BaseScheduleMatrix = ({
+    lessons,
+    isEditable = false,
+    emptyDayMessage = "У цей день пар немає",
+    emptyDayHint = "Спробуйте інший день тижня.",
+}: BaseScheduleMatrixProps) => {
     const { currentTime } = useTime();
     const { day: lastSelectedDay, isEvenWeek, setOrdinaryNumber, setDay } = useSchedule();
     const navigate = useNavigate();
@@ -144,7 +154,7 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixP
     const handleAddLesson = (dayIndex: number, ordNumberIndex: number) => {
         setDay(dayIndexMap(dayIndex + 1));
         setOrdinaryNumber(ordNumberIndex + 1);
-        navigate(`/lesson/create`);
+        navigate('lesson/create');
     };
 
     const isCurrentLessonAt = (rowIndex: number, dayIndex: number) =>
@@ -176,8 +186,8 @@ const BaseScheduleMatrix = ({ lessons, isEditable = false }: BaseScheduleMatrixP
                 </DayTabsRow>
                 {dayIsEmpty && !isEditable ? (
                     <ScheduleEmptyState
-                        message="У цей день пар немає"
-                        hint="Спробуйте інший день тижня."
+                        message={emptyDayMessage}
+                        hint={emptyDayHint}
                     />
                 ) : (
                 <TimeslotList>

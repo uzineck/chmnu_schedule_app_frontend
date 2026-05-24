@@ -5,15 +5,23 @@ import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import {message} from "antd";
 import BaseScheduleMatrix from "../BaseScheduleMatrix.tsx";
 import ScheduleEmptyState from "../ScheduleEmptyState.tsx";
+import { GroupWithSubgroup } from "../../../models/group/GroupWithSubgroup.ts";
 
 interface GroupScheduleProps {
     groupUuid: string;
     subgroup: Subgroup | null;
     is_even: boolean;
     isEditable?: boolean;
+    /** Bubbles the schedule's `schedule_updated_at` up to the parent so a
+     *  single indicator can live in the ControlPanel area. Fires `null`
+     *  before data arrives. */
+    onScheduleUpdatedChange?: (iso: string | null) => void;
+    /** Bubbles the freshly-fetched Group up so the parent screen can render
+     *  the dropdown label even when it didn't preload the full list. */
+    onGroupChange?: (group: GroupWithSubgroup | null) => void;
 }
 
-const GroupSchedule = ({ groupUuid, subgroup, is_even, isEditable }: GroupScheduleProps) => {
+const GroupSchedule = ({ groupUuid, subgroup, is_even, isEditable, onScheduleUpdatedChange, onGroupChange }: GroupScheduleProps) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [otherWeekEmpty, setOtherWeekEmpty] = useState<boolean | null>(null);
 
@@ -105,13 +113,25 @@ const GroupSchedule = ({ groupUuid, subgroup, is_even, isEditable }: GroupSchedu
             ? "Зверніться до старости групи, щоб створити розклад."
             : "Спробуйте змінити тиждень — Над або Під.";
 
+    useEffect(() => {
+        onScheduleUpdatedChange?.(data?.group?.schedule_updated_at ?? null);
+    }, [data, onScheduleUpdatedChange]);
+
+    useEffect(() => {
+        onGroupChange?.(data?.group ?? null);
+    }, [data, onGroupChange]);
+
     return (
         <>
             {contextHolder}
-            {isEmpty ? (
+            {isEmpty && !isEditable ? (
                 <ScheduleEmptyState message={emptyMessage} hint={emptyHint} />
             ) : (
-                <BaseScheduleMatrix lessons={data ? data.lessons : null} isEditable={isEditable}/>
+                <BaseScheduleMatrix
+                    lessons={data ? data.lessons : null}
+                    isEditable={isEditable}
+                    emptyDayMessage={subgroup ? `У підгрупи ${subgroup} немає пар у цей день` : "У цієї групи немає пар у цей день"}
+                />
             )}
         </>
     );

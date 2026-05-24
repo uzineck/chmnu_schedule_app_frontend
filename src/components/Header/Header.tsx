@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
+import {createPortal} from "react-dom";
 import ButtonContainer from "../Buttons/ButtonContainer.tsx";
 import DropdownMenu from "../Menus/DropdownMenu.tsx";
 import {message} from "antd";
@@ -152,7 +153,7 @@ export const Header: React.FC = () => {
                 )}
             </HeaderContainer>
 
-            {!isDesktop && drawerOpen && (
+            {!isDesktop && drawerOpen && createPortal(
                 <DrawerOverlay onClick={closeDrawer}>
                     <DrawerPanel onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Меню навігації">
                         <DrawerTopRow>
@@ -195,7 +196,8 @@ export const Header: React.FC = () => {
                             </DrawerSection>
                         )}
                     </DrawerPanel>
-                </DrawerOverlay>
+                </DrawerOverlay>,
+                document.body,
             )}
         </>
     );

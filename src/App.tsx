@@ -6,7 +6,6 @@ import { RoleProvider } from "./components/Auth/Context/providers/RoleProvider.t
 import {Header} from "./components/Header/Header.tsx";
 import {ScheduleProvider} from "./components/Schedule/Context/providers/ScheduleProvider.tsx";
 import {TimeProvider} from "./components/Schedule/Context/providers/TimeProvider.tsx";
-import {lessonRoutes} from "./components/Schedule/Lesson/Routes.tsx";
 import {adminRoutes} from "./components/Schedule/Admin/Routes.tsx";
 import {clientRoutes} from "./components/Auth/Client/Routes.tsx";
 import {authRoutes} from "./components/Auth/Routes.tsx";
@@ -14,6 +13,7 @@ import {groupRoutes} from "./components/Schedule/Group/Routes.tsx";
 import {teacherRoutes} from "./components/Schedule/Teacher/Routes.tsx";
 import {GlobalStyle} from "./styles/GlobalStyle.ts";
 import {theme} from "./styles/theme.ts";
+import {useModalBodyLock} from "./hooks/useModalBodyLock.ts";
 
 const router = createBrowserRouter([
     {
@@ -36,12 +36,12 @@ const router = createBrowserRouter([
             ...teacherRoutes,
             ...clientRoutes,
             ...adminRoutes,
-            ...lessonRoutes
         ],
     },
 ]);
 
 function App() {
+    useModalBodyLock();
     return (
         <ThemeProvider theme={theme}>
             <ConfigProvider theme={{token: {colorPrimary: theme.colors.primary}}}>

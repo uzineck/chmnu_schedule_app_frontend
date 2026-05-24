@@ -1,15 +1,29 @@
+import qs from "qs";
 import Http from "../index.ts";
 import {ApiResponse} from "../../models/ApiResponse.ts";
 import {Room} from "../../models/room/Room.ts";
 import {RoomNumberSchema} from "../../models/room/request/RoomNumberSchema.ts";
 import {RoomDescriptionSchema} from "../../models/room/request/RoomDescriptionSchema.ts";
 import {StatusResponse} from "../../models/StatusResponse.ts";
+import {ListPaginatedResponse, PaginationIn} from "../../models/ListPaginatedResponse.ts";
+import {SearchFilter} from "../../models/filters/SearchFilter.ts";
 
 
 const BASE_URL = '/schedule/room';
 
 export const getAllRooms = (): Promise<ApiResponse<Room[]>> => {
     return Http.get(`${BASE_URL}/all`);
+}
+
+export const getListOfRooms = (
+    filter: SearchFilter,
+    pagination: PaginationIn,
+): Promise<ApiResponse<ListPaginatedResponse<Room>>> => {
+    const queryParams = qs.stringify(
+        { ...filter, ...pagination },
+        { skipNulls: true },
+    );
+    return Http.get(`${BASE_URL}/?${queryParams}`);
 }
 
 

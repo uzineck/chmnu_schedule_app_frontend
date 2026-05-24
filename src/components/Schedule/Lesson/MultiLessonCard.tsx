@@ -29,14 +29,21 @@ interface MultiLessonCardProps {
 const MultiLessonCard: React.FC<MultiLessonCardProps> = ({ lessons }) => {
     const [open, setOpen] = useState(false);
 
-    // Lock body scroll while the modal is open. Antd's mask alone doesn't
-    // prevent touch-scroll on iOS Safari / older Android.
+    // Lock both <html> and <body> scroll while the modal is open. Locking
+    // body alone isn't enough on some desktop browsers where <html> owns the
+    // document scroll context. Antd's own scroll-locker isn't reliable enough
+    // here — we belt-and-suspenders.
     useEffect(() => {
         if (!open) return;
-        const original = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
+        const html = document.documentElement;
+        const body = document.body;
+        const htmlOriginal = html.style.overflow;
+        const bodyOriginal = body.style.overflow;
+        html.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
         return () => {
-            document.body.style.overflow = original;
+            html.style.overflow = htmlOriginal;
+            body.style.overflow = bodyOriginal;
         };
     }, [open]);
 
@@ -68,7 +75,7 @@ const MultiLessonCard: React.FC<MultiLessonCardProps> = ({ lessons }) => {
                 footer={null}
                 title={`Заняття в цей час · ${lessons.length}`}
                 centered
-                destroyOnHidden
+                destroyOnClose
             >
                 <MultiLessonModalBody>
                     {lessons.map((lesson, idx) => (

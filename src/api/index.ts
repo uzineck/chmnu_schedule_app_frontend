@@ -2,6 +2,7 @@ import {
     ApiCallError,
     AuthError,
     BadRequestError,
+    ConflictError,
     ForbiddenError,
     NetworkError,
     NotFoundError,
@@ -9,6 +10,7 @@ import {
     ServerError,
 } from "./errors.ts";
 import { updateAccessToken } from "./client/auth.ts";
+import { ApiErrorDetail } from "../models/ApiResponse.ts";
 
 const DOMAIN = `${import.meta.env.VITE_API_DOMAIN}`;
 const API = `${DOMAIN}/api`;
@@ -99,41 +101,55 @@ interface FetchOptions extends RequestInit {
     authFlow?: boolean;
 }
 
-const parseDetail = async (response: Response): Promise<string | undefined> => {
+/**
+ * Backend error envelope (4xx/5xx) per OpenAPI `ApiErrorResponse`:
+ *   { data: {}, meta: {}, errors: [{ code, message?, data? }, ...] }
+ * We surface the first error's message + code. `detail` is kept for
+ * call-sites that read it, mirroring the legacy field name.
+ */
+const parseApiError = async (
+    response: Response,
+): Promise<{ message?: string; code?: string }> => {
     try {
         const body = await response.clone().json();
-        if (body && typeof body.detail === "string") {
-            return body.detail;
+        const first: ApiErrorDetail | undefined = body?.errors?.[0];
+        if (first) {
+            return { message: first.message, code: first.code };
         }
     } catch {
         // body wasn't JSON or was empty — fall through
     }
-    return undefined;
+    return {};
 };
 
 const throwForStatus = async (response: Response): Promise<never> => {
-    const detail = await parseDetail(response);
-    const message = detail || response.statusText || `HTTP ${response.status}`;
+    const parsed = await parseApiError(response);
+    const message = parsed.message || response.statusText || `HTTP ${response.status}`;
+    const detail = parsed.message;
+    const code = parsed.code;
 
     if (response.status === 400) {
-        throw new BadRequestError(message, detail);
+        throw new BadRequestError(message, detail, code);
     }
     if (response.status === 401) {
-        throw new AuthError(message, 401, detail);
+        throw new AuthError(message, 401, detail, code);
     }
     if (response.status === 403) {
-        throw new ForbiddenError(message, detail);
+        throw new ForbiddenError(message, detail, code);
     }
     if (response.status === 404) {
-        throw new NotFoundError(message, detail);
+        throw new NotFoundError(message, detail, code);
+    }
+    if (response.status === 409) {
+        throw new ConflictError(message, detail, code);
     }
     if (response.status === 429) {
-        throw new RateLimitError(message, detail);
+        throw new RateLimitError(message, detail, code);
     }
     if (response.status >= 500) {
-        throw new ServerError(message, response.status, detail);
+        throw new ServerError(message, response.status, detail, code);
     }
-    throw new ApiCallError(message, response.status, detail);
+    throw new ApiCallError(message, response.status, detail, code);
 };
 
 const handleResponse = async (

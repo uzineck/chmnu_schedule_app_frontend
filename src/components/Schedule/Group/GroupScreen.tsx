@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import GroupSearch from "./GroupSearch.tsx";
+import GroupSearchAsync from "./GroupSearchAsync.tsx";
 import GroupSchedule from "./GroupSchedule.tsx";
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import { Group } from "../../../models/group/Group.ts";
+import { GroupWithSubgroup } from "../../../models/group/GroupWithSubgroup.ts";
 import { useScheduleSelection } from "../hooks/useScheduleSelection.ts";
 import { useTime } from "../Context/hooks/useTime.ts";
 import { ScheduleScreen } from "../scheduleScreenStyled.ts";
@@ -16,19 +17,22 @@ const GroupScreen = () => {
     const navigate = useNavigate();
     const { currentTime } = useTime();
 
+    // Seed active uuid from URL or localStorage so the schedule loads
+    // immediately — no full-list preload.
+    const initialUuid =
+        groupUuid ?? (typeof window !== "undefined" ? localStorage.getItem("lastGroupUuid") : null);
+    const [activeUuid, setActiveUuid] = useState<string | null>(initialUuid);
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
-    const [groupList, setGroupList] = useState<Group[]>([]);
+    const [scheduleUpdatedAt, setScheduleUpdatedAt] = useState<string | null>(null);
 
     const updateURL = useCallback(
         (group: Group | null, subgroup: Subgroup | null, weekType: boolean) => {
             if (!group) return;
-
             const basePath = `/group/${group.uuid}`;
             const queryParams = new URLSearchParams({
                 weekType: weekType.toString(),
                 ...(group.has_subgroups && { subgroup: subgroup || "" }),
             });
-
             navigate(`${basePath}/lessons?${queryParams.toString()}`, { replace: true });
         },
         [navigate]
@@ -40,21 +44,6 @@ const GroupScreen = () => {
     });
 
     useEffect(() => {
-        if (groupList.length === 0) return;
-
-        const storedGroupUuid = localStorage.getItem("lastGroupUuid");
-        let initialGroup: Group | null = null;
-
-        if (groupUuid) {
-            initialGroup = groupList.find((g) => g.uuid === groupUuid) ?? null;
-        } else if (storedGroupUuid) {
-            initialGroup = groupList.find((g) => g.uuid === storedGroupUuid) ?? null;
-        }
-
-        setSelectedGroup(initialGroup);
-    }, [groupUuid, groupList]);
-
-    useEffect(() => {
         if (!selectedGroup) return;
         localStorage.setItem("lastGroupUuid", selectedGroup.uuid);
         updateURL(selectedGroup, subgroup, weekType);
@@ -62,10 +51,17 @@ const GroupScreen = () => {
 
     const handleGroupSelect = (group: Group | null) => {
         setSelectedGroup(group);
+        setActiveUuid(group?.uuid ?? null);
     };
 
-    const handleGroupListFetched = (groups: Group[]) => {
-        setGroupList(groups);
+    // GroupSchedule fetches `/group/{uuid}/lessons` which returns the group
+    // inline — adopt it as the selected entity so the dropdown label is
+    // correct on a cold URL load.
+    const handleGroupBubbled = (group: GroupWithSubgroup | null) => {
+        if (!group) return;
+        if (!selectedGroup || selectedGroup.uuid !== group.uuid) {
+            setSelectedGroup(group);
+        }
     };
 
     return (
@@ -73,9 +69,8 @@ const GroupScreen = () => {
             <ScheduleControlPanel
                 topSlot={<ScheduleNavSwitcher />}
                 searchSlot={
-                    <GroupSearch
+                    <GroupSearchAsync
                         onGroupSelect={handleGroupSelect}
-                        onGroupListFetched={handleGroupListFetched}
                         selectedGroup={selectedGroup}
                     />
                 }
@@ -86,13 +81,16 @@ const GroupScreen = () => {
                 weekType={weekType}
                 currentWeekType={currentTime?.is_even}
                 onWeekTypeChange={handleWeekTypeChange}
+                lastUpdatedIso={scheduleUpdatedAt}
             />
-            {selectedGroup && (
+            {activeUuid && (
                 <GroupSchedule
-                    key={`${selectedGroup.uuid}-${subgroup}-${weekType}`}
-                    groupUuid={selectedGroup.uuid}
+                    key={`${activeUuid}-${subgroup}-${weekType}`}
+                    groupUuid={activeUuid}
                     subgroup={subgroup}
                     is_even={weekType}
+                    onScheduleUpdatedChange={setScheduleUpdatedAt}
+                    onGroupChange={handleGroupBubbled}
                 />
             )}
         </ScheduleScreen>

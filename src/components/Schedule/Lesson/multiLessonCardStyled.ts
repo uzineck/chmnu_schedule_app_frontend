@@ -121,4 +121,8 @@ export const MultiLessonModalBody = styled.div`
     flex-direction: column;
     gap: 12px;
     padding-top: 8px;
+    /* Stop scroll-chaining: when the modal content is long enough to scroll
+     * internally, reaching the top/bottom must NOT pass scroll up to the
+     * (already-locked) page beneath. */
+    overscroll-behavior: contain;
 `;

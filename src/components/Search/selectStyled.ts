@@ -29,9 +29,8 @@ export const customStyles: StylesConfig<OptionType, false> = {
             borderColor: theme.colors.accentDarkestPurple,
         },
     }),
-    menu: (provided) => ({
+    menuList: (provided) => ({
         ...provided,
-        overflowY: 'auto',
         scrollbarWidth: 'thin',
         scrollbarColor: `${theme.colors.accentPlum} transparent`,
         '&::-webkit-scrollbar': {

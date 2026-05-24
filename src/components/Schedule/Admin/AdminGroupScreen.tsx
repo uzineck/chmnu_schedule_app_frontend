@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Group } from "../../../models/group/Group.ts";
-import GroupSearch from "../Group/GroupSearch.tsx";
+import { GroupWithSubgroup } from "../../../models/group/GroupWithSubgroup.ts";
+import GroupSearchAsync from "../Group/GroupSearchAsync.tsx";
 import GroupSchedule from "../Group/GroupSchedule.tsx";
 import { useSchedule } from "../Context/hooks/useSchedule.ts";
 import { useScheduleSelection } from "../hooks/useScheduleSelection.ts";
@@ -13,9 +14,17 @@ import ViewPublicScheduleLink from "../ViewPublicScheduleLink.tsx";
 const AdminGroupScreen = () => {
     const { groupUuid } = useParams<{ groupUuid: string }>();
     const [searchParams] = useSearchParams();
-    const { group, setGroupUuid, setGroup, groupUuid: contextGroupUuid } = useSchedule();
-    const [groupList, setGroupList] = useState<Group[]>([]);
-    const [isInitialized, setIsInitialized] = useState(false);
+    const { setGroupUuid, setGroup, groupUuid: contextGroupUuid, setScheduleEditMode, scheduleRefreshKey } = useSchedule();
+
+    useEffect(() => {
+        setScheduleEditMode('admin');
+    }, [setScheduleEditMode]);
+
+    const initialUuid =
+        groupUuid ?? (typeof window !== "undefined" ? localStorage.getItem("lastGroupUuid") : null);
+    const [activeUuid, setActiveUuid] = useState<string | null>(initialUuid);
+    const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+    const [scheduleUpdatedAt, setScheduleUpdatedAt] = useState<string | null>(null);
 
     const navigate = useNavigate();
     const { currentTime } = useTime();
@@ -29,82 +38,76 @@ const AdminGroupScreen = () => {
     );
 
     const { subgroup, weekType, handleSubgroupChange, handleWeekTypeChange } = useScheduleSelection({
-        hasSubgroups: group?.has_subgroups ?? false,
+        hasSubgroups: selectedGroup?.has_subgroups ?? false,
         searchParams,
     });
 
+    // Push the active uuid into the lesson-context bridge so lesson actions
+    // (delete, modal submits) know which group they're acting on.
     useEffect(() => {
-        if (groupList.length === 0) return;
-
-        const storedGroupUuid = localStorage.getItem("lastGroupUuid");
-        let initialGroup: Group | null = null;
-
-        if (groupUuid) {
-            initialGroup = groupList.find((g) => g.uuid === groupUuid) ?? null;
-        } else if (storedGroupUuid) {
-            initialGroup = groupList.find((g) => g.uuid === storedGroupUuid) ?? null;
+        if (activeUuid) {
+            setGroupUuid(activeUuid);
         }
-
-        if (initialGroup) {
-            setGroup(initialGroup);
-            setGroupUuid(initialGroup.uuid);
-            setIsInitialized(true);
-        }
-    }, [groupUuid, groupList, setGroup, setGroupUuid]);
+    }, [activeUuid, setGroupUuid]);
 
     useEffect(() => {
-        if (!isInitialized) return;
-        updateURL(group);
-    }, [isInitialized, group, updateURL]);
+        if (!selectedGroup) return;
+        setGroup(selectedGroup);
+        localStorage.setItem("lastGroupUuid", selectedGroup.uuid);
+        updateURL(selectedGroup);
+    }, [selectedGroup, setGroup, updateURL]);
 
     const handleGroupSelect = (group: Group | null) => {
-        if (group) {
-            setGroup(group);
-            setGroupUuid(group.uuid);
-            localStorage.setItem("lastGroupUuid", group.uuid);
-            setIsInitialized(true);
-        }
+        setSelectedGroup(group);
+        setActiveUuid(group?.uuid ?? null);
     };
 
-    const handleGroupListFetched = (groups: Group[]) => {
-        setGroupList(groups);
+    const handleGroupBubbled = (group: GroupWithSubgroup | null) => {
+        if (!group) return;
+        if (!selectedGroup || selectedGroup.uuid !== group.uuid) {
+            setSelectedGroup(group);
+        }
     };
 
     return (
         <ScheduleScreen>
             <ScheduleControlPanel
                 topSlot={
-                    group ? (
+                    selectedGroup ? (
                         <ViewPublicScheduleLink
-                            groupUuid={group.uuid}
+                            groupUuid={selectedGroup.uuid}
                             subgroup={subgroup}
                             weekType={weekType}
                         />
                     ) : undefined
                 }
                 searchSlot={
-                    <GroupSearch
+                    <GroupSearchAsync
                         onGroupSelect={handleGroupSelect}
-                        onGroupListFetched={handleGroupListFetched}
-                        selectedGroup={group}
+                        selectedGroup={selectedGroup}
                     />
                 }
-                hasSubgroups={group?.has_subgroups ?? false}
+                showFilters={!!selectedGroup}
+                hasSubgroups={selectedGroup?.has_subgroups ?? false}
                 subgroup={subgroup}
                 onSubgroupChange={handleSubgroupChange}
                 weekType={weekType}
                 currentWeekType={currentTime?.is_even}
                 onWeekTypeChange={handleWeekTypeChange}
+                lastUpdatedIso={scheduleUpdatedAt}
             />
-            {contextGroupUuid && isInitialized && (
+            {contextGroupUuid && activeUuid && (
                 <GroupSchedule
-                    key={`${contextGroupUuid}-${subgroup}-${weekType}`}
-                    groupUuid={contextGroupUuid}
+                    key={`${activeUuid}-${subgroup}-${weekType}-${scheduleRefreshKey}`}
+                    groupUuid={activeUuid}
                     subgroup={subgroup}
                     is_even={weekType}
                     isEditable={true}
+                    onScheduleUpdatedChange={setScheduleUpdatedAt}
+                    onGroupChange={handleGroupBubbled}
                 />
             )}
+            <Outlet />
         </ScheduleScreen>
     );
 };

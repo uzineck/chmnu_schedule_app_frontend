@@ -8,11 +8,28 @@ import {GroupWithHeadman} from "../../models/group/GroupWithHeadman.ts";
 import {CreateGroupSchema} from "../../models/group/requests/CreateGroupSchema.ts";
 import {UpdateGroupHeadmanSchema} from "../../models/group/requests/UpdateGroupHeadmanSchema.ts";
 import {StatusResponse} from "../../models/StatusResponse.ts";
+import {ListPaginatedResponse, PaginationIn} from "../../models/ListPaginatedResponse.ts";
+import {SearchFilter} from "../../models/filters/SearchFilter.ts";
 
 const BASE_URL = '/schedule/group';
 
 export const getAllGroups = (): Promise<ApiResponse<Group[]>> => {
     return Http.get(`${BASE_URL}/all`);
+}
+
+export const getListOfGroups = (
+    filter: SearchFilter,
+    pagination: PaginationIn,
+): Promise<ApiResponse<ListPaginatedResponse<GroupWithHeadman>>> => {
+    const queryParams = qs.stringify(
+        { ...filter, ...pagination },
+        { skipNulls: true },
+    );
+    return Http.get(`${BASE_URL}/?${queryParams}`);
+}
+
+export const deleteGroup = (groupUuid: string): Promise<ApiResponse<StatusResponse>> => {
+    return Http.delete(`${BASE_URL}/${groupUuid}`, {});
 }
 
 export const getGroupLessons = (groupUuid: string, subgroup: Subgroup | null, is_even: boolean): Promise<ApiResponse<GroupWithLessons>> => {

@@ -1,8 +1,7 @@
 import {TeacherRanks} from "../enums/TeacherRanks.ts";
 
 export interface TeacherFilter {
-    first_name: string | null;
-    last_name: string | null;
-    middle_name: string | null;
-    rank: TeacherRanks | null;
+    /** Backend matches against last_name + first_name + middle_name. */
+    name?: string | null;
+    rank?: TeacherRanks | null;
 }

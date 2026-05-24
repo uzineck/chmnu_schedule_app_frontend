@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import styled from "styled-components";
 import { Subgroup } from "../../models/enums/Subgroup.ts";
 import {
     ControlPanel,
@@ -8,6 +9,15 @@ import {
     ScheduleScreenSearchContainer,
 } from "./scheduleScreenStyled.ts";
 import FilterTabRow from "./FilterTabRow.tsx";
+import { formatRelativeUa } from "../../utils/relativeTime.ts";
+
+const LastUpdated = styled.div`
+    font-size: 0.75rem;
+    color: ${({ theme }) => theme.colors.textMuted};
+    margin-top: 12px;
+    line-height: 1.2;
+    text-align: right;
+`;
 
 interface ScheduleControlPanelProps {
     topSlot?: ReactNode;
@@ -19,6 +29,8 @@ interface ScheduleControlPanelProps {
     weekType: boolean;
     currentWeekType?: boolean | null;
     onWeekTypeChange: (next: boolean) => void;
+    /** ISO datetime of the schedule's last update; null hides the indicator. */
+    lastUpdatedIso?: string | null;
 }
 
 const ScheduleControlPanel = ({
@@ -31,7 +43,13 @@ const ScheduleControlPanel = ({
     weekType,
     currentWeekType,
     onWeekTypeChange,
+    lastUpdatedIso,
 }: ScheduleControlPanelProps) => {
+    const lastUpdatedLabel = lastUpdatedIso ? formatRelativeUa(lastUpdatedIso) : null;
+    const lastUpdatedNode = lastUpdatedLabel ? (
+        <LastUpdated>Оновлено: {lastUpdatedLabel}</LastUpdated>
+    ) : null;
+
     return (
         <ControlPanel>
             {topSlot}
@@ -68,6 +86,7 @@ const ScheduleControlPanel = ({
                         </ScheduleButtonContainer>
                     )}
                 </ScheduleScreenControls>
+                {lastUpdatedNode}
             </ControlPanelBody>
         </ControlPanel>
     );

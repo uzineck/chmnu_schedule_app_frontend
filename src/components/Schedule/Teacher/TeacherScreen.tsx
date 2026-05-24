@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import TeacherSearch from "./TeacherSearch.tsx";
+import TeacherSearch from "./TeacherSearchAsync.tsx";
 import { Teacher } from "../../../models/teacher/Teacher.ts";
 import TeacherSchedule from "./TeacherSchedule.tsx";
 import { useScheduleSelection } from "../hooks/useScheduleSelection.ts";
@@ -15,8 +15,14 @@ const TeacherScreen = () => {
     const navigate = useNavigate();
     const { currentTime } = useTime();
 
+    // Effective uuid drives data fetch. On mount we seed it from URL or
+    // localStorage so the schedule loads immediately — no full-list preload.
+    const initialUuid =
+        teacherUuid ?? (typeof window !== "undefined" ? localStorage.getItem("lastTeacherUuid") : null);
+    const [activeUuid, setActiveUuid] = useState<string | null>(initialUuid);
+    // Full Teacher object — sourced from the dropdown OR bubbled up from
+    // TeacherSchedule's fetch (which returns `{teacher, lessons}`).
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
-    const [teacherList, setTeacherList] = useState<Teacher[]>([]);
 
     const updateURL = useCallback((teacher: Teacher | null, weekType: boolean) => {
         if (teacher) {
@@ -30,23 +36,6 @@ const TeacherScreen = () => {
     });
 
     useEffect(() => {
-        if (teacherList.length === 0) return;
-
-        let initialTeacher: Teacher | null = null;
-
-        if (teacherUuid) {
-            initialTeacher = teacherList.find((t) => t.uuid === teacherUuid) ?? null;
-        } else {
-            const storedTeacher = localStorage.getItem("lastTeacherUuid");
-            if (storedTeacher) {
-                initialTeacher = teacherList.find((t) => t.uuid === storedTeacher) ?? null;
-            }
-        }
-
-        setSelectedTeacher(initialTeacher);
-    }, [teacherUuid, teacherList]);
-
-    useEffect(() => {
         if (!selectedTeacher) return;
         localStorage.setItem("lastTeacherUuid", selectedTeacher.uuid);
         updateURL(selectedTeacher, weekType);
@@ -54,10 +43,17 @@ const TeacherScreen = () => {
 
     const handleTeacherSelect = (teacher: Teacher | null) => {
         setSelectedTeacher(teacher);
+        setActiveUuid(teacher?.uuid ?? null);
     };
 
-    const handleTeacherListFetched = (teachers: Teacher[]) => {
-        setTeacherList(teachers);
+    // TeacherSchedule fetches `/teacher/{uuid}/lessons` which returns the full
+    // Teacher inline — adopt it as our selected entity so the dropdown label
+    // is correct even on a cold load via URL.
+    const handleTeacherBubbled = (teacher: Teacher | null) => {
+        if (!teacher) return;
+        if (!selectedTeacher || selectedTeacher.uuid !== teacher.uuid) {
+            setSelectedTeacher(teacher);
+        }
     };
 
     return (
@@ -67,7 +63,6 @@ const TeacherScreen = () => {
                 searchSlot={
                     <TeacherSearch
                         onTeacherSelect={handleTeacherSelect}
-                        onTeacherListFetched={handleTeacherListFetched}
                         selectedTeacher={selectedTeacher}
                     />
                 }
@@ -77,11 +72,12 @@ const TeacherScreen = () => {
                 currentWeekType={currentTime?.is_even}
                 onWeekTypeChange={handleWeekTypeChange}
             />
-            {selectedTeacher && (
+            {activeUuid && (
                 <TeacherSchedule
-                    key={`${selectedTeacher.uuid}-${weekType}`}
-                    teacherUuid={selectedTeacher.uuid}
+                    key={`${activeUuid}-${weekType}`}
+                    teacherUuid={activeUuid}
                     is_even={weekType}
+                    onTeacherChange={handleTeacherBubbled}
                 />
             )}
         </ScheduleScreen>

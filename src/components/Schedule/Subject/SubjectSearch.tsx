@@ -1,28 +1,23 @@
-import EntitySearch from "../../Search/EntitySearch.tsx";
-import {Subject} from "../../../models/subject/Subject.ts";
-import {getAllSubjects} from "../../../api/schedule/subject.ts";
+import AsyncEntitySearch from "../../Search/AsyncEntitySearch.tsx";
+import { getListOfSubjects } from "../../../api/schedule/subject.ts";
+import { Subject } from "../../../models/subject/Subject.ts";
 
 interface SubjectSearchProps {
     onSubjectSelect: (subject: Subject | null) => void;
-    onSubjectListFetched: (subjects: Subject[]) => void;
     selectedSubject: Subject | null;
 }
 
-const SubjectSearch = ({ onSubjectSelect, selectedSubject, onSubjectListFetched }: SubjectSearchProps) => {
+const SubjectSearch = ({ onSubjectSelect, selectedSubject }: SubjectSearchProps) => {
     return (
-        <EntitySearch<Subject>
-            fetchData={getAllSubjects}
-            mapToOptions={(subject: Subject) => ({
-                value: subject.uuid,
-                label: `${subject.title}`,
-            })}
-            selectedOption={selectedSubject ?
-                {
-                    value: selectedSubject.uuid,
-                    label: `${selectedSubject.title}`,
-                } : null}
-            onEntitySelect={onSubjectSelect}
-            onDataFetched={onSubjectListFetched}
+        <AsyncEntitySearch<Subject>
+            fetchPage={getListOfSubjects}
+            mapToOption={(subject) => ({ value: subject.uuid, label: subject.title })}
+            selected={
+                selectedSubject
+                    ? { value: selectedSubject.uuid, label: selectedSubject.title }
+                    : null
+            }
+            onSelect={onSubjectSelect}
             placeholder="Виберіть дисципліну"
             noOptionsMessage="Жодної дисципліни не знайдено"
         />

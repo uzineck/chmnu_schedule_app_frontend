@@ -8,6 +8,7 @@ import {clientFormRoutes} from "./Client/Routes.tsx";
 import {groupFormRoutes} from "./Group/Routes.tsx";
 import {Outlet} from "react-router-dom";
 import {facultyFormRoutes} from "./Faculty/Routes.tsx";
+import {lessonChildRoutes} from "../Lesson/Routes.tsx";
 
 export const adminRoutes = [
     {
@@ -24,7 +25,11 @@ export const adminRoutes = [
                                 path: "group",
                                 children: [
                                     { index: true, element: <ProtectedRoute roles={[ClientRole.ADMIN, ClientRole.SCHEDULE_MANAGER]}><AdminGroupScreen /></ProtectedRoute>},
-                                    { path: ":groupUuid/lessons", element:<ProtectedRoute roles={[ClientRole.ADMIN, ClientRole.SCHEDULE_MANAGER]}><AdminGroupScreen /></ProtectedRoute>},
+                                    {
+                                        path: ":groupUuid/lessons",
+                                        element: <ProtectedRoute roles={[ClientRole.ADMIN, ClientRole.SCHEDULE_MANAGER]}><AdminGroupScreen /></ProtectedRoute>,
+                                        children: lessonChildRoutes,
+                                    },
                                 ]
                             },
                         ]

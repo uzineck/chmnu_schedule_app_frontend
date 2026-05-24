@@ -42,8 +42,12 @@ export const useScheduleSelection = ({
     const { currentTime } = useTime();
     const { setSubgroup: bridgeSubgroup, setIsEvenWeek: bridgeWeekType } = useSchedule();
 
-    const [subgroup, setLocalSubgroup] = useState<Subgroup | null>(null);
+    const [storedSubgroup, setLocalSubgroup] = useState<Subgroup | null>(null);
     const [weekType, setLocalWeekType] = useState<boolean>(true);
+    // Effective subgroup must be derived synchronously from `hasSubgroups` so
+    // that switching from a group-with-subgroups to one without doesn't fire
+    // a stale `subgroup=A` request before the reset effect runs.
+    const subgroup = hasSubgroups ? storedSubgroup : null;
 
     const initialized = useRef(false);
     const onChangeRef = useRef(onChange);
@@ -75,17 +79,23 @@ export const useScheduleSelection = ({
         initialized.current = true;
     }, [hasSubgroups, searchParams, currentTime, bridgeSubgroup, bridgeWeekType]);
 
+    // When the user navigates into a group that has subgroups but we don't
+    // yet have a stored selection, seed it (defaults to A). The "drop on
+    // hasSubgroups=false" case is handled by the derivation above.
     useEffect(() => {
         if (!initialized.current) return;
-        if (!hasSubgroups && subgroup !== null) {
-            setLocalSubgroup(null);
-            bridgeSubgroup(null);
-        } else if (hasSubgroups && subgroup === null) {
+        if (hasSubgroups && storedSubgroup === null) {
             const resolved = resolveSubgroup(true, null);
             setLocalSubgroup(resolved);
-            bridgeSubgroup(resolved);
         }
-    }, [hasSubgroups, subgroup, bridgeSubgroup]);
+    }, [hasSubgroups, storedSubgroup]);
+
+    // Keep ScheduleContext in sync with the derived (effective) subgroup so
+    // lesson actions always read the right value.
+    useEffect(() => {
+        if (!initialized.current) return;
+        bridgeSubgroup(subgroup);
+    }, [subgroup, bridgeSubgroup]);
 
     const handleSubgroupChange = useCallback(
         (next: Subgroup) => {

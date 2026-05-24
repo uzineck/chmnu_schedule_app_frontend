@@ -1,28 +1,26 @@
-import EntitySearch from "../../Search/EntitySearch.tsx";
-import {getAllFaculties} from "../../../api/schedule/faculty.ts";
-import {Faculty} from "../../../models/faculty/Faculty.ts";
+import AsyncEntitySearch from "../../Search/AsyncEntitySearch.tsx";
+import { getListOfFaculties } from "../../../api/schedule/faculty.ts";
+import { Faculty } from "../../../models/faculty/Faculty.ts";
 
 interface FacultySearchProps {
-    onFacultySelect: (Faculty: Faculty | null) => void;
-    onFacultyListFetched: (Faculties: Faculty[]) => void;
+    onFacultySelect: (faculty: Faculty | null) => void;
     selectedFaculty: Faculty | null;
 }
 
-const FacultySearch = ({ onFacultySelect, selectedFaculty, onFacultyListFetched }: FacultySearchProps) => {
+const FacultySearch = ({ onFacultySelect, selectedFaculty }: FacultySearchProps) => {
     return (
-        <EntitySearch<Faculty>
-            fetchData={getAllFaculties}
-            mapToOptions={(faculty: Faculty) => ({
+        <AsyncEntitySearch<Faculty>
+            fetchPage={getListOfFaculties}
+            mapToOption={(faculty) => ({
                 value: faculty.uuid,
-                label: `${faculty.code_name}`,
+                label: faculty.code_name,
             })}
-            selectedOption={selectedFaculty ?
-                {
-                    value: selectedFaculty.uuid,
-                    label: `${selectedFaculty.code_name}`,
-                } : null}
-            onEntitySelect={onFacultySelect}
-            onDataFetched={onFacultyListFetched}
+            selected={
+                selectedFaculty
+                    ? { value: selectedFaculty.uuid, label: selectedFaculty.code_name }
+                    : null
+            }
+            onSelect={onFacultySelect}
             placeholder="Виберіть факультет"
             noOptionsMessage="Жодного факультета не знайдено"
         />

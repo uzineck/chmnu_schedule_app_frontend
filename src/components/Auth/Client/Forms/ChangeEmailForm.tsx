@@ -1,28 +1,46 @@
 import React from 'react';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import type { MessageInstance } from "antd/es/message/interface";
 import { updateEmail } from "../../../../api/client/client.ts";
-import { useNavigate } from "react-router-dom";
-import { ApiCallError } from "../../../../api/errors.ts";
-import { message } from "antd";
-
-import {useAuth} from "../../Context/hooks/useAuth.ts";
-import {ErrorMessage, FormCard, FormInputGroup, FormInput, FormLabel, SubmitButton} from "./formikFormStyled.ts";
+import { useAuth } from "../../Context/hooks/useAuth.ts";
+import { FormCard } from "../../../Forms/formStyled.ts";
+import FormField from "../../../Forms/FormField.tsx";
+import FormActions from "../../../Forms/FormActions.tsx";
+import { useFormSubmit } from "../../../Forms/useFormSubmit.ts";
 
 const ChangeEmailSchema = Yup.object().shape({
     email: Yup.string()
         .email('Невірний формат email')
-        .matches(/^[a-zA-Z0-9_.+-]+@gmail\.com$/g, 'Невірний домен email, використовуйте @gmail.com')
         .required('Email обов\'язковий'),
     password: Yup.string()
-        .required('Паролько обов\'язковий'),
+        .required('Пароль обов\'язковий'),
 });
 
-const ChangeEmailForm: React.FC = () => {
-    const { loginProp } = useAuth()
-    const [messageApi, contextHolder] = message.useMessage();
-    const navigate = useNavigate();
-    const key = 'updatable';
+interface ChangeEmailFormProps {
+    onSuccess?: () => void;
+    onCancel?: () => void;
+    /** External messageApi — when provided, toasts survive form unmount. */
+    messageApi?: MessageInstance;
+}
+
+const ChangeEmailForm: React.FC<ChangeEmailFormProps> = ({ onSuccess, onCancel, messageApi }) => {
+    const { loginProp } = useAuth();
+
+    const { onSubmit, contextHolder } = useFormSubmit({
+        submit: async (values: { email: string; password: string }) => {
+            const response = await updateEmail({
+                new_email: values.email,
+                password: values.password,
+            });
+            loginProp(response.data.access_token);
+            return response;
+        },
+        successTo: onSuccess ? undefined : '/profile',
+        successMessage: 'Email змінено успішно',
+        onSuccess,
+        messageApi,
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -30,58 +48,38 @@ const ChangeEmailForm: React.FC = () => {
             password: '',
         },
         validationSchema: ChangeEmailSchema,
-        onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Завантаження...' });
-            try {
-                const response = await updateEmail({
-                    new_email: values.email,
-                    password: values.password,
-                });
-                loginProp(response.data.access_token)
-                navigate('/profile', {
-                    state: { successMessage: 'Email змінено успішно' },
-                });
-            } catch (error) {
-                if (error instanceof ApiCallError) {
-                    messageApi.error({ key: key, content: error.message, duration: 3 });
-                } else {
-                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 3 });
-                }
-            } finally {
-                setSubmitting(false);
-            }
-        },
+        onSubmit,
     });
 
     return (
-        <FormCard onSubmit={formik.handleSubmit}>
+        <FormCard onSubmit={formik.handleSubmit} noValidate>
             {contextHolder}
-            <FormInputGroup>
-                <FormLabel htmlFor="email">Новий email</FormLabel>
-                <FormInput
-                    id="email"
-                    type="email"
-                    {...formik.getFieldProps('email')}
-                />
-                {formik.touched.email && formik.errors.email && (
-                    <ErrorMessage>{formik.errors.email}</ErrorMessage>
-                )}
-            </FormInputGroup>
-            <FormInputGroup>
-                <FormLabel htmlFor="password">Пароль</FormLabel>
-                <FormInput
-                    id="password"
-                    type="password"
-                    {...formik.getFieldProps('password')}
-                />
-                {formik.touched.password && formik.errors.password && (
-                    <ErrorMessage>{formik.errors.password}</ErrorMessage>
-                )}
-            </FormInputGroup>
 
-            <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Збереження...' : 'Змінити'}
-            </SubmitButton>
+            <FormField
+                {...formik.getFieldProps('email')}
+                label="Новий email"
+                type="email"
+                autoComplete="email"
+                touched={formik.touched.email}
+                error={formik.errors.email}
+            />
+
+            <FormField
+                {...formik.getFieldProps('password')}
+                label="Пароль"
+                type="password"
+                autoComplete="current-password"
+                touched={formik.touched.password}
+                error={formik.errors.password}
+            />
+
+            <FormActions
+                submitLabel="Змінити email"
+                submitLoadingLabel="Збереження..."
+                cancelTo={onCancel ? undefined : "/profile"}
+                onCancel={onCancel}
+                isSubmitting={formik.isSubmitting}
+            />
         </FormCard>
     );
 };

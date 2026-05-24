@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import styled from "styled-components";
 import { login } from '../../../api/client/auth.ts';
-import { useNavigate } from 'react-router-dom';
 import {
     ApiCallError,
     AuthError,
@@ -10,25 +10,54 @@ import {
     RateLimitError,
     ServerError,
 } from "../../../api/errors.ts";
-import {message} from "antd";
-import {useAuth} from "../Context/hooks/useAuth.ts";
-import {
-    ErrorMessage,
-    FormInputGroup,
-    FormInput,
-    FormLabel,
-    SubmitButton,
-    FormSubmit
-} from "../Client/Forms/formikFormStyled.ts";
-import {FormTitle, FormPage, SmallFormDiv} from "../../Schedule/Lesson/Forms/formStyled.ts";
+import { useAuth } from "../Context/hooks/useAuth.ts";
+import { FormCard } from "../../Forms/formStyled.ts";
+import FormField from "../../Forms/FormField.tsx";
+import FormActions from "../../Forms/FormActions.tsx";
+import { useFormSubmit } from "../../Forms/useFormSubmit.ts";
+import { media } from "../../../styles/media.ts";
+
+const LoginPage = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 1.5rem 0.75rem;
+    gap: 16px;
+
+    ${media.up('phone')} {
+        padding: 2.5rem 1rem;
+        gap: 20px;
+    }
+
+    ${media.up('tablet')} {
+        padding: 4rem 1rem;
+    }
+`;
+
+const LoginTitle = styled.h1`
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: ${({theme}) => theme.colors.textPrimary};
+    text-align: center;
+    margin: 0;
+
+    ${media.up('phone')} {
+        font-size: 1.35rem;
+    }
+
+    ${media.up('tablet')} {
+        font-size: 1.5rem;
+    }
+`;
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
         .email('Невірний формат email')
-        .matches(/^[a-zA-Z0-9_.+-]+@gmail\.com$/g, 'Невірний домен email, використовуйте @gmail.com')
         .required('Email обов\'язковий'),
     password: Yup.string()
-        .required('Паролько обов\'язковий'),
+        .required('Пароль обов\'язковий'),
 });
 
 const messageForError = (error: unknown): string => {
@@ -52,72 +81,58 @@ const messageForError = (error: unknown): string => {
 
 const Login = () => {
     const { loginProp } = useAuth();
-    const [messageApi, contextHolder] = message.useMessage();
-    const navigate = useNavigate();
-    const key = 'login';
+
+    const { onSubmit, contextHolder } = useFormSubmit({
+        submit: async (values: { email: string; password: string }) => {
+            const response = await login({ email: values.email, password: values.password });
+            await loginProp(response.data.access_token);
+            return response;
+        },
+        successTo: "/",
+        successMessage: "Ви успішно увійшли у систему",
+        loadingKey: "login",
+        formatError: messageForError,
+    });
 
     const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
+        initialValues: { email: '', password: '' },
         validationSchema: LoginSchema,
-        onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key, content: 'Завантаження...' });
-            try {
-                const response = await login({
-                    email: values.email,
-                    password: values.password,
-                });
-                await loginProp(response.data.access_token);
-                messageApi.destroy(key);
-                navigate("/", {
-                    state: { successMessage: "Ви успішно увійшли у систему" },
-                });
-            } catch (error) {
-                messageApi.error({ key, content: messageForError(error), duration: 3 });
-            } finally {
-                setSubmitting(false);
-            }
-        },
+        onSubmit,
     });
 
     return (
-        <FormPage>
+        <LoginPage>
             {contextHolder}
-            <SmallFormDiv>
-                <FormTitle>Увійдіть у свій акаунт розкладу</FormTitle>
-                <FormSubmit onSubmit={formik.handleSubmit}>
-                    <FormInputGroup>
-                        <FormLabel htmlFor="email">Email</FormLabel>
-                        <FormInput
-                            id="email"
-                            type="email"
-                            {...formik.getFieldProps('email')}
-                        />
-                        {formik.touched.email && formik.errors.email && (
-                            <ErrorMessage>{formik.errors.email}</ErrorMessage>
-                        )}
-                    </FormInputGroup>
+            <LoginTitle>Увійдіть у свій акаунт розкладу</LoginTitle>
 
-                    <FormInputGroup>
-                        <FormLabel htmlFor="password">Пароль</FormLabel>
-                        <FormInput
-                            id="password"
-                            type="password"
-                            {...formik.getFieldProps('password')}
-                        />
-                        {formik.touched.password && formik.errors.password && (
-                            <ErrorMessage>{formik.errors.password}</ErrorMessage>
-                        )}
-                    </FormInputGroup>
+            <FormCard onSubmit={formik.handleSubmit} noValidate>
+                <FormField
+                    {...formik.getFieldProps('email')}
+                    label="Email"
+                    type="email"
+                    autoComplete="email"
+                    touched={formik.touched.email}
+                    error={formik.errors.email}
+                />
 
-                    <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                        {formik.isSubmitting ? 'Завантаження...' : 'Увійти'}
-                    </SubmitButton>
-                </FormSubmit>
-            </SmallFormDiv>
-        </FormPage>
+                <FormField
+                    {...formik.getFieldProps('password')}
+                    label="Пароль"
+                    type="password"
+                    autoComplete="current-password"
+                    touched={formik.touched.password}
+                    error={formik.errors.password}
+                />
+
+                <FormActions
+                    submitLabel="Увійти"
+                    submitLoadingLabel="Вхід..."
+                    cancelTo="/"
+                    cancelLabel="На головну"
+                    isSubmitting={formik.isSubmitting}
+                />
+            </FormCard>
+        </LoginPage>
     );
 };
 

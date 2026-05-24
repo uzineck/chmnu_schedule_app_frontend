@@ -8,6 +8,7 @@ export enum ClientRole {
     TEACHER_MANAGER = "teacher_manager",
     GROUP_MANAGER = "group_manager",
     SCHEDULE_MANAGER = "schedule_manager",
+    DEFAULT = "default",
 }
 
 export const clientRoleOptionsUa = [
@@ -20,6 +21,7 @@ export const clientRoleOptionsUa = [
     { value: ClientRole.SUBJECT_MANAGER, label: "Менеджер дисциплін" },
     { value: ClientRole.GROUP_MANAGER, label: "Менеджер груп" },
     { value: ClientRole.SCHEDULE_MANAGER, label: "Менеджер розкладу" },
+    { value: ClientRole.DEFAULT, label: "Користувач" },
 ];
 
 export const getClientRoleLabels = (roles: ClientRole[] | undefined): string => {

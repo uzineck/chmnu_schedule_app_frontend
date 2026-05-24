@@ -1,25 +1,45 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import {updateCredentials} from "../../../../api/client/client.ts";
-import {ApiCallError} from "../../../../api/errors.ts";
-import {message} from "antd";
-import {useNavigate} from "react-router-dom";
-
-import {useAuth} from "../../Context/hooks/useAuth.ts";
-import {ErrorMessage, FormCard, FormInputGroup, FormInput, FormLabel, SubmitButton} from "./formikFormStyled.ts";
+import type { MessageInstance } from "antd/es/message/interface";
+import { updateCredentials } from "../../../../api/client/client.ts";
+import { useAuth } from "../../Context/hooks/useAuth.ts";
+import { FormCard } from "../../../Forms/formStyled.ts";
+import FormField from "../../../Forms/FormField.tsx";
+import FormActions from "../../../Forms/FormActions.tsx";
+import { useFormSubmit } from "../../../Forms/useFormSubmit.ts";
 
 const ChangeCredentialsSchema = Yup.object().shape({
     lastName: Yup.string().required('Прізвище обов\'язкове'),
-    firstName: Yup.string().required('Ім\'я обов\'зкове'),
+    firstName: Yup.string().required('Ім\'я обов\'язкове'),
     middleName: Yup.string().required('Ім\'я по-батькові обов\'язкове'),
 });
 
-const ChangeCredentialsForm: React.FC = () => {
+interface ChangeCredentialsFormProps {
+    onSuccess?: () => void;
+    onCancel?: () => void;
+    /** External messageApi — when provided, toasts survive form unmount. */
+    messageApi?: MessageInstance;
+}
+
+const ChangeCredentialsForm: React.FC<ChangeCredentialsFormProps> = ({ onSuccess, onCancel, messageApi }) => {
     const { client, updateClient } = useAuth();
-    const [messageApi, contextHolder] = message.useMessage();
-    const navigate = useNavigate();
-    const key = 'updatable';
+
+    const { onSubmit, contextHolder } = useFormSubmit({
+        submit: async (values: { lastName: string; firstName: string; middleName: string }) => {
+            const result = await updateCredentials({
+                first_name: values.firstName,
+                last_name: values.lastName,
+                middle_name: values.middleName,
+            });
+            updateClient();
+            return result;
+        },
+        successTo: onSuccess ? undefined : '/profile',
+        successMessage: 'Повне ім\'я змінено успішно',
+        onSuccess,
+        messageApi,
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -28,69 +48,47 @@ const ChangeCredentialsForm: React.FC = () => {
             middleName: client?.middle_name || '',
         },
         validationSchema: ChangeCredentialsSchema,
-        onSubmit: async (values, { setSubmitting }) => {
-            messageApi.loading({ key: key, content: 'Завантаження...' });
-            try {
-                await updateCredentials({
-                    first_name: values.firstName,
-                    last_name: values.lastName,
-                    middle_name: values.middleName,
-                });
-                updateClient();
-                navigate('/profile', {
-                    state: { successMessage: 'Повне ім\'я змінено успішно' },
-                });
-            } catch (error) {
-                if (error instanceof ApiCallError) {
-                    messageApi.error({ key: key, content: error.message, duration: 3 });
-                } else {
-                    messageApi.error({ key: key, content: "Виникла невідома помилка", duration: 2 });
-                }
-            } finally {
-                setSubmitting(false);
-            }
-        },
+        onSubmit,
     });
 
     return (
-        <FormCard onSubmit={formik.handleSubmit}>
+        <FormCard onSubmit={formik.handleSubmit} noValidate>
             {contextHolder}
-            <FormInputGroup>
-                <FormLabel htmlFor="lastName">Прізвище</FormLabel>
-                <FormInput
-                    id="lastName"
-                    type="text"
-                    {...formik.getFieldProps('lastName')}
-                />
-                {formik.touched.lastName && formik.errors.lastName && (
-                    <ErrorMessage>{formik.errors.lastName}</ErrorMessage>
-                )}
-            </FormInputGroup>
 
-            <FormInputGroup>
-                <FormLabel htmlFor="firstName">Ім'я</FormLabel>
-                <FormInput
-                    id="firstName"
-                    type="text"
-                    {...formik.getFieldProps('firstName')}
-                />
-                {formik.touched.firstName && formik.errors.firstName && (
-                    <ErrorMessage>{formik.errors.firstName}</ErrorMessage>
-                )}
-            </FormInputGroup>
+            <FormField
+                {...formik.getFieldProps('lastName')}
+                label="Прізвище"
+                type="text"
+                autoComplete="family-name"
+                touched={formik.touched.lastName}
+                error={formik.errors.lastName}
+            />
 
-            <FormInputGroup>
-                <FormLabel htmlFor="middleName">Ім'я по-батькові</FormLabel>
-                <FormInput
-                    id="middleName"
-                    type="text"
-                    {...formik.getFieldProps('middleName')}
-                />
-            </FormInputGroup>
+            <FormField
+                {...formik.getFieldProps('firstName')}
+                label="Ім'я"
+                type="text"
+                autoComplete="given-name"
+                touched={formik.touched.firstName}
+                error={formik.errors.firstName}
+            />
 
-            <SubmitButton type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? 'Збереження...' : 'Змінити'}
-            </SubmitButton>
+            <FormField
+                {...formik.getFieldProps('middleName')}
+                label="Ім'я по-батькові"
+                type="text"
+                autoComplete="additional-name"
+                touched={formik.touched.middleName}
+                error={formik.errors.middleName}
+            />
+
+            <FormActions
+                submitLabel="Зберегти зміни"
+                submitLoadingLabel="Збереження..."
+                cancelTo={onCancel ? undefined : "/profile"}
+                onCancel={onCancel}
+                isSubmitting={formik.isSubmitting}
+            />
         </FormCard>
     );
 };
