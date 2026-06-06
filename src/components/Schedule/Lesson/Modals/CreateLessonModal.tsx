@@ -6,10 +6,12 @@ import { Subject } from "../../../../models/subject/Subject.ts";
 import { Teacher } from "../../../../models/teacher/Teacher.ts";
 import { Room } from "../../../../models/room/Room.ts";
 import { LessonType, lessonTypeOptionsUa } from "../../../../models/enums/LessonType.ts";
+import { OrdinaryNumber } from "../../../../models/enums/OrdinaryNumber.ts";
+import { Subgroup } from "../../../../models/enums/Subgroup.ts";
 import { LessonSchema } from "../../../../models/lesson/request/LessonSchema.ts";
 import { createLesson } from "../../../../api/schedule/lesson.ts";
 import { addLessonToGroupAdmin, addLessonToGroupHeadman } from "../../../../api/schedule/group.ts";
-import { ApiCallError } from "../../../../api/errors.ts";
+import { ApiCallError, ConflictError } from "../../../../api/errors.ts";
 import { useSchedule } from "../../Context/hooks/useSchedule.ts";
 import { useScheduleEditTarget } from "../../hooks/useScheduleEditTarget.ts";
 import SubjectSearch from "../../Subject/SubjectSearch.tsx";
@@ -18,6 +20,18 @@ import RoomSearch from "../../Room/RoomSearch.tsx";
 import { FormCard, FormFieldSelect } from "../../../Forms/formStyled.ts";
 import FormField from "../../../Forms/FormField.tsx";
 import FormActions from "../../../Forms/FormActions.tsx";
+import LessonTimeslotSelector from "./LessonTimeslotSelector.tsx";
+
+const LAST_LESSON_TYPE_KEY = 'lastLessonType';
+
+const readStoredLessonType = (): LessonType => {
+    if (typeof window === 'undefined') return LessonType.LECTURE;
+    const stored = localStorage.getItem(LAST_LESSON_TYPE_KEY);
+    if (stored && (Object.values(LessonType) as string[]).includes(stored)) {
+        return stored as LessonType;
+    }
+    return LessonType.LECTURE;
+};
 
 const CreateLessonValidationSchema = Yup.object().shape({
     subject_uuid: Yup.string().required("Оберіть дисципліну"),
@@ -37,11 +51,20 @@ interface CreateLessonModalProps {
 const CreateLessonModal = ({ open, onClose, onSuccess }: CreateLessonModalProps) => {
     const { day, ordinaryNumber, isEvenWeek, groupUuid, subgroup } = useSchedule();
     const { mode } = useScheduleEditTarget();
-    const [messageApi, contextHolder] = message.useMessage();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
     const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+
+    const [extraOrds, setExtraOrds] = useState<Set<OrdinaryNumber>>(new Set());
+    const [extraWeeks, setExtraWeeks] = useState<Set<boolean>>(new Set());
+    const [extraSubgroups, setExtraSubgroups] = useState<Set<Subgroup>>(new Set());
+
+    const resetExtras = () => {
+        setExtraOrds(new Set());
+        setExtraWeeks(new Set());
+        setExtraSubgroups(new Set());
+    };
 
     const formik = useFormik<{
         subject_uuid: string;
@@ -53,47 +76,108 @@ const CreateLessonModal = ({ open, onClose, onSuccess }: CreateLessonModalProps)
             subject_uuid: '',
             teacher_uuid: '',
             room_uuid: '',
-            type: LessonType.LECTURE,
+            type: readStoredLessonType(),
         },
         validationSchema: CreateLessonValidationSchema,
         onSubmit: async (values, { setSubmitting, resetForm }) => {
             if (!day || !ordinaryNumber || !groupUuid) {
-                messageApi.error({ content: "Створюйте пару тільки з панелі розкладу", duration: 3 });
+                message.error({ content: "Створюйте пару тільки з панелі розкладу", duration: 3 });
                 setSubmitting(false);
                 return;
             }
-            messageApi.loading({ key: "create-lesson", content: "Створення..." });
-            try {
-                const lessonData: LessonSchema = {
-                    schema: {
-                        subject_uuid: values.subject_uuid,
-                        teacher_uuid: values.teacher_uuid,
-                        room_uuid: values.room_uuid,
-                    },
-                    lesson_schema: {
-                        type: values.type,
-                        timeslot: { day, ord_number: ordinaryNumber, is_even: isEvenWeek },
-                    },
-                };
-                const createResponse = await createLesson(lessonData);
-                const newLessonUuid = createResponse.data.uuid;
-                if (mode === 'headman') {
-                    await addLessonToGroupHeadman(newLessonUuid, subgroup);
-                } else {
-                    await addLessonToGroupAdmin(groupUuid, newLessonUuid, subgroup);
+
+            const allOrds = Array.from(new Set([ordinaryNumber, ...extraOrds]));
+            const allWeeks = Array.from(new Set([isEvenWeek, ...extraWeeks]));
+            const allSubgroups: (Subgroup | null)[] = subgroup !== null
+                ? Array.from(new Set([subgroup, ...extraSubgroups]))
+                : [null];
+
+            // "Slot" = a single cell the user sees in the matrix (week × ord × subgroup).
+            // That's what we count for the summary toast.
+            const expected = allWeeks.length * allOrds.length * allSubgroups.length;
+
+            let created = 0;
+            let skipped = 0;
+            let failed = 0;
+            const failureMessages: string[] = [];
+
+            message.loading({ key: "create-lesson", content: "Створення..." });
+
+            // Each (week, ord) gets its own Lesson row; that Lesson is then
+            // attached to every selected subgroup. We continue past per-slot
+            // errors so a single conflict doesn't abort the whole batch.
+            for (const w of allWeeks) {
+                for (const ord of allOrds) {
+                    let newLessonUuid: string | null = null;
+                    try {
+                        const lessonData: LessonSchema = {
+                            schema: {
+                                subject_uuid: values.subject_uuid,
+                                teacher_uuid: values.teacher_uuid,
+                                room_uuid: values.room_uuid,
+                            },
+                            lesson_schema: {
+                                type: values.type,
+                                timeslot: { day, ord_number: ord, is_even: w },
+                            },
+                        };
+                        const response = await createLesson(lessonData);
+                        newLessonUuid = response.data.uuid;
+                    } catch (error) {
+                        // createLesson failed for every subgroup at this (week, ord).
+                        failed += allSubgroups.length;
+                        if (error instanceof ApiCallError) failureMessages.push(error.message);
+                    }
+
+                    if (!newLessonUuid) continue;
+
+                    for (const sg of allSubgroups) {
+                        try {
+                            if (mode === 'headman') {
+                                await addLessonToGroupHeadman(newLessonUuid, sg);
+                            } else {
+                                await addLessonToGroupAdmin(groupUuid, newLessonUuid, sg);
+                            }
+                            created++;
+                        } catch (error) {
+                            // ConflictError = slot already occupied for this
+                            // group/subgroup. Treat as skipped, not failed.
+                            if (error instanceof ConflictError) {
+                                skipped++;
+                            } else {
+                                failed++;
+                                if (error instanceof ApiCallError) failureMessages.push(error.message);
+                            }
+                        }
+                    }
                 }
-                messageApi.success({ key: "create-lesson", content: "Пару успішно створено", duration: 2 });
+            }
+
+            if (created === expected) {
+                const label = expected > 1
+                    ? `Створено ${expected} пар`
+                    : "Пару успішно створено";
+                message.success({ key: "create-lesson", content: label, duration: 2 });
+            } else if (created > 0) {
+                const parts = [`Створено: ${created}`];
+                if (skipped > 0) parts.push(`пропущено: ${skipped}`);
+                if (failed > 0) parts.push(`помилок: ${failed}`);
+                message.warning({ key: "create-lesson", content: parts.join(", "), duration: 4 });
+            } else {
+                const hint = failureMessages[0] ?? (skipped > 0 ? "усі слоти вже зайняті" : "не вдалося створити пару");
+                message.error({ key: "create-lesson", content: hint, duration: 4 });
+            }
+
+            if (created > 0) {
+                localStorage.setItem(LAST_LESSON_TYPE_KEY, values.type);
                 resetForm();
                 setSelectedSubject(null);
                 setSelectedTeacher(null);
                 setSelectedRoom(null);
+                resetExtras();
                 onSuccess();
-            } catch (error) {
-                const text = error instanceof ApiCallError ? error.message : "Виникла невідома помилка";
-                messageApi.error({ key: "create-lesson", content: text, duration: 3 });
-            } finally {
-                setSubmitting(false);
             }
+            setSubmitting(false);
         },
     });
 
@@ -103,6 +187,7 @@ const CreateLessonModal = ({ open, onClose, onSuccess }: CreateLessonModalProps)
         setSelectedSubject(null);
         setSelectedTeacher(null);
         setSelectedRoom(null);
+        resetExtras();
         onClose();
     };
 
@@ -129,8 +214,21 @@ const CreateLessonModal = ({ open, onClose, onSuccess }: CreateLessonModalProps)
             destroyOnClose
             styles={{ body: { maxHeight: 'calc(100vh - 160px)', overflowY: 'auto' } }}
         >
-            {contextHolder}
             <FormCard onSubmit={formik.handleSubmit} noValidate>
+                {day && ordinaryNumber && (
+                    <LessonTimeslotSelector
+                        currentOrd={ordinaryNumber}
+                        currentIsEven={isEvenWeek}
+                        currentSubgroup={subgroup}
+                        extraOrds={extraOrds}
+                        extraWeeks={extraWeeks}
+                        extraSubgroups={extraSubgroups}
+                        onExtraOrdsChange={setExtraOrds}
+                        onExtraWeeksChange={setExtraWeeks}
+                        onExtraSubgroupsChange={setExtraSubgroups}
+                    />
+                )}
+
                 <FormField
                     name="type"
                     label="Тип заняття"

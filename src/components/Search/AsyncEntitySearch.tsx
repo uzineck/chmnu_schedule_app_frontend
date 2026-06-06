@@ -155,6 +155,7 @@ const AsyncEntitySearch = <T,>({
                 // typed query doesn't hide options the server matched.
                 filterOption={null}
                 menuPortalTarget={document.body}
+                menuPosition="fixed"
                 styles={{
                     ...customStyles,
                     menuPortal: (base) => ({ ...base, zIndex: 9999 }),

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import GroupSearchAsync from "./GroupSearchAsync.tsx";
+import GroupSearch from "./GroupSearch.tsx";
 import GroupSchedule from "./GroupSchedule.tsx";
 import { Subgroup } from "../../../models/enums/Subgroup.ts";
 import { Group } from "../../../models/group/Group.ts";
@@ -69,7 +69,7 @@ const GroupScreen = () => {
             <ScheduleControlPanel
                 topSlot={<ScheduleNavSwitcher />}
                 searchSlot={
-                    <GroupSearchAsync
+                    <GroupSearch
                         onGroupSelect={handleGroupSelect}
                         selectedGroup={selectedGroup}
                     />

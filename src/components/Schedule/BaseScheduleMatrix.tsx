@@ -137,7 +137,8 @@ const BaseScheduleMatrix = ({
     };
 
     const matrix = useMemo<LessonCell[][]>(() => {
-        const m: LessonCell[][] = Array.from({ length: 7 }, () => Array(5).fill(null));
+        const ordCount = Object.values(OrdinaryNumber).filter((v) => typeof v === "number").length;
+        const m: LessonCell[][] = Array.from({ length: ordCount }, () => Array(5).fill(null));
         lessons?.forEach((lesson) => {
             const dayIndex = Object.values(Day).indexOf(lesson.timeslot.day);
             const ordNumberIndex = lesson.timeslot.ord_number - 1;
@@ -176,8 +177,8 @@ const BaseScheduleMatrix = ({
                             type="button"
                             role="tab"
                             aria-selected={idx === phoneDayIndex}
-                            active={idx === phoneDayIndex}
-                            isToday={idx === todayIndex}
+                            $active={idx === phoneDayIndex}
+                            $isToday={idx === todayIndex}
                             onClick={() => handlePhoneDayChange(idx)}
                         >
                             {label}
@@ -197,7 +198,7 @@ const BaseScheduleMatrix = ({
                         const isCurrent = !!cell && isCurrentLessonAt(rowIndex, dayIndex);
 
                         return (
-                            <TimeslotCard key={rowIndex} isCurrentLesson={isCurrent}>
+                            <TimeslotCard key={rowIndex} $isCurrentLesson={isCurrent}>
                                 <TimeslotTimeRow>
                                     <TimeslotOrd>{ordinaryNumber}</TimeslotOrd>
                                     <TimeslotTimeText>
@@ -260,7 +261,7 @@ const BaseScheduleMatrix = ({
                             type="button"
                             role="tab"
                             aria-selected={idx === tabletPageIndex}
-                            active={idx === tabletPageIndex}
+                            $active={idx === tabletPageIndex}
                             onClick={() => handleTabletPageChange(idx)}
                         >
                             {page.label}
@@ -276,7 +277,7 @@ const BaseScheduleMatrix = ({
                         {visibleDayIndices.map((dayIndex) => (
                             <DayCell
                                 key={dayIndex}
-                                isCurrentDay={currentTime?.day === dayIndex + 1}
+                                $isCurrentDay={currentTime?.day === dayIndex + 1}
                             >
                                 {dayOptionsUa[dayIndex].label}
                             </DayCell>
@@ -305,9 +306,9 @@ const BaseScheduleMatrix = ({
                                     return (
                                         <BodyCell
                                             key={dayIndex}
-                                            hasLesson={!!lessonCell}
-                                            isCurrentLesson={isCurrent}
-                                            isCurrentDay={isCurrentDay}
+                                            $hasLesson={!!lessonCell}
+                                            $isCurrentLesson={isCurrent}
+                                            $isCurrentDay={isCurrentDay}
                                         >
                                             {lessonCell && (
                                                 <div>

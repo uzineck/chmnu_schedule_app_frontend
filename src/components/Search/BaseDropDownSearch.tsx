@@ -36,6 +36,7 @@ const BaseDropDownSearch: React.FC<BaseDropDownSearchProps> =
                 isLoading={isLoading}
                 noOptionsMessage={() => isLoading ? "Завантаження..." : noOptionsMessage}
                 menuPortalTarget={document.body}
+                menuPosition="fixed"
                 styles={{
                     ...customStyles,
                     menuPortal: base => ({ ...base, zIndex: 9999 })
