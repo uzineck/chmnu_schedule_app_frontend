@@ -5,5 +5,4 @@ export enum OrdinaryNumber {
     FOURTH = 4,
     FIFTH = 5,
     SIXTH = 6,
-    SEVENTH = 7,
 }

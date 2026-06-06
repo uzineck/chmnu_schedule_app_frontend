@@ -165,7 +165,7 @@ export const Header: React.FC = () => {
                             ) : (
                                 <DrawerNavItem
                                     type="button"
-                                    active={selectedPage === "login"}
+                                    $active={selectedPage === "login"}
                                     onClick={() => handleDrawerNav('/login')}
                                 >
                                     <UserOutlined /> Увійти

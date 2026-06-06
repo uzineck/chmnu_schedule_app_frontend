@@ -31,7 +31,6 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
     const { mode } = useScheduleEditTarget();
     const navigate = useNavigate();
     const confirm = useConfirm();
-    const [messageApi, contextHolder] = message.useMessage();
 
     const handleEditLesson = () => {
         setLessonUuid(lesson.uuid);
@@ -51,21 +50,21 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
             },
             async () => {
                 if (!groupUuid) {
-                    messageApi.error({ content: "Видаляйте пару тільки з панелі розкладу", duration: 3 });
+                    message.error({ content: "Видаляйте пару тільки з панелі розкладу", duration: 3 });
                     return;
                 }
-                messageApi.loading({ key: "delete-lesson", content: "Видалення..." });
+                message.loading({ key: "delete-lesson", content: "Видалення..." });
                 try {
                     if (mode === 'headman') {
                         await removeLessonToGroupHeadman(lesson.uuid, subgroup);
                     } else {
                         await removeLessonFromGroupAdmin(groupUuid, lesson.uuid, subgroup);
                     }
-                    messageApi.success({ key: "delete-lesson", content: "Пара успішно видалена", duration: 2 });
+                    message.success({ key: "delete-lesson", content: "Пара успішно видалена", duration: 2 });
                     bumpScheduleRefresh();
                 } catch (error) {
                     const text = error instanceof ApiCallError ? error.message : "Виникла невідома помилка";
-                    messageApi.error({ key: "delete-lesson", content: text, duration: 3 });
+                    message.error({ key: "delete-lesson", content: text, duration: 3 });
                 }
             },
         );
@@ -73,7 +72,6 @@ const LessonDetails: React.FC<LessonDetailsProps> = ({ lesson, isEditable = fals
 
     return (
         <LessonDetailsContainer>
-            {contextHolder}
             <LessonTypeContainer type={lesson.type}>{getLessonTypeLabel(lesson.type)}</LessonTypeContainer>
             <LessonTitle>{lesson.subject.title}</LessonTitle>
             <LessonRoom><DoorIcon /> {lesson.room.number}</LessonRoom>

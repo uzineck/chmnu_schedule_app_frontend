@@ -40,7 +40,6 @@ interface EditLessonModalProps {
 const EditLessonModal = ({ open, onClose, onSuccess }: EditLessonModalProps) => {
     const { day, ordinaryNumber, isEvenWeek, groupUuid, subgroup, lesson } = useSchedule();
     const { mode } = useScheduleEditTarget();
-    const [messageApi, contextHolder] = message.useMessage();
 
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -61,16 +60,16 @@ const EditLessonModal = ({ open, onClose, onSuccess }: EditLessonModalProps) => 
         validationSchema: EditLessonValidationSchema,
         onSubmit: async (values, { setSubmitting }) => {
             if (!lesson || !lesson.uuid) {
-                messageApi.error({ content: "Дані про пару відсутні", duration: 3 });
+                message.error({ content: "Дані про пару відсутні", duration: 3 });
                 setSubmitting(false);
                 return;
             }
             if (!day || !ordinaryNumber || !groupUuid) {
-                messageApi.error({ content: "Редагуйте пару тільки з панелі розкладу", duration: 3 });
+                message.error({ content: "Редагуйте пару тільки з панелі розкладу", duration: 3 });
                 setSubmitting(false);
                 return;
             }
-            messageApi.loading({ key: "update-lesson", content: "Оновлення..." });
+            message.loading({ key: "update-lesson", content: "Оновлення..." });
             try {
                 const lessonData: LessonSchema = {
                     schema: {
@@ -92,11 +91,11 @@ const EditLessonModal = ({ open, onClose, onSuccess }: EditLessonModalProps) => 
                 } else {
                     await updateLessonInGroupAdmin(groupUuid, newUuid, oldUuid, subgroup);
                 }
-                messageApi.success({ key: "update-lesson", content: "Пару успішно оновлено", duration: 2 });
+                message.success({ key: "update-lesson", content: "Пару успішно оновлено", duration: 2 });
                 onSuccess();
             } catch (error) {
                 const text = error instanceof ApiCallError ? error.message : "Виникла невідома помилка";
-                messageApi.error({ key: "update-lesson", content: text, duration: 3 });
+                message.error({ key: "update-lesson", content: text, duration: 3 });
             } finally {
                 setSubmitting(false);
             }
@@ -147,7 +146,6 @@ const EditLessonModal = ({ open, onClose, onSuccess }: EditLessonModalProps) => 
             destroyOnClose
             styles={{ body: { maxHeight: 'calc(100vh - 160px)', overflowY: 'auto' } }}
         >
-            {contextHolder}
             <FormCard onSubmit={formik.handleSubmit} noValidate>
                 <FormField
                     name="type"

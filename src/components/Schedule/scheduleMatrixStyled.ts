@@ -24,9 +24,9 @@ export const MatrixTable = styled.table`
     }
 `;
 
-export const DayCell = styled.th<{ isCurrentDay?: boolean }>`
-    background-color: ${({ isCurrentDay, theme }) => (isCurrentDay ? theme.colors.infoBackground : theme.colors.surfaceSubtle)};
-    color: ${({ isCurrentDay, theme }) => (isCurrentDay ? theme.colors.info : theme.colors.textPrimary)};
+export const DayCell = styled.th<{ $isCurrentDay?: boolean }>`
+    background-color: ${({ $isCurrentDay, theme }) => ($isCurrentDay ? theme.colors.infoBackground : theme.colors.surfaceSubtle)};
+    color: ${({ $isCurrentDay, theme }) => ($isCurrentDay ? theme.colors.info : theme.colors.textPrimary)};
     padding: 10px 6px;
     text-align: center;
     font-size: 14px;
@@ -97,7 +97,7 @@ export const TimeRange = styled.div`
     }
 `;
 
-export const BodyCell = styled.td<{ hasLesson: boolean; isCurrentLesson?: boolean; isCurrentDay?: boolean }>`
+export const BodyCell = styled.td<{ $hasLesson: boolean; $isCurrentLesson?: boolean; $isCurrentDay?: boolean }>`
     height: 120px;
     text-align: center;
     vertical-align: top;
@@ -106,24 +106,24 @@ export const BodyCell = styled.td<{ hasLesson: boolean; isCurrentLesson?: boolea
     border-radius: 10px;
     transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     font-size: 12px;
-    background-color: ${({ hasLesson, isCurrentDay, theme }) =>
-        hasLesson
+    background-color: ${({ $hasLesson, $isCurrentDay, theme }) =>
+        $hasLesson
             ? theme.colors.surface
-            : isCurrentDay
+            : $isCurrentDay
                 ? theme.colors.infoBackground
                 : theme.colors.surfaceMuted};
-    color: ${({ hasLesson, theme }) => (hasLesson ? theme.colors.textPrimary : theme.colors.textMuted)};
-    box-shadow: ${({ hasLesson, theme }) => (hasLesson ? `0 1px 3px ${theme.colors.shadow}` : 'none')};
+    color: ${({ $hasLesson, theme }) => ($hasLesson ? theme.colors.textPrimary : theme.colors.textMuted)};
+    box-shadow: ${({ $hasLesson, theme }) => ($hasLesson ? `0 1px 3px ${theme.colors.shadow}` : 'none')};
     position: relative;
 
-    ${({ isCurrentDay, hasLesson, theme }) =>
-        isCurrentDay && hasLesson &&
+    ${({ $isCurrentDay, $hasLesson, theme }) =>
+        $isCurrentDay && $hasLesson &&
         `
         background-color: ${theme.colors.infoBackground};
     `};
 
-    ${({ isCurrentLesson, theme }) =>
-        isCurrentLesson &&
+    ${({ $isCurrentLesson, theme }) =>
+        $isCurrentLesson &&
         `
         background-color: ${theme.colors.surface};
         color: ${theme.colors.success};
@@ -228,16 +228,16 @@ export const PagerTabsRow = styled.div`
     margin: 0 auto 4px;
 `;
 
-export const PagerTab = styled.button<{ active: boolean }>`
+export const PagerTab = styled.button<{ $active: boolean }>`
     flex: 1 1 0;
     min-height: 40px;
     padding: 8px 12px;
-    border: 1px solid ${({theme, active}) => active ? theme.colors.primary : theme.colors.border};
-    background-color: ${({active, theme}) => active ? theme.colors.primary : theme.colors.surface};
-    color: ${({active, theme}) => active ? theme.colors.textInverse : theme.colors.textPrimary};
+    border: 1px solid ${({theme, $active}) => $active ? theme.colors.primary : theme.colors.border};
+    background-color: ${({$active, theme}) => $active ? theme.colors.primary : theme.colors.surface};
+    color: ${({$active, theme}) => $active ? theme.colors.textInverse : theme.colors.textPrimary};
     border-radius: 8px;
     font-size: 0.95rem;
-    font-weight: ${({active}) => active ? 'bold' : 'normal'};
+    font-weight: ${({$active}) => $active ? 'bold' : 'normal'};
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 
@@ -261,17 +261,17 @@ export const DayTabsRow = styled.div`
     width: 100%;
 `;
 
-export const DayTab = styled.button<{ active: boolean; isToday: boolean }>`
+export const DayTab = styled.button<{ $active: boolean; $isToday: boolean }>`
     flex: 1 1 0;
     min-width: 0;
     min-height: 44px;
     padding: 8px 4px;
-    border: 1px solid ${({theme, active}) => active ? theme.colors.primary : theme.colors.border};
-    background-color: ${({active, theme}) => active ? theme.colors.primary : theme.colors.surface};
-    color: ${({active, theme}) => active ? theme.colors.textInverse : theme.colors.textPrimary};
+    border: 1px solid ${({theme, $active}) => $active ? theme.colors.primary : theme.colors.border};
+    background-color: ${({$active, theme}) => $active ? theme.colors.primary : theme.colors.surface};
+    color: ${({$active, theme}) => $active ? theme.colors.textInverse : theme.colors.textPrimary};
     border-radius: 8px;
     font-size: 0.95rem;
-    font-weight: ${({active}) => active ? 'bold' : 'normal'};
+    font-weight: ${({$active}) => $active ? 'bold' : 'normal'};
     cursor: pointer;
     position: relative;
     transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -285,8 +285,8 @@ export const DayTab = styled.button<{ active: boolean; isToday: boolean }>`
         width: 4px;
         height: 4px;
         border-radius: 50%;
-        background-color: ${({isToday, theme, active}) =>
-            isToday ? (active ? theme.colors.textInverse : theme.colors.primary) : 'transparent'};
+        background-color: ${({$isToday, theme, $active}) =>
+            $isToday ? ($active ? theme.colors.textInverse : theme.colors.primary) : 'transparent'};
     }
 
     &:focus-visible {
@@ -302,10 +302,10 @@ export const TimeslotList = styled.div`
     width: 100%;
 `;
 
-export const TimeslotCard = styled.div<{ isCurrentLesson?: boolean }>`
+export const TimeslotCard = styled.div<{ $isCurrentLesson?: boolean }>`
     background-color: ${({theme}) => theme.colors.surface};
-    border: 1px solid ${({theme, isCurrentLesson}) =>
-        isCurrentLesson ? theme.colors.success : theme.colors.border};
+    border: 1px solid ${({theme, $isCurrentLesson}) =>
+        $isCurrentLesson ? theme.colors.success : theme.colors.border};
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 2px 4px ${({theme}) => theme.colors.shadow};

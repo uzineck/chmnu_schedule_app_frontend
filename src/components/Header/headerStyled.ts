@@ -286,19 +286,19 @@ export const DrawerSectionTitle = styled.h2`
     margin: 4px 0 4px 8px;
 `;
 
-export const DrawerNavItem = styled.button<{ active?: boolean }>`
+export const DrawerNavItem = styled.button<{ $active?: boolean }>`
     display: flex;
     align-items: center;
     gap: 12px;
     width: 100%;
     min-height: 48px;
     padding: 10px 12px;
-    background-color: ${({active, theme}) => active ? theme.colors.surfaceSubtle : 'transparent'};
-    color: ${({active, theme}) => active ? theme.colors.primary : theme.colors.textPrimary};
+    background-color: ${({$active, theme}) => $active ? theme.colors.surfaceSubtle : 'transparent'};
+    color: ${({$active, theme}) => $active ? theme.colors.primary : theme.colors.textPrimary};
     border: none;
     border-radius: 8px;
     font-size: 1rem;
-    font-weight: ${({active}) => active ? 600 : 400};
+    font-weight: ${({$active}) => $active ? 600 : 400};
     text-align: left;
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
